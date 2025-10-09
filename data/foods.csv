@@ -1,0 +1,281 @@
+Food Item,Calories,Protein,Carbs,Fiber,Fats,Veg/Non-Veg,Category,Meal,Allergens,Junk/Healthy,Weight
+Apple,87,0.8,11,2.9,0.3,Veg,Fruits,"Breakfast,Snack",None,Healthy,Weight Loss
+Banana,58,1.2,21,1.4,0.1,Veg,Fruits,"Breakfast,Snack",None,Healthy,Weight Loss
+Mango,49,1.3,23,2.3,0.5,Veg,Fruits,"Lunch,Snack",None,Healthy,Weight Loss
+Guava,81,0.6,18,2.3,0.2,Veg,Fruits,"Breakfast,Snack",None,Healthy,Weight Loss
+Papaya,51,1,24,1.1,0.2,Veg,Fruits,"Breakfast,Snack",None,Healthy,Weight Loss
+Orange,90,0.5,21,2.3,0.2,Veg,Fruits,"Breakfast,Snack",None,Healthy,Weight Loss
+Pineapple,61,0.9,15,1.3,0.4,Veg,Fruits,"Breakfast,Snack",None,Healthy,Weight Loss
+Watermelon,75,0.5,10,1,0.5,Veg,Fruits,"Breakfast,Snack",None,Healthy,Weight Loss
+Lychee,74,1,23,1.7,0.3,Veg,Fruits,"Breakfast,Snack",None,Healthy,Weight Loss
+Pomegranate,49,1.1,20,1.3,0.3,Veg,Fruits,"Breakfast,Snack",None,Healthy,Weight Loss
+Pear,41,0.9,11,1.2,0.2,Veg,Fruits,"Breakfast,Snack",None,Healthy,Weight Loss
+Grapes,58,1.3,24,2,0.2,Veg,Fruits,"Breakfast,Snack",None,Healthy,Weight Loss
+Plum,59,0.6,13,1.9,0.3,Veg,Fruits,"Breakfast,Snack",None,Healthy,Weight Loss
+Kiwi,58,0.3,21,1.8,0.2,Veg,Fruits,"Breakfast,Snack",None,Healthy,Weight Loss
+Jamun,60,1.4,21,2.9,0.2,Veg,Fruits,"Breakfast,Snack",None,Healthy,Weight Loss
+Custard Apple,82,0.4,19,2.7,0.1,Veg,Fruits,"Breakfast,Snack",None,Healthy,Weight Loss
+Sapota,73,0.2,25,2,0.4,Veg,Fruits,"Breakfast,Snack",None,Healthy,Weight Loss
+Fig,80,1.2,25,2.7,0.3,Veg,Fruits,"Breakfast,Snack",None,Healthy,Weight Loss
+Strawberry,88,1.3,16,1,0.5,Veg,Fruits,"Breakfast,Snack",None,Healthy,Weight Loss
+Mulberry,57,1.4,19,1.6,0.4,Veg,Fruits,"Breakfast,Snack",None,Healthy,Weight Loss
+Spinach,56,1.7,15,1,0.5,Veg,Vegetables,"Breakfast,Lunch,Dinner",None,Healthy,Weight Loss
+Potato,23,2.8,9,2.5,0.4,Veg,Vegetables,"Breakfast,Lunch,Dinner",None,Healthy,Weight Loss
+Cauliflower,64,2.6,6,1.1,0.2,Veg,Vegetables,"Breakfast,Lunch,Dinner",None,Healthy,Weight Loss
+Cabbage,43,1.3,14,1.7,0.5,Veg,Vegetables,"Breakfast,Lunch,Dinner",None,Healthy,Weight Loss
+Ladyfinger,21,2.8,8,1.2,0.4,Veg,Vegetables,"Breakfast,Lunch,Dinner",None,Healthy,Weight Loss
+Bottle Gourd,60,2,3,1.8,0.5,Veg,Vegetables,"Breakfast,Lunch,Dinner",None,Healthy,Weight Loss
+Bitter Gourd,58,1.6,3,2.6,0.4,Veg,Vegetables,"Breakfast,Lunch,Dinner",None,Healthy,Weight Loss
+Brinjal,50,2.8,7,2.7,0.2,Veg,Vegetables,"Breakfast,Lunch,Dinner",None,Healthy,Weight Loss
+Carrot,63,1.7,13,1.3,0.2,Veg,Vegetables,"Breakfast,Lunch,Dinner",None,Healthy,Weight Loss
+Radish,45,1.4,15,2.9,0.2,Veg,Vegetables,"Breakfast,Lunch,Dinner",None,Healthy,Weight Loss
+Beetroot,43,2.2,10,2.7,0.2,Veg,Vegetables,"Breakfast,Lunch,Dinner",None,Healthy,Weight Loss
+Capsicum,20,1.7,5,1.6,0.3,Veg,Vegetables,"Breakfast,Lunch,Dinner",None,Healthy,Weight Loss
+Cucumber,43,1.5,5,1.2,0.4,Veg,Vegetables,"Breakfast,Lunch,Dinner",None,Healthy,Weight Loss
+Tomato,64,1.4,4,1.5,0.5,Veg,Vegetables,"Breakfast,Lunch,Dinner",None,Healthy,Weight Loss
+Onion,68,2.6,9,1.2,0.5,Veg,Vegetables,"Breakfast,Lunch,Dinner",None,Healthy,Weight Loss
+Pumpkin,29,1.2,4,2.1,0.5,Veg,Vegetables,"Breakfast,Lunch,Dinner",None,Healthy,Weight Loss
+Mushroom,65,1.5,4,1.7,0.2,Veg,Vegetables,"Breakfast,Lunch,Dinner",None,Healthy,Weight Loss
+Fenugreek Leaves,73,2.2,4,1.1,0.4,Veg,Vegetables,"Breakfast,Lunch,Dinner",None,Healthy,Weight Loss
+Coriander Leaves,26,2,11,1.1,0.1,Veg,Vegetables,"Breakfast,Lunch,Dinner",None,Healthy,Weight Loss
+Mustard Greens,22,2.4,6,3,0.2,Veg,Vegetables,"Breakfast,Lunch,Dinner",None,Healthy,Weight Loss
+Chana Dal,345,20.5,51,8.9,5.8,Veg,Pulses,"Snack,Breakfast,Lunch,Dinner",None,Healthy,Weight Gain
+Moong Dal,329,20.4,63,10.7,2.7,Veg,Pulses,"Snack,Breakfast,Lunch,Dinner",None,Healthy,Weight Gain
+Masoor Dal,372,21.2,61,9.2,1.1,Veg,Pulses,"Snack,Breakfast,Lunch,Dinner",None,Healthy,Weight Gain
+Urad Dal,300,24.9,60,9.3,3.1,Veg,Pulses,"Breakfast,Lunch,Dinner",None,Healthy,Weight Gain
+Toor Dal,365,24,51,8.7,4.6,Veg,Pulses,"Breakfast,Lunch,Dinner",None,Healthy,Weight Gain
+Rajma,371,19.1,64,10.1,3.2,Veg,Pulses,"Breakfast,Lunch,Dinner",None,Healthy,Weight Gain
+Kabuli Chana,370,20.6,63,11.9,4.7,Veg,Pulses,"Breakfast,Lunch,Dinner",None,Healthy,Weight Gain
+Green Moong,360,23.8,61,11.1,5.1,Veg,Pulses,"Snack,Breakfast,Lunch,Dinner",None,Healthy,Weight Gain
+Black Gram,312,21.4,58,11.3,5.1,Veg,Pulses,"Breakfast,Lunch,Dinner",None,Healthy,Weight Gain
+Horse Gram,377,20.3,56,10.9,3.2,Veg,Pulses,"Snack,Breakfast,Lunch,Dinner",None,Healthy,Weight Gain
+Lobia,326,20,54,11.5,4.9,Veg,Pulses,"Breakfast,Lunch,Dinner",None,Healthy,Weight Gain
+Moth Dal,332,24.6,63,9.6,2.2,Veg,Pulses,"Breakfast,Lunch,Dinner",None,Healthy,Weight Gain
+Soybeans,321,21.9,65,11.2,4.6,Veg,Pulses,"Breakfast,Lunch,Dinner",None,Healthy,Weight Gain
+Kulthi Dal,310,19.9,56,12,4.1,Veg,Pulses,"Breakfast,Lunch,Dinner",None,Healthy,Weight Gain
+Arhar Dal,346,20.6,52,10.5,4.2,Veg,Pulses,"Breakfast,Lunch,Dinner",None,Healthy,Weight Gain
+Bengal Gram,372,21.6,58,8.5,5.6,Veg,Pulses,"Breakfast,Lunch,Dinner",None,Healthy,Weight Gain
+Chickpeas,314,22.9,59,10.8,1.6,Veg,Pulses,"Breakfast,Lunch,Dinner",None,Healthy,Weight Gain
+Yellow Split Peas,315,18.3,64,11.8,2.7,Veg,Pulses,"Breakfast,Lunch,Dinner",None,Healthy,Weight Gain
+Green Peas,327,21.8,56,11.8,3.4,Veg,Pulses,"Breakfast,Lunch,Dinner",None,Healthy,Weight Gain
+Red Lentils,306,22.6,61,10.8,1.4,Veg,Pulses,"Snack,Breakfast,Lunch,Dinner",None,Healthy,Weight Gain
+Basmati Rice,357,7.9,75,2,2.1,Veg,Grains,"Lunch,Dinner",None,Healthy,Weight Gain
+Brown Rice,349,11.9,72,2.6,1.5,Veg,Grains,"Lunch,Dinner",None,Healthy,Weight Gain
+Parboiled Rice,368,10.7,73,2,1.5,Veg,Grains,"Lunch,Dinner",None,Healthy,Weight Gain
+Flattened Rice,330,8.9,68,1.7,2,Veg,Grains,"Lunch,Dinner",None,Healthy,Weight Gain
+Barley,350,6.7,71,1.9,1.2,Veg,Grains,"Breakfast,Lunch,Dinner",None,Healthy,Weight Gain
+Millet,336,8.4,77,2.9,1,Veg,Grains,"Breakfast,Lunch,Dinner",None,Healthy,Weight Gain
+Ragi,380,8.3,68,1.3,1.7,Veg,Grains,"Breakfast,Lunch,Dinner",None,Healthy,Weight Gain
+Oats,336,11.9,76,2.4,2.5,Veg,Grains,"Breakfast,Snack",None,Healthy,Weight Gain
+Buckwheat,349,8.4,79,2.4,2.4,Veg,Grains,"Breakfast,Lunch,Dinner",None,Healthy,Weight Gain
+Amaranth,331,6.6,80,1.3,2.9,Veg,Grains,"Breakfast,Lunch,Dinner",None,Healthy,Weight Gain
+Quinoa,350,9.8,68,1.1,1.6,Veg,Grains,"Lunch,Dinner",None,Healthy,Weight Gain
+Broken Wheat,371,8.7,76,1.3,1.9,Veg,Grains,"Breakfast,Lunch,Dinner",None,Healthy,Weight Gain
+Sorghum,348,6.6,71,1.8,1.3,Veg,Grains,"Lunch,Dinner",None,Healthy,Weight Gain
+Foxtail Millet,343,11.3,69,2.6,2.5,Veg,Grains,"Breakfast,Lunch,Dinner",None,Healthy,Weight Gain
+Little Millet,362,11.4,71,1.7,1.1,Veg,Grains,"Breakfast,Lunch,Dinner",None,Healthy,Weight Gain
+Kodo Millet,341,7.6,78,2.1,1.8,Veg,Grains,"Breakfast,Lunch,Dinner",None,Healthy,Weight Gain
+Pearl Millet,337,8.5,78,2.1,2.5,Veg,Grains,"Lunch,Dinner",None,Healthy,Weight Gain
+Finger Millet,341,8.2,70,2.7,2.5,Veg,Grains,"Breakfast,Lunch,Dinner",None,Healthy,Weight Gain
+Wild Rice,366,9.5,70,2.3,2.3,Veg,Grains,"Lunch,Dinner",None,Healthy,Weight Gain
+Proso Millet,371,6.1,74,1.7,2,Veg,Grains,"Breakfast,Lunch,Dinner",None,Healthy,Weight Gain
+Wheat Roti,298,8.4,66,6.1,5.7,Veg,Roti,"Breakfast,Lunch,Dinner",Gluten,Healthy,Weight Gain
+Makki Roti,283,7.6,67,8,2.4,Veg,Roti,"Breakfast,Lunch,Dinner",Gluten,Healthy,Weight Gain
+Bajra Roti,317,9.7,70,7.6,3.8,Veg,Roti,"Lunch,Dinner",Gluten,Healthy,Weight Gain
+Jowar Roti,315,8.9,62,8.3,5.3,Veg,Roti,"Lunch,Dinner",Gluten,Healthy,Weight Gain
+Ragi Roti,298,9.6,61,9.2,4.7,Veg,Roti,"Lunch,Dinner",Gluten,Healthy,Weight Gain
+Missi Roti,293,9.7,70,7.7,3.2,Veg,Roti,"Lunch,Dinner",Gluten,Healthy,Weight Gain
+Besan Roti,355,8.9,68,7.7,3.4,Veg,Roti,"Lunch,Dinner",Gluten,Healthy,Weight Gain
+Ajwain Roti,341,7.4,60,7.7,5.8,Veg,Roti,"Lunch,Dinner",Gluten,Healthy,Weight Gain
+Multigrain Roti,298,9.6,65,7.4,4.3,Veg,Roti,"Lunch,Dinner",Gluten,Healthy,Weight Gain
+Tandoori Roti,310,8.4,64,8.6,3.9,Veg,Roti,"Lunch,Dinner",Gluten,Healthy,Weight Gain
+Naan,354,9.1,69,8.8,2.7,Veg,Roti,"Lunch,Dinner",Gluten,Healthy,Weight Gain
+Kulcha,303,9.1,62,7.1,3.4,Veg,Roti,"Lunch,Dinner",Gluten,Healthy,Weight Gain
+Roomali Roti,352,7.8,65,6.5,4.9,Veg,Roti,"Lunch,Dinner",Gluten,Healthy,Weight Gain
+Phulka,332,7.3,64,8.7,2.3,Veg,Roti,"Breakfast,Lunch,Dinner",Gluten,Healthy,Weight Gain
+Lachha Paratha,335,9.7,70,6.3,3.8,Veg,Roti,"Breakfast,Lunch,Dinner",Gluten,Healthy,Weight Gain
+Aloo Paratha,332,10,68,6.3,5.9,Veg,Roti,"Breakfast,Lunch",Gluten,Healthy,Weight Gain
+Paneer Paratha,283,9.3,70,6.3,5,Veg,Roti,"Breakfast,Lunch",Gluten,Healthy,Weight Gain
+Gobi Paratha,336,9.2,63,7.7,2.6,Veg,Roti,"Breakfast,Lunch",Gluten,Healthy,Weight Gain
+Methi Paratha,358,8.4,64,6.6,5.1,Veg,Roti,"Breakfast,Lunch",Gluten,Healthy,Weight Gain
+Onion Paratha,344,8,62,8.7,2.3,Veg,Roti,"Breakfast,Lunch",Gluten,Healthy,Weight Gain
+White Bread,298,6.5,52,2.7,4.4,Veg,Breads,"Breakfast,Snack",Gluten,Healthy,Weight Gain
+Brown Bread,280,7.2,47,3.2,3.8,Veg,Breads,"Breakfast,Snack",Gluten,Healthy,Weight Gain
+Whole Wheat Bread,256,6.4,49,2.6,5.7,Veg,Breads,"Breakfast,Snack",Gluten,Healthy,Weight Gain
+Multigrain Bread,294,7.1,47,3.3,5.5,Veg,Breads,"Breakfast,Snack",Gluten,Healthy,Weight Gain
+Garlic Bread,296,6,55,3.3,5.7,Veg,Breads,"Snack,Dinner",Gluten,Healthy,Weight Gain
+Stuffed Kulcha,274,9.8,48,2.6,3.8,Veg,Breads,"Lunch,Dinner",Gluten,Healthy,Weight Gain
+Pita Bread,277,8.8,47,3,4.8,Veg,Breads,"Lunch,Dinner",Gluten,Healthy,Weight Gain
+Focaccia,251,7.1,46,3.7,3.4,Veg,Breads,"Lunch,Dinner,Snack",Gluten,Healthy,Weight Gain
+Bun,296,9.5,52,2.4,5.1,Veg,Breads,"Breakfast,Snack",Gluten,Junk,Weight Gain
+Bread Roll,242,9.2,46,3.2,5.8,Veg,Breads,"Breakfast,Snack",Gluten,Healthy,Weight Loss
+Fruit Bread,266,9.3,45,3.8,5.8,Veg,Breads,"Breakfast,Snack",Gluten,Healthy,Weight Gain
+Cheese Bread,285,6.1,53,2.4,4.3,Veg,Breads,"Breakfast,Snack",Gluten,Junk,Weight Gain
+Herb Bread,256,6.9,47,2,5.4,Veg,Breads,"Lunch,Dinner,Snack",Gluten,Junk,Weight Gain
+Ciabatta,255,8,51,2.2,3.3,Veg,Breads,"Lunch,Dinner",Gluten,Healthy,Weight Gain
+Baguette,242,8.5,47,2.2,3,Veg,Breads,"Lunch,Dinner",Gluten,Healthy,Weight Loss
+Croissant,253,9.1,55,2.5,3.1,Veg,Breads,"Breakfast,Snack",Gluten,Healthy,Weight Gain
+Khari Biscuit,243,7.7,48,2.3,5.4,Veg,Breads,Snack,Gluten,Healthy,Weight Loss
+Kulcha Bread,264,10,48,3.2,4.9,Veg,Breads,"Lunch,Dinner",Gluten,Healthy,Weight Gain
+Sweet Bun,289,6.3,45,3.4,4.5,Veg,Breads,"Breakfast,Snack",Gluten,Healthy,Weight Gain
+Milk Bread,282,8.3,50,3.1,4,Veg,Breads,"Breakfast,Snack",Gluten,Healthy,Weight Gain
+Paneer,287,12.8,8,1,13,Veg,Dairy & Alternatives,"Lunch,Dinner",Dairy,Healthy,Weight Gain
+Milk,197,14.2,2,0.2,11.3,Veg,Dairy & Alternatives,"Breakfast,Dinner",Dairy,Healthy,Weight Loss
+Curd,271,5.4,7,1,5.2,Veg,Dairy & Alternatives,"Lunch,Dinner",Dairy,Healthy,Weight Gain
+Buttermilk,218,19.4,9,0.2,12.1,Veg,Dairy & Alternatives,Lunch,Dairy,Healthy,Weight Loss
+Cheese,225,3.7,9,0.7,3.5,Veg,Dairy & Alternatives,"Breakfast,Snack,Lunch,Dinner",Dairy,Healthy,Weight Loss
+Ghee,89,8,7,0.3,4.1,Veg,Dairy & Alternatives,"Breakfast,Lunch,Dinner",Dairy,Healthy,Weight Loss
+Butter,247,6.2,2,0.9,24.3,Veg,Dairy & Alternatives,"Breakfast,Snack,Lunch,Dinner",Dairy,Healthy,Weight Loss
+Cream,313,11.9,10,0.1,17.7,Veg,Dairy & Alternatives,"Breakfast,Lunch,Dinner",Dairy,Healthy,Weight Gain
+Kefir,225,5.4,7,0.6,14.3,Veg,Dairy & Alternatives,"Breakfast,Snack",Dairy,Healthy,Weight Loss
+Soy Milk,247,9.4,4,0.4,4.4,Veg,Dairy & Alternatives,Breakfast,Dairy,Healthy,Weight Loss
+Almond Milk,263,6.8,7,0.4,4.6,Veg,Dairy & Alternatives,Breakfast,Dairy,Healthy,Weight Gain
+Coconut Milk,211,19.9,7,0.9,19.1,Veg,Dairy & Alternatives,"Lunch,Dinner",Dairy,Healthy,Weight Loss
+Lassi,217,10.1,6,0.3,8.1,Veg,Dairy & Alternatives,"Breakfast,Lunch,Snack",Dairy,Healthy,Weight Loss
+Khoa,76,17.3,7,0.3,9.4,Veg,Dairy & Alternatives,"Lunch,Dinner",Dairy,Healthy,Weight Loss
+Shrikhand,282,6.6,7,1,11.4,Veg,Dairy & Alternatives,"Lunch,Dinner",Dairy,Healthy,Weight Gain
+Yogurt,105,15,2,1,3.1,Veg,Dairy & Alternatives,"Lunch,Dinner,Dessert",Dairy,Healthy,Weight Loss
+Chaas,70,9,2,0.3,16.1,Veg,Dairy & Alternatives,Lunch,Dairy,Healthy,Weight Loss
+Cottage Cheese,264,18.6,2,0.9,24.5,Veg,Dairy & Alternatives,"Lunch,Dinner",Dairy,Healthy,Weight Gain
+Skimmed Milk,67,18,4,0.3,3.9,Veg,Dairy & Alternatives,"Breakfast,Dinner",Dairy,Healthy,Weight Loss
+Full Cream Milk,200,5,4,0.8,11.4,Veg,Dairy & Alternatives,"Breakfast,Dinner",Dairy,Healthy,Weight Loss
+Chicken Curry,169,25.8,8,0.9,5.9,Non-Veg,Meats & Seafood,"Lunch,Dinner",None,Healthy,Weight Loss
+Fish Fry,290,25.9,5,1.7,14.8,Non-Veg,Meats & Seafood,"Lunch,Dinner",None,Healthy,Weight Gain
+Tandoori Chicken,207,21.9,0,1.1,18.8,Non-Veg,Meats & Seafood,"Lunch,Dinner",None,Healthy,Weight Loss
+Butter Chicken,275,29.3,10,0.1,10,Non-Veg,Meats & Seafood,"Lunch,Dinner",None,Healthy,Weight Gain
+Mutton Curry,188,26.5,10,0.7,18.3,Non-Veg,Meats & Seafood,"Lunch,Dinner",None,Healthy,Weight Loss
+Keema,204,23.7,2,1.3,11.6,Non-Veg,Meats & Seafood,"Lunch,Dinner",None,Healthy,Weight Loss
+Prawns Masala,159,20.7,2,1.2,12.1,Non-Veg,Meats & Seafood,"Lunch,Dinner",None,Healthy,Weight Loss
+Fish Curry,291,24,2,0.3,15.3,Non-Veg,Meats & Seafood,"Lunch,Dinner",None,Healthy,Weight Gain
+Egg Curry,220,28.6,0,1.1,7.3,Non-Veg,Meats & Seafood,"Lunch,Dinner",None,Healthy,Weight Loss
+Boiled Egg,202,28,8,1.4,17.7,Non-Veg,Meats & Seafood,"Breakfast,Snack,Lunch,Dinner",None,Healthy,Weight Loss
+Omelette,296,26,3,1.4,7.1,Non-Veg,Meats & Seafood,"Breakfast,Snack,Lunch,Dinner",None,Healthy,Weight Gain
+Grilled Fish,293,21.5,9,0.1,16.8,Non-Veg,Meats & Seafood,"Lunch,Dinner",None,Healthy,Weight Gain
+Fried Fish,284,28.7,4,0.8,11.1,Non-Veg,Meats & Seafood,"Lunch,Dinner",None,Healthy,Weight Gain
+Chicken Biryani,221,22.5,8,0.6,9,Non-Veg,Meats & Seafood,"Lunch,Dinner",None,Healthy,Weight Loss
+Mutton Biryani,193,22.3,4,0.4,17.7,Non-Veg,Meats & Seafood,"Lunch,Dinner",None,Healthy,Weight Loss
+Tandoori Fish,200,28.7,7,0.2,14.5,Non-Veg,Meats & Seafood,"Lunch,Dinner",None,Healthy,Weight Loss
+Egg Bhurji,179,27.3,7,0.5,9,Non-Veg,Meats & Seafood,"Breakfast,Snack,Lunch,Dinner",None,Healthy,Weight Loss
+Seekh Kebab,264,21.8,6,1.5,13.9,Non-Veg,Meats & Seafood,"Lunch,Dinner",None,Healthy,Weight Gain
+Chicken Tikka,252,25.9,10,1.3,10.9,Non-Veg,Meats & Seafood,"Lunch,Dinner",None,Healthy,Weight Gain
+Lamb Curry,247,23.3,2,0.6,19.4,Non-Veg,Meats & Seafood,"Lunch,Dinner",None,Healthy,Weight Loss
+Samosa,436,7.2,32,3.3,22.2,Veg,Snacks & Street Foods,Snack,None,Junk,Weight Gain
+Pakora,330,5.1,49,3.7,14.5,Veg,Snacks & Street Foods,Snack,None,Junk,Weight Gain
+Kachori,350,9.5,32,4.2,11.4,Veg,Snacks & Street Foods,Snack,None,Healthy,Weight Gain
+Chole Kulche,288,9.3,47,3.7,24.5,Veg,Snacks & Street Foods,Snack,None,Healthy,Weight Gain
+Gol Gappa,416,6.3,46,4.2,21.4,Veg,Snacks & Street Foods,Snack,None,Healthy,Weight Gain
+Bhel Puri,445,6.5,38,2.7,13,Veg,Snacks & Street Foods,Snack,None,Healthy,Weight Gain
+Sev Puri,438,5.3,37,2.6,11.4,Veg,Snacks & Street Foods,Snack,None,Junk,Weight Gain
+Vada Pav,359,9.1,29,3.2,16.9,Veg,Snacks & Street Foods,Snack,None,Healthy,Weight Gain
+Aloo Tikki,405,6.7,27,2.7,21.6,Veg,Snacks & Street Foods,Snack,None,Junk,Weight Gain
+Bread Pakora,407,7.6,46,4.3,22.3,Veg,Snacks & Street Foods,Snack,None,Junk,Weight Gain
+Paneer Pakora,392,4.6,45,2.5,13.8,Veg,Snacks & Street Foods,Snack,None,Healthy,Weight Gain
+Mirchi Bajji,394,9.2,49,2.2,22.9,Veg,Snacks & Street Foods,Snack,None,Junk,Weight Gain
+Mathri,283,8.4,32,4.3,10.1,Veg,Snacks & Street Foods,Snack,None,Healthy,Weight Gain
+Chakli,382,8.1,42,2.5,18.7,Veg,Snacks & Street Foods,Snack,None,Junk,Weight Gain
+Murukku,370,6.6,29,4.4,16.9,Veg,Snacks & Street Foods,Snack,None,Junk,Weight Gain
+Dhokla,370,8.2,26,3.9,14.2,Veg,Snacks & Street Foods,Snack,None,Healthy,Weight Gain
+Khandvi,327,6.1,29,4.4,17.6,Veg,Snacks & Street Foods,Snack,None,Healthy,Weight Gain
+Spring Roll,294,9.7,30,4.8,15,Veg,Snacks & Street Foods,Snack,None,Junk,Weight Gain
+Cutlet,420,4.3,34,2.4,16.4,Veg,Snacks & Street Foods,Snack,None,Junk,Weight Gain
+French Fries,373,7.4,31,3.9,13.2,Veg,Snacks & Street Foods,Snack,None,Junk,Weight Gain
+Chole Bhature,412,8.8,43,3.5,9.3,Veg,Cooked Meals,"Snack,Lunch,Dinner",Gluten,Junk,Weight Gain
+Rajma Chawal,374,13.6,41,3.2,13.3,Veg,Cooked Meals,"Breakfast,Lunch,Dinner",Gluten,Healthy,Weight Gain
+Kadhi Chawal,444,6.6,29,3.8,10.1,Veg,Cooked Meals,"Breakfast,Lunch,Dinner",Gluten,Healthy,Weight Gain
+Palak Paneer,218,13.8,40,4.6,11.4,Veg,Cooked Meals,"Breakfast,Lunch,Dinner",Gluten,Healthy,Weight Loss
+Shahi Paneer,307,9.8,24,2.1,16.8,Veg,Cooked Meals,"Breakfast,Lunch,Dinner",Gluten,Healthy,Weight Gain
+Paneer Butter Masala,420,10.7,47,2.5,11.6,Veg,Cooked Meals,"Breakfast,Lunch,Dinner",Gluten,Healthy,Weight Gain
+Baingan Bharta,228,6.3,23,5,14.6,Veg,Cooked Meals,"Breakfast,Lunch,Dinner",Gluten,Healthy,Weight Loss
+Aloo Gobi,349,5.1,46,4.6,19.7,Veg,Cooked Meals,"Breakfast,Lunch,Dinner",Gluten,Healthy,Weight Gain
+Dal Makhani,248,10.6,50,3.4,17.6,Veg,Cooked Meals,"Breakfast,Lunch,Dinner",Gluten,Healthy,Weight Loss
+Sarson Da Saag,432,11.4,30,5,17.9,Veg,Cooked Meals,"Breakfast,Lunch,Dinner",Gluten,Healthy,Weight Gain
+Makki Roti Saag,295,7,20,3.1,16.5,Veg,Cooked Meals,"Breakfast,Lunch,Dinner",Gluten,Healthy,Weight Gain
+Bhindi Masala,431,12.4,46,3.2,19.2,Veg,Cooked Meals,"Breakfast,Lunch,Dinner",Gluten,Healthy,Weight Gain
+Vegetable Pulao,352,9,23,5.1,10.5,Veg,Cooked Meals,"Breakfast,Lunch,Dinner",Gluten,Healthy,Weight Gain
+Vegetable Biryani,290,5.8,36,5.2,9.9,Veg,Cooked Meals,"Breakfast,Lunch,Dinner",Gluten,Healthy,Weight Gain
+Khichdi,382,7.1,29,5.5,8.7,Veg,Cooked Meals,"Breakfast,Lunch,Dinner",Gluten,Healthy,Weight Gain
+Upma,294,14.2,25,5.2,18,Veg,Cooked Meals,"Breakfast,Snack",Gluten,Healthy,Weight Gain
+Idli Sambar,426,10.2,30,4.2,15.7,Veg,Cooked Meals,Breakfast,Gluten,Healthy,Weight Gain
+Dosa,392,9,50,2.8,10.5,Veg,Cooked Meals,"Breakfast,Lunch,Dinner,Snack",Gluten,Healthy,Weight Gain
+Poori Sabzi,391,12.8,29,3.9,8.9,Veg,Cooked Meals,"Breakfast,Lunch",Gluten,Healthy,Weight Gain
+Mutter Paneer,236,5.9,39,4.6,15,Veg,Cooked Meals,"Breakfast,Lunch,Dinner",Gluten,Healthy,Weight Loss
+Almonds,641,21.9,15,10.4,46.6,Veg,Nuts,Snack,None,Healthy,Weight Gain
+Cashews,516,22,25,5.5,51,Veg,Nuts,Snack,None,Healthy,Weight Gain
+Walnuts,570,24.8,16,9.9,53.8,Veg,Nuts,Snack,None,Healthy,Weight Gain
+Pistachios,608,22.7,19,12,52.8,Veg,Nuts,Snack,None,Healthy,Weight Gain
+Peanuts,646,23.8,18,6.4,48.9,Veg,Nuts,Snack,None,Healthy,Weight Gain
+Hazelnuts,502,20.7,23,10.8,54.8,Veg,Nuts,Snack,None,Healthy,Weight Gain
+Pine Nuts,516,16.2,17,11.6,51.9,Veg,Nuts,Snack,None,Healthy,Weight Gain
+Brazil Nuts,570,16.2,18,10.6,58.6,Veg,Nuts,Snack,None,Healthy,Weight Gain
+Macadamia Nuts,509,16.8,15,6.7,51.4,Veg,Nuts,Snack,None,Healthy,Weight Gain
+Chilgoza,650,17.9,25,9.1,56.4,Veg,Nuts,Snack,None,Healthy,Weight Gain
+Lotus Seeds,644,23.1,17,11.3,53.3,Veg,Nuts,Snack,None,Healthy,Weight Gain
+Chironji,616,16.1,21,10,48.1,Veg,Nuts,Snack,None,Healthy,Weight Gain
+Flax Seeds,525,19,17,5.8,59.6,Veg,Nuts,Snack,None,Healthy,Weight Gain
+Chia Seeds,602,16.8,15,8.2,52.2,Veg,Nuts,Snack,None,Healthy,Weight Gain
+Sunflower Seeds,575,23.9,22,5.1,54.5,Veg,Nuts,Snack,None,Healthy,Weight Gain
+Pumpkin Seeds,507,24.5,18,7.1,54.5,Veg,Nuts,Snack,None,Healthy,Weight Gain
+Sesame Seeds,582,22.5,21,6.7,49.5,Veg,Nuts,Snack,None,Healthy,Weight Gain
+Watermelon Seeds,613,16.2,23,7.5,58.8,Veg,Nuts,Snack,None,Healthy,Weight Gain
+Mustard Seeds,564,24.9,25,5.4,59.2,Veg,Nuts,Snack,None,Healthy,Weight Gain
+Nigella Seeds,588,23.5,24,8.8,59,Veg,Nuts,Snack,None,Healthy,Weight Gain
+Lassi,94,0.6,19,0.8,2.9,Veg,Beverages,"Snack,Lunch",None,Healthy,Weight Loss
+Chaas,102,1,17,0.6,0.6,Veg,Beverages,"Snack,Lunch",None,Healthy,Weight Loss
+Masala Chai,35,2.6,5,0.9,2.3,Veg,Beverages,Snack,None,Healthy,Weight Loss
+Black Tea,41,1.7,18,0.6,3.9,Veg,Beverages,Snack,None,Healthy,Weight Loss
+Green Tea,86,0.8,6,0.6,3.3,Veg,Beverages,Snack,None,Healthy,Weight Loss
+Coffee,117,3.6,9,0.6,2.5,Veg,Beverages,Snack,None,Healthy,Weight Loss
+Cold Coffee,56,1.5,20,0.9,1.2,Veg,Beverages,Snack,None,Healthy,Weight Loss
+Sugarcane Juice,27,1,18,0.8,1,Veg,Beverages,Snack,None,Healthy,Weight Loss
+Coconut Water,39,3,10,0.3,0.6,Veg,Beverages,Snack,None,Healthy,Weight Loss
+Nimbu Pani,41,0.5,5,0.9,1.5,Veg,Beverages,Snack,None,Healthy,Weight Loss
+Milkshake,56,4.6,6,0.5,3.3,Veg,Beverages,Snack,None,Healthy,Weight Loss
+Badam Milk,74,3.9,16,0.7,3.3,Veg,Beverages,Snack,None,Healthy,Weight Loss
+Thandai,130,2.9,7,0.5,2.8,Veg,Beverages,Snack,None,Healthy,Weight Loss
+Kesar Milk,108,0.3,17,0.7,1,Veg,Beverages,"Breakfast,Snack,Dinner",None,Healthy,Weight Loss
+Hot Chocolate,53,0.2,20,0.6,0.1,Veg,Beverages,Snack,None,Healthy,Weight Loss
+Butter Milk,141,0.7,11,0.6,3.3,Veg,Beverages,"Snack,Lunch",None,Healthy,Weight Loss
+Soft Drink,82,1.4,17,0.7,2.9,Veg,Beverages,Snack,None,Junk,Weight Loss
+Energy Drink,37,2.5,6,0.9,2.3,Veg,Beverages,Snack,None,Junk,Weight Loss
+Fruit Juice,96,4.2,12,0.3,2,Veg,Beverages,Snack,None,Healthy,Weight Loss
+Smoothie,116,3.4,8,0.6,3.4,Veg,Beverages,Snack,None,Junk,Weight Loss
+Whey Protein,417,21.9,12,1.3,2.9,Veg,Protein Supplements,"Pre-Workout, Post-Workout",Dairy,Healthy,Weight Gain
+Soy Protein Powder,420,31.1,9,3.3,6.9,Veg,Protein Supplements,"Pre-Workout, Post-Workout",Dairy,Healthy,Weight Gain
+Pea Protein Powder,435,47.2,11,4,2.8,Veg,Protein Supplements,"Pre-Workout, Post-Workout",Dairy,Healthy,Weight Gain
+Casein Protein,351,50.7,14,2.2,4.9,Veg,Protein Supplements,Pre-Bed,Dairy,Healthy,Weight Gain
+Mass Gainer,427,62.7,19,0.3,5.7,Veg,Protein Supplements,"Breakfast, Snack, Post-Workout",Dairy,Healthy,Weight Gain
+Egg Protein Powder,410,45.6,5,1.3,7.4,Veg,Protein Supplements,"Pre-Workout, Post-Workout",Dairy,Healthy,Weight Gain
+Hemp Protein Powder,427,59,8,3.9,2.1,Veg,Protein Supplements,"Pre-Workout, Post-Workout",Dairy,Healthy,Weight Gain
+Brown Rice Protein,447,42.3,20,0.8,2.3,Veg,Protein Supplements,"Pre-Workout, Post-Workout",Dairy,Healthy,Weight Gain
+Collagen Powder,370,57.3,19,4.7,3.9,Veg,Protein Supplements,"Snack, Pre-Bed",Dairy,Healthy,Weight Gain
+Vegan Protein Blend,422,31.4,5,1.7,4,Veg,Protein Supplements,"Pre-Workout, Post-Workout",Dairy,Healthy,Weight Gain
+Protein Bar,366,49.9,12,2.5,5.9,Veg,Protein Supplements,"Pre-Workout, Post-Workout,Snack",Dairy,Healthy,Weight Gain
+BCAA Powder,364,69.3,15,2.7,6.1,Veg,Protein Supplements,Intra-Workout,Dairy,Healthy,Weight Gain
+Glutamine Supplement,357,75.6,8,3.7,2.8,Veg,Protein Supplements,"Post-Workout, Pre-Bed",Dairy,Healthy,Weight Gain
+Creatine Blend,409,27,10,2.3,2.9,Veg,Protein Supplements,"Pre-Workout, Post-Workout",Dairy,Healthy,Weight Gain
+Plant Protein Shake,410,34.6,17,1.4,2.9,Veg,Protein Supplements,"Pre-Workout, Post-Workout",Dairy,Healthy,Weight Gain
+Isolate Whey,444,45.4,13,3.7,5.3,Veg,Protein Supplements,"Pre-Workout, Post-Workout",Dairy,Healthy,Weight Gain
+Concentrate Whey,437,62.2,15,1.7,7.9,Veg,Protein Supplements,"Pre-Workout, Post-Workout",Dairy,Healthy,Weight Gain
+Hydrolyzed Whey,386,67.3,15,0.6,7.9,Veg,Protein Supplements,"Pre-Workout, Post-Workout",Dairy,Healthy,Weight Gain
+Herbal Protein Mix,391,75.5,17,3.5,6.5,Veg,Protein Supplements,"Snack, Post-Workout",Dairy,Healthy,Weight Gain
+Milk Protein,415,20.8,10,4.1,2.6,Veg,Protein Supplements,"Breakfast, Snack, Post-Workout",Dairy,Healthy,Weight Gain
+Gulab Jamun,422,4,58,1.9,10.8,Veg,Desserts & Sweets,Snack,Gluten,Healthy,Weight Gain
+Carrot Halwa,322,7.1,57,0.4,12,Veg,Desserts & Sweets,Snack,Gluten,Healthy,Weight Gain
+Rasgulla,376,7.6,53,1.9,15.1,Veg,Desserts & Sweets,Snack,Gluten,Junk,Weight Gain
+Jalebi,436,6.5,51,1,19.8,Veg,Desserts & Sweets,Snack,Gluten,Healthy,Weight Gain
+Barfi,413,5.4,41,0.5,13.4,Veg,Desserts & Sweets,Snack,Gluten,Junk,Weight Gain
+Kaju Katli,306,6.5,58,1.2,15,Veg,Desserts & Sweets,Snack,Gluten,Healthy,Weight Gain
+Rasmalai,331,4.9,44,0.5,17.7,Veg,Desserts & Sweets,Snack,Gluten,Junk,Weight Gain
+Sandesh,359,4.3,60,0.3,17.3,Veg,Desserts & Sweets,Snack,Gluten,Healthy,Weight Gain
+Soan Papdi,415,6.6,49,0,13.4,Veg,Desserts & Sweets,Snack,Gluten,Healthy,Weight Gain
+Peda,371,7.6,40,0.2,17.4,Veg,Desserts & Sweets,Snack,Gluten,Junk,Weight Gain
+Ladoo,446,3.9,54,2.2,13.9,Veg,Desserts & Sweets,Snack,Gluten,Junk,Weight Gain
+Imarti,357,7.6,43,0.4,17.3,Veg,Desserts & Sweets,Snack,Gluten,Junk,Weight Gain
+Chum Chum,441,7.5,40,0.5,11,Veg,Desserts & Sweets,Snack,Gluten,Healthy,Weight Gain
+Balushahi,352,3.3,49,0.2,16.1,Veg,Desserts & Sweets,Snack,Gluten,Junk,Weight Gain
+Malpua,439,3.2,45,1.4,11.6,Veg,Desserts & Sweets,Snack,Gluten,Healthy,Weight Gain
+Sheer Khurma,434,6.7,40,0.4,18.3,Veg,Desserts & Sweets,Snack,Gluten,Healthy,Weight Gain
+Rice Kheer,383,7,49,1.6,11.9,Veg,Desserts & Sweets,Snack,Gluten,Healthy,Weight Gain
+Phirni,308,5.7,47,1,14.2,Veg,Desserts & Sweets,Snack,Gluten,Junk,Weight Gain
+Kulfi,301,7.3,52,3,16.5,Veg,Desserts & Sweets,Snack,Gluten,Healthy,Weight Gain
+Ice Cream,305,5.5,50,2.7,17.9,Veg,Desserts & Sweets,Snack,Gluten,Healthy,Weight Gain
