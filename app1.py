@@ -715,7 +715,7 @@ elif st.session_state.current_page == "planner":
 st.markdown("---")
 st.markdown(
     f"<div style='text-align: center; color: {COLORS['medium_blue']}; padding: 3rem; background: {COLORS['light_bg']}; border-radius: 15px; margin-top: 3rem;'>"
-    "<p style='margin: 0; font-size: 1rem; font-weight: 600;'>🏥 Health Matrices Pro • Your Personal Health Companion • Built with Streamlit</p>"
+    "<p style='margin: 0; font-size: 1rem; font-weight: 600;'>🏥 Health Matrices Pro •  Your Health Journey Starts Here • Transform Your Wellness</p>"
     "</div>",
     unsafe_allow_html=True
 )
