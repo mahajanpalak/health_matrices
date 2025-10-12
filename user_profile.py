@@ -1,7 +1,7 @@
-# profile.py
+# user_profile.py
 import streamlit as st
 import pandas as pd
-from utils import save_profile, load_profile
+from database import save_user_profile, load_user_profile
 
 def create_or_edit_profile():
     st.header("👤 Your Profile")
@@ -10,19 +10,21 @@ def create_or_edit_profile():
     ALLERGY_OPTIONS = ["None", "Gluten", "Dairy", "Nuts", "Soy", "Seafood"]
     INJURY_OPTIONS = ["None", "Core", "Back", "Shoulder", "Arms", "Neck", "Upper Body", "Lower Body", "Full Body"]
 
-    # Load existing profile
-    profile_df = load_profile()
-    if not profile_df.empty:
-        profile = profile_df.iloc[0].to_dict()
-        st.info("Editing existing profile")
+    # Load existing profile from database
+    profile_data = load_user_profile(st.session_state.user_id)
+    
+    if profile_data:
+        profile = profile_data
+        st.success("📋 Editing your existing profile")
     else:
         profile = {}
+        st.info("🆕 Create your new profile to get started!")
 
     # --- Basic info ---
     name = st.text_input("Name", profile.get("Name", ""))
-    age = st.number_input("Age", min_value=0, max_value=120, value=int(profile.get("Age", 20)))
-    height = st.number_input("Height (cm)", min_value=50, max_value=250, value=int(profile.get("Height", 160)))
-    weight = st.number_input("Weight (kg)", min_value=20, max_value=300, value=int(profile.get("Weight", 60)))
+    age = st.number_input("Age", min_value=0, max_value=120, value=int(profile.get("Age", 25)))
+    height = st.number_input("Height (cm)", min_value=50, max_value=250, value=int(profile.get("Height", 170)))
+    weight = st.number_input("Weight (kg)", min_value=20, max_value=300, value=int(profile.get("Weight", 65)))
     gender = st.selectbox("Gender", ["Male", "Female", "Other"], index=["Male", "Female", "Other"].index(profile.get("Gender", "Male")))
     goal = st.selectbox("Goal", ["Lose", "Maintain", "Gain"], index=["Lose", "Maintain", "Gain"].index(profile.get("Goal", "Maintain")))
 
@@ -44,18 +46,27 @@ def create_or_edit_profile():
     )
 
     # --- Save button ---
-    if st.button("Save Profile"):
-        updated_profile = {
-            "Name": name,
-            "Age": age,
-            "Height": height,
-            "Weight": weight,
-            "Gender": gender,
-            "Goal": goal,
-            "Diet Preference": diet_pref,
-            "Allergies": allergies,
-            "Injuries": injuries,
-            "Lifestyle": lifestyle
-        }
-        save_profile(updated_profile)
-        st.success("Profile saved successfully!")
+    col1, col2, col3 = st.columns([1, 2, 1])
+    with col2:
+        if st.button("💾 Save Profile", use_container_width=True):
+            if not name:
+                st.error("❌ Please enter your name")
+            else:
+                updated_profile = {
+                    "Name": name,
+                    "Age": age,
+                    "Height": height,
+                    "Weight": weight,
+                    "Gender": gender,
+                    "Goal": goal,
+                    "Diet Preference": diet_pref,
+                    "Allergies": allergies,
+                    "Injuries": injuries,
+                    "Lifestyle": lifestyle
+                }
+                save_user_profile(st.session_state.user_id, updated_profile)
+                st.success("✅ Profile saved successfully!")
+                st.balloons()
+                
+                # Refresh the app to show updated data
+                st.rerun()

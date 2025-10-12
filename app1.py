@@ -13,6 +13,10 @@ from food_recommender import food_recommender_ui
 from full_day_meal_planner import full_day_meal_planner_ui
 from utils import load_profile, save_profile
 
+# Import authentication and database
+import auth
+from database import load_user_profile as load_user_profile_db
+
 # Page configuration
 st.set_page_config(
     page_title="Health Matrices Pro",
@@ -20,6 +24,11 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded"
 )
+
+# Check authentication - STOP HERE if not logged in
+if not auth.check_auth():
+    auth.show_login_signup()
+    st.stop()
 
 # Medical Color Palette
 COLORS = {
@@ -208,82 +217,79 @@ st.markdown(f"""
 """, unsafe_allow_html=True)
 
 def load_user_profile():
-    """Load user data from profile.csv with proper error handling"""
+    """Load user data from database with proper error handling"""
     try:
-        # Try multiple methods to load the profile
-        profile_df = load_profile()
-        
-        if not profile_df.empty and 'Name' in profile_df.columns:
-            user_data = profile_df.iloc[0].to_dict()
+        # Try to load from database first
+        if st.session_state.user_id:
+            profile_data = load_user_profile_db(st.session_state.user_id)
             
-            # Extract and convert basic metrics
-            name = user_data.get('Name', 'Guest User')
-            age = int(user_data.get('Age', 25))
-            height = float(user_data.get('Height', 170))
-            weight = float(user_data.get('Weight', 65))
-            gender = user_data.get('Gender', 'Not specified')
-            goal = user_data.get('Goal', 'Maintain')
-            
-            # Calculate BMI
-            height_m = height / 100
-            bmi = round(weight / (height_m ** 2), 1)
-            
-            # Determine BMI category
-            if bmi < 18.5:
-                bmi_category = "Underweight"
-                bmi_color = "#60a5fa"  # Blue
-            elif bmi < 25:
-                bmi_category = "Healthy"
-                bmi_color = "#34d399"  # Green
-            elif bmi < 30:
-                bmi_category = "Overweight"
-                bmi_color = "#fbbf24"  # Yellow
-            else:
-                bmi_category = "Obese"
-                bmi_color = "#f87171"  # Red
-            
-            # Calculate daily calorie needs (simplified Harris-Benedict)
-            if gender.lower() == "male":
-                bmr = 88.362 + (13.397 * weight) + (4.799 * height) - (5.677 * age)
-            else:
-                bmr = 447.593 + (9.247 * weight) + (3.098 * height) - (4.330 * age)
-            
-            # Activity multiplier
-            activity_multipliers = {
-                "Sedentary": 1.2,
-                "Lightly Active": 1.375,
-                "Moderately Active": 1.55,
-                "Very Active": 1.725
-            }
-            lifestyle = user_data.get('Lifestyle', 'Moderately Active')
-            activity_multiplier = activity_multipliers.get(lifestyle, 1.55)
-            
-            daily_calories = round(bmr * activity_multiplier)
-            
-            # Goal adjustment
-            if goal.lower() == "lose":
-                daily_calories -= 500
-            elif goal.lower() == "gain":
-                daily_calories += 500
-            
-            return {
-                'name': name,
-                'age': age,
-                'height': height,
-                'weight': weight,
-                'bmi': bmi,
-                'bmi_category': bmi_category,
-                'bmi_color': bmi_color,
-                'gender': gender,
-                'goal': goal,
-                'lifestyle': lifestyle,
-                'daily_calories': daily_calories,
-                'diet_preference': user_data.get('Diet Preference', 'Mixed'),
-                'allergies': user_data.get('Allergies', []),
-                'injuries': user_data.get('Injuries', [])
-            }
-        else:
-            st.sidebar.warning("Profile file is empty or has incorrect format")
+            if profile_data and profile_data.get('Name') and profile_data.get('Name') != 'Guest User':
+                # Extract and convert basic metrics
+                name = profile_data.get('Name', 'Guest User')
+                age = int(profile_data.get('Age', 25))
+                height = float(profile_data.get('Height', 170))
+                weight = float(profile_data.get('Weight', 65))
+                gender = profile_data.get('Gender', 'Not specified')
+                goal = profile_data.get('Goal', 'Maintain')
+                
+                # Calculate BMI
+                height_m = height / 100
+                bmi = round(weight / (height_m ** 2), 1)
+                
+                # Determine BMI category
+                if bmi < 18.5:
+                    bmi_category = "Underweight"
+                    bmi_color = "#60a5fa"  # Blue
+                elif bmi < 25:
+                    bmi_category = "Healthy"
+                    bmi_color = "#34d399"  # Green
+                elif bmi < 30:
+                    bmi_category = "Overweight"
+                    bmi_color = "#fbbf24"  # Yellow
+                else:
+                    bmi_category = "Obese"
+                    bmi_color = "#f87171"  # Red
+                
+                # Calculate daily calorie needs (simplified Harris-Benedict)
+                if gender.lower() == "male":
+                    bmr = 88.362 + (13.397 * weight) + (4.799 * height) - (5.677 * age)
+                else:
+                    bmr = 447.593 + (9.247 * weight) + (3.098 * height) - (4.330 * age)
+                
+                # Activity multiplier
+                activity_multipliers = {
+                    "Sedentary": 1.2,
+                    "Lightly Active": 1.375,
+                    "Moderately Active": 1.55,
+                    "Very Active": 1.725
+                }
+                lifestyle = profile_data.get('Lifestyle', 'Moderately Active')
+                activity_multiplier = activity_multipliers.get(lifestyle, 1.55)
+                
+                daily_calories = round(bmr * activity_multiplier)
+                
+                # Goal adjustment
+                if goal.lower() == "lose":
+                    daily_calories -= 500
+                elif goal.lower() == "gain":
+                    daily_calories += 500
+                
+                return {
+                    'name': name,
+                    'age': age,
+                    'height': height,
+                    'weight': weight,
+                    'bmi': bmi,
+                    'bmi_category': bmi_category,
+                    'bmi_color': bmi_color,
+                    'gender': gender,
+                    'goal': goal,
+                    'lifestyle': lifestyle,
+                    'daily_calories': daily_calories,
+                    'diet_preference': profile_data.get('Diet Preference', 'Mixed'),
+                    'allergies': profile_data.get('Allergies', []),
+                    'injuries': profile_data.get('Injuries', [])
+                }
             
     except Exception as e:
         st.sidebar.error(f"Error loading profile: {str(e)}")
@@ -441,22 +447,29 @@ with st.sidebar:
     </div>
     """, unsafe_allow_html=True)
     
-    # Refresh button
-    if st.button("🔄 Refresh Profile Data", use_container_width=True):
-        st.cache_data.clear()
-        st.rerun()
-    
-    # User welcome section
+    # User info section
     st.markdown(f"""
     <div class="user-welcome">
         <h4 style="margin: 0 0 0.8rem 0; color: {COLORS['dark_blue']}; font-size: 1.2rem;">
-        👋 Welcome, {user['name']}!</h4>
+        👋 Welcome, {st.session_state.username}!</h4>
         <p style="margin: 0.3rem 0; color: {COLORS['medium_blue']}; font-size: 0.95rem;">
         <strong>BMI:</strong> {user['bmi']} ({user['bmi_category']})</p>
         <p style="margin: 0.3rem 0; color: {COLORS['medium_blue']}; font-size: 0.95rem;">
         <strong>Goal:</strong> {user['goal']} • <strong>Lifestyle:</strong> {user['lifestyle']}</p>
     </div>
     """, unsafe_allow_html=True)
+    
+    # Refresh button
+    if st.button("🔄 Refresh Profile Data", use_container_width=True):
+        st.cache_data.clear()
+        st.rerun()
+    
+    # Logout button
+    if st.button("🚪 Logout", use_container_width=True):
+        st.session_state.logged_in = False
+        st.session_state.user_id = None
+        st.session_state.username = None
+        st.rerun()
     
     st.markdown("---")
     
@@ -469,7 +482,8 @@ with st.sidebar:
         "🍎 Food Search": "food_search",
         "💡 Food Recommender": "food_recommender",
         "🏋️ Exercise": "exercise",
-        "📅 Full-Day Planner": "planner"
+        "📅 Full-Day Planner": "planner",
+        "🔧 Admin": "admin"
     }
     
     for display_name, page_key in nav_options.items():
@@ -711,6 +725,79 @@ elif st.session_state.current_page == "planner":
         }
         full_day_meal_planner_ui(compatible_user, foods)
 
+elif st.session_state.current_page == "admin":
+    st.markdown('<h1 class="main-header">🔧 Admin Panel</h1>', unsafe_allow_html=True)
+    
+    # ONLY SPECIFIC USERNAMES CAN ACCESS
+    ADMIN_USERS = ["Palak"]  # Add your usernames here
+    
+    if st.session_state.username in ADMIN_USERS:
+        import database as db
+        import sqlite3
+        
+        st.success(f"✅ Welcome, Admin {st.session_state.username}!")
+        
+        tab1, tab2, tab3 = st.tabs(["👥 Users", "📊 Profiles", "⚙️ Database"])
+        
+        with tab1:
+            st.subheader("Registered Users")
+            conn = sqlite3.connect('health_app.db')
+            users_df = pd.read_sql_query("SELECT id, username, email, created_at FROM users", conn)
+            conn.close()
+            
+            st.dataframe(users_df, use_container_width=True)
+            st.metric("Total Users", len(users_df))
+            
+            # Download users data
+            csv = users_df.to_csv(index=False)
+            st.download_button("📥 Download Users CSV", csv, "users.csv")
+        
+        with tab2:
+            st.subheader("User Profiles")
+            conn = sqlite3.connect('health_app.db')
+            profiles_df = pd.read_sql_query("""
+                SELECT up.id, u.username, up.name, up.age, up.height, up.weight, 
+                       up.gender, up.goal, up.lifestyle, up.diet_preference,
+                       up.allergies, up.injuries, up.created_at 
+                FROM user_profiles up 
+                JOIN users u ON up.user_id = u.id
+            """, conn)
+            conn.close()
+            
+            st.dataframe(profiles_df, use_container_width=True)
+            st.metric("Total Profiles", len(profiles_df))
+            
+            # Download profiles data
+            csv = profiles_df.to_csv(index=False)
+            st.download_button("📥 Download Profiles CSV", csv, "profiles.csv")
+        
+        with tab3:
+            st.subheader("Database Management")
+            st.info("Database file: health_app.db")
+            
+            # Show file size
+            import os
+            if os.path.exists('health_app.db'):
+                file_size = os.path.getsize('health_app.db')
+                st.write(f"File size: {file_size / 1024:.2f} KB")
+            
+            # Clear database button (dangerous!)
+            if st.button("🗑️ Clear All Data", type="secondary"):
+                st.warning("This will delete ALL user data! Proceed with caution.")
+                confirm = st.text_input("Type 'DELETE ALL' to confirm:")
+                if confirm == "DELETE ALL":
+                    conn = sqlite3.connect('health_app.db')
+                    conn.execute("DELETE FROM user_profiles")
+                    conn.execute("DELETE FROM users")
+                    conn.commit()
+                    conn.close()
+                    st.error("All data has been deleted!")
+                    st.rerun()
+    
+    else:
+        st.error("🚫 Access Denied - Admin privileges required")
+        st.info("This section is only accessible to administrators.")
+
 # Footer
 st.markdown("---")
 st.markdown(
@@ -719,3 +806,4 @@ st.markdown(
     "</div>",
     unsafe_allow_html=True
 )
+
