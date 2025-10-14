@@ -217,7 +217,7 @@ st.markdown(f"""
 """, unsafe_allow_html=True)
 
 def load_user_profile():
-    """Load user data from database with proper error handling"""
+    """Load user data from database with proper error handling - NO CACHING"""
     try:
         # Try to load from database first
         if st.session_state.user_id:

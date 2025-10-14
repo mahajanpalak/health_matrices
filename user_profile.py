@@ -46,6 +46,8 @@ def create_or_edit_profile():
     )
 
     # --- Save button ---
+# user_profile.py - Update the save button section
+# --- Save button ---
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
         if st.button("💾 Save Profile", use_container_width=True):
@@ -68,5 +70,10 @@ def create_or_edit_profile():
                 st.success("✅ Profile saved successfully!")
                 st.balloons()
                 
-                # Refresh the app to show updated data
-                st.rerun()
+                # Clear cache and force refresh
+                st.cache_data.clear()
+                
+                # Add a button to go back to dashboard to see updated data
+                if st.button("🏠 Go to Dashboard to See Updates", use_container_width=True):
+                    st.session_state.current_page = "dashboard"
+                    st.rerun()
