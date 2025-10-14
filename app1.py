@@ -451,19 +451,21 @@ with st.sidebar:
     st.markdown(f"""
     <div class="user-welcome">
         <h4 style="margin: 0 0 0.8rem 0; color: {COLORS['dark_blue']}; font-size: 1.2rem;">
-        👋 Welcome, {st.session_state.username}!</h4>
+        👋 Welcome, {user['name']}!</h4>
         <p style="margin: 0.3rem 0; color: {COLORS['medium_blue']}; font-size: 0.95rem;">
         <strong>BMI:</strong> {user['bmi']} ({user['bmi_category']})</p>
         <p style="margin: 0.3rem 0; color: {COLORS['medium_blue']}; font-size: 0.95rem;">
         <strong>Goal:</strong> {user['goal']} • <strong>Lifestyle:</strong> {user['lifestyle']}</p>
     </div>
-    """, unsafe_allow_html=True)
-    
-    # Refresh button
+    """, unsafe_allow_html=True)    
+
+# Refresh button
     if st.button("🔄 Refresh Profile Data", use_container_width=True):
         st.cache_data.clear()
-        st.rerun()
-    
+        # Force reload by removing user data from session state
+        if 'user_profile_data' in st.session_state:
+            del st.session_state.user_profile_data
+        st.rerun()    
     # Logout button
     if st.button("🚪 Logout", use_container_width=True):
         st.session_state.logged_in = False
