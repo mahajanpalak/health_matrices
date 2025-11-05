@@ -1,5 +1,9 @@
 import streamlit as st
 import pandas as pd
+import os
+
+# Load foods dataset from data/ folder
+foods = pd.read_csv(os.path.join("data", "foods.csv"))
 
 def get_food_suggestions(goal, meal, foods, n=3, exclude=[]):
     df = foods.copy()

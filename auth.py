@@ -28,15 +28,6 @@ def show_login_signup():
             margin-bottom: 2rem;
             font-weight: 800;
         }
-        .auth-container {
-            max-width: 500px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-        .auth-tab {
-            font-size: 1.2rem;
-            font-weight: 600;
-        }
     </style>
     """, unsafe_allow_html=True)
     

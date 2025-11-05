@@ -4,14 +4,18 @@ import numpy as np
 import plotly.graph_objects as go
 import plotly.express as px
 from datetime import datetime, timedelta
+import time
 import os
 
+import database as db  
 from user_profile import create_or_edit_profile
 from food import search_food_ui
 from exercise import search_exercise_ui
 from food_recommender import food_recommender_ui
 from full_day_meal_planner import full_day_meal_planner_ui
+from workout_generator import workout_generator_ui
 from utils import load_profile, save_profile
+from routine_optimizer import routine_optimizer_ui
 
 # Import authentication and database
 import auth
@@ -25,196 +29,882 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Check authentication - STOP HERE if not logged in
-if not auth.check_auth():
-    auth.show_login_signup()
-    st.stop()
-
-# Medical Color Palette
+# PREMIUM MEDICAL DARK THEME COLOR PALETTE
+# ENHANCED MEDICAL COLOR PALETTE (Based on your screenshots)
 COLORS = {
-    "dark_blue": "#131a2f",
-    "medium_blue": "#264493", 
-    "light_blue": "#11a2d7",
-    "light_bg": "#e5f3fa",
-    "white": "#ffffff",
-    "off_white": "#f8fafc",
-    "light_green": "#10b981",
-    "pink": "#ec4899",
-    "yellow": "#f59e0b",
-    "purple": "#8b5cf6"
+    # Background Colors
+    "dark_navy": "#0a1128",
+    "deep_blue": "#1a2035",
+    "surface": "#1e2436",
+    "card_bg": "#2a3142",
+    
+    # Vibrant Medical Accents
+    "medical_cyan": "#00e0ff",
+    "medical_teal": "#2a9d8f",
+    "health_amber": "#e9c46a",
+    "medical_coral": "#f4a261",
+    "medical_red": "#e76f51",
+    "wellness_green": "#2a9d8f",
+    
+    # Text Hierarchy
+    "text_primary": "#ffffff",
+    "text_secondary": "#e2e8f0",
+    "text_labels": "#94a3b8",
+    
+    # Status Colors
+    "success": "#2a9d8f",
+    "warning": "#e9c46a",
+    "error": "#e76f51",
+    "info": "#00e0ff"
 }
 
-# Custom CSS for medical professional styling
+# PREMIUM MEDICAL DARK THEME CSS
 st.markdown(f"""
 <style>
+    /* Global Styles */
+    .stApp {{
+        background: linear-gradient(135deg, {COLORS['dark_navy']} 0%, {COLORS['deep_blue']} 100%);
+        color: {COLORS['text_primary']};
+    }}
+
+    /* Fix Navigation text visibility */
+    .sidebar-header h2 {{
+        color: #ffffff !important;
+    }}
+    
+    .sidebar-header p {{
+        color: #e2e8f0 !important;
+    }}
+    
+    /* Fix navigation buttons text */
+    .nav-button {{
+        color: #ffffff !important;
+    }}
+
+    /* FIX ALL TEXT VISIBILITY ISSUES */
+    
+    /* Fix all input placeholders to be visible */
+    .stTextInput input::placeholder, 
+    .stNumberInput input::placeholder, 
+    .stTextArea textarea::placeholder,
+    .stSelectbox select::placeholder {{
+        color: #94a3b8 !important;
+        opacity: 1 !important;
+    }}
+
+    /* Fix select dropdown text and options */
+    .stSelectbox [data-baseweb="select"] {{
+        color: #ffffff !important;
+    }}
+    
+    /* Fix dropdown options background and text */
+    [data-baseweb="popover"] [role="listbox"] {{
+        background-color: {COLORS['surface']} !important;
+        color: #ffffff !important;
+    }}
+    
+    [data-baseweb="popover"] [role="option"] {{
+        color: #ffffff !important;
+        background-color: {COLORS['surface']} !important;
+    }}
+    
+    [data-baseweb="popover"] [role="option"]:hover {{
+        background-color: {COLORS['card_bg']} !important;
+        color: #ffffff !important;
+    }}
+
+    /* Fix multi-select text and options */
+    .stMultiSelect [data-baseweb="select"] {{
+        color: #ffffff !important;
+    }}
+    
+    .stMultiSelect [data-baseweb="select"] span {{
+        color: #ffffff !important;
+    }}
+
+    /* Fix radio button labels */
+    .stRadio label {{
+        color: #ffffff !important;
+        font-weight: 500 !important;
+    }}
+
+    /* Fix checkbox labels */
+    .stCheckbox label {{
+        color: #ffffff !important;
+        font-weight: 500 !important;
+    }}
+
+    /* Fix sidebar section headers */
+    .sidebar .stMarkdown h3 {{
+        color: #ffffff !important;
+    }}
+
+    /* Fix text colors for form inputs and labels */
+    .stTextInput label, .stNumberInput label, .stSelectbox label, .stTextArea label {{
+        color: #ffffff !important;
+        font-weight: 500 !important;
+    }}
+
+    .stTextInput input, .stNumberInput input, .stSelectbox select, .stTextArea textarea {{
+        color: #ffffff !important;
+        background-color: {COLORS['surface']} !important;
+        border: 1px solid {COLORS['card_bg']} !important;
+    }}
+
+    .stTextInput input:focus, .stNumberInput input:focus, .stSelectbox select:focus, .stTextArea textarea:focus {{
+        border-color: {COLORS['medical_cyan']} !important;
+        box-shadow: 0 0 0 2px rgba(0, 224, 255, 0.2) !important;
+    }}
+
+    /* Fix all text elements to be visible */
+    .stMarkdown, .stText, .stHeader, .stSubheader, .stTitle {{
+        color: #ffffff !important;
+    }}
+
+    /* Specific fixes for common text sizes */
+    p, div, span {{
+        color: #e2e8f0 !important;
+    }}
+
+    /* Fix for "How are you feeling right now?" and similar texts */
+    .stRadio label, .stCheckbox label {{
+        color: #ffffff !important;
+        font-weight: 500 !important;
+    }}
+
+    /* Fix for form container backgrounds */
+    .stForm {{
+        background-color: {COLORS['surface']} !important;
+        border: 1px solid {COLORS['card_bg']} !important;
+        border-radius: 10px !important;
+        padding: 1.5rem !important;
+    }}
+
+    /* Fix for profile section specifically */
+    .profile-section {{
+        background: {COLORS['surface']} !important;
+        padding: 2rem !important;
+        border-radius: 12px !important;
+        border: 1px solid {COLORS['card_bg']} !important;
+    }}
+
+    /* Fix for metric values and labels */
+    .stMetric {{
+        color: #ffffff !important;
+    }}
+
+    .stMetric label {{
+        color: {COLORS['text_labels']} !important;
+    }}
+
+    .stMetric value {{
+        color: #ffffff !important;
+    }}
+
+    /* Fix for expander headers */
+    .streamlit-expanderHeader {{
+        color: #ffffff !important;
+        background-color: {COLORS['surface']} !important;
+        border: 1px solid {COLORS['card_bg']} !important;
+    }}
+
+    .streamlit-expanderContent {{
+        background-color: {COLORS['surface']} !important;
+        color: {COLORS['text_secondary']} !important;
+    }}
+
+    /* Fix for dataframes */
+    .dataframe {{
+        color: #ffffff !important;
+    }}
+
+    /* Fix for tabs */
+    .stTabs [data-baseweb="tab"] {{
+        color: {COLORS['text_secondary']} !important;
+    }}
+
+    .stTabs [aria-selected="true"] {{
+        color: {COLORS['dark_navy']} !important;
+    }}
+
+    /* Fix for buttons text */
+    .stButton button {{
+        color: {COLORS['dark_navy']} !important;
+    }}
+
+    /* Fix for success/warning/error messages */
+    .stAlert {{
+        color: #ffffff !important;
+    }}
+
+    .stSuccess {{
+        background-color: rgba(42, 157, 143, 0.2) !important;
+        border-color: {COLORS['wellness_green']} !important;
+    }}
+
+    .stWarning {{
+        background-color: rgba(233, 196, 106, 0.2) !important;
+        border-color: {COLORS['health_amber']} !important;
+    }}
+
+    .stError {{
+        background-color: rgba(231, 111, 81, 0.2) !important;
+        border-color: {COLORS['medical_red']} !important;
+    }}
+
+    .stInfo {{
+        background-color: rgba(0, 224, 255, 0.2) !important;
+        border-color: {COLORS['medical_cyan']} !important;
+    }}
+
+    /* Fix for slider labels */
+    .stSlider label {{
+        color: #ffffff !important;
+    }}
+
+    /* Fix for file uploader */
+    .stFileUploader label {{
+        color: #ffffff !important;
+    }}
+
+    /* Fix for progress bars */
+    .stProgress .st-bo {{
+        color: #ffffff !important;
+    }}
+    
+    /* Additional fixes for dropdown selected values */
+    [data-baseweb="select"] div {{
+        color: #ffffff !important;
+    }}
+    
+    /* Fix for multiselect selected items */
+    [data-baseweb="tag"] {{
+        background-color: {COLORS['card_bg']} !important;
+        color: #ffffff !important;
+    }}
+    
+    /* Fix for date input */
+    .stDateInput input {{
+        color: #ffffff !important;
+    }}
+    
+    .stDateInput label {{
+        color: #ffffff !important;
+    }}
+
+    /* NEW: Fix placeholder text color specifically for form inputs */
+    .stTextInput input::placeholder {{
+        color: #94a3b8 !important;
+        opacity: 0.8 !important;
+    }}
+
+    .stNumberInput input::placeholder {{
+        color: #94a3b8 !important;
+        opacity: 0.8 !important;
+    }}
+
+    .stTextArea textarea::placeholder {{
+        color: #94a3b8 !important;
+        opacity: 0.8 !important;
+    }}
+
+    .stSelectbox select::placeholder {{
+        color: #94a3b8 !important;
+        opacity: 0.8 !important;
+    }}
+
+    /* Fix for text input placeholder when typing */
+    .stTextInput input:not(:focus):placeholder-shown {{
+        color: #94a3b8 !important;
+    }}
+
+    .stNumberInput input:not(:focus):placeholder-shown {{
+        color: #94a3b8 !important;
+    }}
+
+    .stTextArea textarea:not(:focus):placeholder-shown {{
+        color: #94a3b8 !important;
+    }}
+
+    /* Fix for select box placeholder text */
+    [data-baseweb="select"] [aria-live="polite"] {{
+        color: #94a3b8 !important;
+    }}
+
+    /* Fix for empty select box state */
+    [data-baseweb="select"]:empty {{
+        color: #94a3b8 !important;
+    }}
+    /* Fix ALL placeholder text visibility - COMPREHENSIVE FIX */
+    ::placeholder {{
+        color: #94a3b8 !important;
+        opacity: 0.8 !important;
+    }}
+    
+    /* Specific fixes for Streamlit components */
+    .stSelectbox [data-baseweb="select"] div,
+    .stSelectbox [data-baseweb="select"] span {{
+        color: #94a3b8 !important;
+    }}
+    
+    .stSelectbox [data-baseweb="select"]:has(div:empty)::before {{
+        content: attr(placeholder);
+        color: #94a3b8 !important;
+        opacity: 0.8 !important;
+    }}
+    
+    /* Fix for dropdown selected value when empty */
+    [data-baseweb="select"] div:empty::before {{
+        color: #94a3b8 !important;
+        opacity: 0.8 !important;
+    }}
+    
+    /* Fix for all input text */
+    .stTextInput input,
+    .stNumberInput input,
+    .stTextArea textarea,
+    .stSelectbox select {{
+        color: #94a3b8 !important;
+    }}
+    
+    /* When input is focused, change text color to white */
+    .stTextInput input:focus,
+    .stNumberInput input:focus,
+    .stTextArea textarea:focus,
+    .stSelectbox select:focus {{
+        color: #ffffff !important;
+    }}
+
+    /* Specific fix for workout generator form placeholders */
+    .workout-form input::placeholder,
+    .workout-form textarea::placeholder {{
+        color: #94a3b8 !important;
+        opacity: 0.8 !important;
+    }}
+
+    /* Fix all input placeholders to be visible */
+    .stTextInput input::placeholder, 
+    .stNumberInput input::placeholder, 
+    .stTextArea textarea::placeholder,
+    .stSelectbox select::placeholder {{
+        color: #94a3b8 !important;
+        opacity: 1 !important;
+    }}
+
+        /* Main Header */
     .main-header {{
         font-size: 2.8rem;
-        color: #ffffff;
-        background: linear-gradient(135deg, {COLORS['dark_blue']} 0%, {COLORS['medium_blue']} 100%);
+        color: {COLORS['text_primary']};
+        background: linear-gradient(135deg, {COLORS['surface']} 0%, {COLORS['card_bg']} 100%);
         padding: 2.5rem;
-        border-radius: 20px;
+        border-radius: 15px;
         text-align: center;
         margin-bottom: 2rem;
-        font-weight: 800;
-        box-shadow: 0 8px 25px rgba(19, 26, 47, 0.3);
+        font-weight: 700;
+        box-shadow: 0 12px 30px rgba(10, 17, 40, 0.6);
         text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        border: 1px solid {COLORS['medical_cyan']}33;
+        position: relative;
+        overflow: hidden;
+        animation: fadeInUp 0.8s ease-out;
     }}
-    .metric-card {{ 
-        background: linear-gradient(135deg, {COLORS['medium_blue']} 0%, {COLORS['light_blue']} 100%);
-        padding: 2rem;
-        border-radius: 16px;
-        color: white;
+    
+    .main-header::before {{
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, {COLORS['medical_cyan']}, {COLORS['wellness_green']});
+        animation: shimmer 2s infinite;
+    }}
+    
+    /* Metric Cards with Hover Animations */
+    .metric-card {{
+        background: linear-gradient(135deg, {COLORS['surface']} 0%, {COLORS['card_bg']} 100%);
+        padding: 1.8rem;
+        border-radius: 12px;
+        color: {COLORS['text_primary']};
         text-align: center;
-        box-shadow: 0 6px 20px rgba(38, 68, 147, 0.4);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.4);
         margin: 0.5rem;
-        border: 2px solid {COLORS['light_blue']};
+        border: 1px solid {COLORS['medical_cyan']}33;
+        transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        position: relative;
+        overflow: hidden;
+        animation: slideInUp 0.6s ease-out;
+    }}
+    
+    .metric-card::before {{
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: linear-gradient(90deg, {COLORS['medical_cyan']}, {COLORS['wellness_green']});
+        transform: scaleX(0);
         transition: transform 0.3s ease;
     }}
+    
     .metric-card:hover {{
-        transform: translateY(-5px);
+        transform: translateY(-8px) scale(1.02);
+        box-shadow: 0 15px 40px rgba(0, 225, 255, 0.3);
     }}
-    .metric-card-age {{
-        background: linear-gradient(135deg, {COLORS['light_green']} 0%, #34d399 100%);
-        padding: 2rem;
-        border-radius: 16px;
-        color: white;
-        text-align: center;
-        box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
-        margin: 0.5rem;
-        border: 2px solid #34d399;
-        transition: transform 0.3s ease;
+    
+    .metric-card:hover::before {{
+        transform: scaleX(1);
     }}
-    .metric-card-weight {{
-        background: linear-gradient(135deg, {COLORS['pink']} 0%, #f472b6 100%);
-        padding: 2rem;
-        border-radius: 16px;
-        color: white;
-        text-align: center;
-        box-shadow: 0 6px 20px rgba(236, 72, 153, 0.4);
-        margin: 0.5rem;
-        border: 2px solid #f472b6;
-        transition: transform 0.3s ease;
-    }}
-    .metric-card-height {{
-        background: linear-gradient(135deg, {COLORS['yellow']} 0%, #fbbf24 100%);
-        padding: 2rem;
-        border-radius: 16px;
-        color: white;
-        text-align: center;
-        box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4);
-        margin: 0.5rem;
-        border: 2px solid #fbbf24;
-        transition: transform 0.3s ease;
-    }}
+    
     .metric-card h3 {{
-        font-size: 1.1rem;
-        margin: 0 0 1rem 0;
-        opacity: 0.95;
+        font-size: 0.95rem;
+        margin: 0 0 0.8rem 0;
+        opacity: 0.9;
         font-weight: 600;
         letter-spacing: 0.5px;
+        text-transform: uppercase;
+        color: {COLORS['text_labels']};
     }}
+    
     .metric-card h2 {{
-        font-size: 2.5rem;
-        margin: 1rem 0;
-        font-weight: 800;
+        font-size: 2.2rem;
+        margin: 0.5rem 0;
+        font-weight: 700;
+        background: linear-gradient(135deg, {COLORS['medical_cyan']}, {COLORS['wellness_green']});
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
     }}
+    
     .metric-card p {{
         margin: 0;
-        font-size: 1rem;
-        opacity: 0.95;
+        font-size: 0.9rem;
+        opacity: 0.9;
         font-weight: 500;
+        color: {COLORS['text_secondary']};
     }}
+    
+    /* Specialized Metric Cards */
+    .metric-card-bmi {{
+        background: linear-gradient(135deg, {COLORS['surface']} 0%, {COLORS['card_bg']} 100%);
+        border-left: 4px solid {COLORS['medical_cyan']};
+    }}
+    
+    .metric-card-age {{
+        background: linear-gradient(135deg, {COLORS['surface']} 0%, {COLORS['card_bg']} 100%);
+        border-left: 4px solid {COLORS['wellness_green']};
+    }}
+    
+    .metric-card-weight {{
+        background: linear-gradient(135deg, {COLORS['surface']} 0%, {COLORS['card_bg']} 100%);
+        border-left: 4px solid {COLORS['health_amber']};
+    }}
+    
+    .metric-card-height {{
+        background: linear-gradient(135deg, {COLORS['surface']} 0%, {COLORS['card_bg']} 100%);
+        border-left: 4px solid {COLORS['medical_red']};
+    }}
+    
+    /* Insight Cards */
     .insight-card {{
-        background: {COLORS['white']};
+        background: {COLORS['surface']};
         padding: 2rem;
-        border-radius: 16px;
-        border-left: 6px solid {COLORS['light_blue']};
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        border-radius: 12px;
+        border-left: 4px solid {COLORS['medical_cyan']};
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
         margin: 1.5rem 0;
-        border: 1px solid #e2e8f0;
+        border: 1px solid {COLORS['card_bg']};
         transition: all 0.3s ease;
+        animation: fadeIn 0.8s ease-out;
     }}
+    
     .insight-card:hover {{
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        box-shadow: 0 12px 35px rgba(0, 225, 255, 0.2);
+        transform: translateY(-3px);
     }}
+    
+    /* Feature Cards */
     .feature-card {{
-        background: {COLORS['white']};
+        background: {COLORS['surface']};
         padding: 2rem;
-        border-radius: 16px;
-        border: 2px solid #e2e8f0;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        border-radius: 12px;
+        border: 1px solid {COLORS['card_bg']};
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
         margin: 1.5rem 0;
-        transition: all 0.3s ease;
-        min-height: 220px;
+        transition: all 0.4s ease;
+        min-height: 200px;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
+        position: relative;
+        overflow: hidden;
+        animation: slideInLeft 0.6s ease-out;
     }}
+    
+    .feature-card::before {{
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, {COLORS['medical_cyan']}, {COLORS['wellness_green']});
+        transform: scaleX(0);
+        transition: transform 0.3s ease;
+    }}
+    
+    .feature-card:hover::before {{
+        transform: scaleX(1);
+    }}
+    
     .feature-card:hover {{
-        transform: translateY(-5px);
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
-        border-color: {COLORS['light_blue']};
+        transform: translateY(-8px);
+        box-shadow: 0 15px 40px rgba(0, 225, 255, 0.25);
+        border-color: {COLORS['medical_cyan']}33;
     }}
+    
+    /* Sidebar Styling */
     .sidebar-header {{
-        background: linear-gradient(135deg, {COLORS['dark_blue']} 0%, {COLORS['medium_blue']} 100%);
+        background: linear-gradient(135deg, {COLORS['surface']} 0%, {COLORS['card_bg']} 100%);
         padding: 2rem;
-        border-radius: 0 0 20px 20px;
-        color: white;
+        border-radius: 0 0 15px 15px;
+        color: {COLORS['text_primary']};
         text-align: center;
         margin-bottom: 1.5rem;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+        position: relative;
+        overflow: hidden;
     }}
+    
+    .sidebar-header::before {{
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, {COLORS['medical_cyan']}, {COLORS['wellness_green']});
+    }}
+    
     .user-welcome {{
-        background: {COLORS['light_bg']};
+        background: {COLORS['surface']};
         padding: 1.5rem;
-        border-radius: 12px;
-        border-left: 5px solid {COLORS['light_blue']};
+        border-radius: 10px;
+        border-left: 4px solid {COLORS['medical_cyan']};
         margin: 1.5rem 0;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        border: 1px solid {COLORS['card_bg']};
+        animation: pulse 2s infinite;
     }}
+    
+    /* Button Styling */
     .stButton button {{
-        background: linear-gradient(135deg, {COLORS['medium_blue']} 0%, {COLORS['light_blue']} 100%);
-        color: white;
+        background: linear-gradient(135deg, {COLORS['medical_cyan']} 0%, {COLORS['wellness_green']} 100%);
+        color: {COLORS['dark_navy']};
         border: none;
-        padding: 1rem 2rem;
-        border-radius: 12px;
-        font-weight: 700;
-        font-size: 1rem;
-        transition: all 0.3s ease;
-        box-shadow: 0 4px 12px rgba(30, 64, 175, 0.3);
+        padding: 0.9rem 1.8rem;
+        border-radius: 10px;
+        font-weight: 600;
+        font-size: 0.95rem;
+        transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        box-shadow: 0 6px 20px rgba(0, 225, 255, 0.3);
+        position: relative;
+        overflow: hidden;
     }}
+    
     .stButton button:hover {{
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(17, 162, 215, 0.4);
+        transform: translateY(-3px) scale(1.05);
+        box-shadow: 0 10px 30px rgba(0, 225, 255, 0.5);
     }}
+    
+    .stButton button::before {{
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+        transition: left 0.5s;
+    }}
+    
+    .stButton button:hover::before {{
+        left: 100%;
+    }}
+    
+    /* Section Headers */
     .section-header {{
-        color: {COLORS['dark_blue']};
-        border-bottom: 3px solid {COLORS['light_blue']};
+        color: {COLORS['text_primary']};
+        border-bottom: 2px solid {COLORS['medical_cyan']};
         padding-bottom: 1rem;
         margin: 3rem 0 2rem 0;
-        font-size: 1.8rem;
+        font-size: 1.6rem;
         font-weight: 700;
+        position: relative;
+        animation: fadeIn 0.8s ease-out;
     }}
+    
+    .section-header::after {{
+        content: '';
+        position: absolute;
+        bottom: -2px;
+        left: 0;
+        width: 50px;
+        height: 2px;
+        background: {COLORS['wellness_green']};
+        animation: expandWidth 1s ease-out;
+    }}
+    
+    /* Progress Bars */
     .progress-container {{
-        background: {COLORS['light_bg']};
-        border-radius: 12px;
+        background: {COLORS['card_bg']};
+        border-radius: 10px;
         margin: 1rem 0;
-        padding: 0.5rem;
-        box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+        padding: 0.4rem;
+        box-shadow: inset 0 2px 8px rgba(0,0,0,0.3);
+        border: 1px solid {COLORS['surface']};
     }}
+    
     .progress-fill {{
-        background: linear-gradient(90deg, {COLORS['light_blue']} 0%, {COLORS['medium_blue']} 100%);
-        height: 25px;
+        background: linear-gradient(90deg, {COLORS['medical_cyan']} 0%, {COLORS['wellness_green']} 100%);
+        height: 22px;
         border-radius: 8px;
         text-align: center;
-        color: white;
-        font-size: 0.9rem;
-        line-height: 25px;
+        color: {COLORS['dark_navy']};
+        font-size: 0.85rem;
+        line-height: 22px;
         font-weight: 600;
-        box-shadow: 0 2px 8px rgba(17, 162, 215, 0.3);
+        box-shadow: 0 2px 8px rgba(0, 225, 255, 0.4);
+        position: relative;
+        overflow: hidden;
+        transition: width 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }}
+    
+    .progress-fill::before {{
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+        animation: shimmer 2s infinite;
+    }}
+    
+    /* Navigation Buttons */
+    .nav-button {{
+        background: {COLORS['surface']} !important;
+        color: {COLORS['text_primary']} !important;
+        border: 1px solid {COLORS['card_bg']} !important;
+        padding: 1rem !important;
+        border-radius: 10px !important;
+        font-weight: 500 !important;
+        transition: all 0.3s ease !important;
+        margin: 0.3rem 0 !important;
+        text-align: left !important;
+    }}
+    
+    .nav-button:hover {{
+        background: linear-gradient(135deg, {COLORS['surface']} 0%, {COLORS['card_bg']} 100%) !important;
+        border-color: {COLORS['medical_cyan']} !important;
+        transform: translateX(8px) !important;
+        box-shadow: 0 6px 20px rgba(0, 225, 255, 0.3) !important;
+    }}
+    
+    /* Tab Styling */
+    .stTabs [data-baseweb="tab-list"] {{
+        gap: 2px;
+        background: {COLORS['surface']};
+        padding: 0.5rem;
+        border-radius: 10px;
+    }}
+    
+    .stTabs [data-baseweb="tab"] {{
+        background-color: {COLORS['card_bg']};
+        border-radius: 8px;
+        padding: 1rem 1.5rem;
+        border: none;
+        font-weight: 500;
+        color: {COLORS['text_secondary']};
+        transition: all 0.3s ease;
+    }}
+    
+    .stTabs [aria-selected="true"] {{
+        background-color: {COLORS['medical_cyan']} !important;
+        color: {COLORS['dark_navy']} !important;
+        box-shadow: 0 4px 15px rgba(0, 225, 255, 0.4) !important;
+        transform: translateY(-2px);
+    }}
+    
+    /* Animations */
+    @keyframes fadeInUp {{
+        from {{
+            opacity: 0;
+            transform: translateY(30px);
+        }}
+        to {{
+            opacity: 1;
+            transform: translateY(0);
+        }}
+    }}
+    
+    @keyframes slideInUp {{
+        from {{
+            opacity: 0;
+            transform: translateY(50px);
+        }}
+        to {{
+            opacity: 1;
+            transform: translateY(0);
+        }}
+    }}
+    
+    @keyframes slideInLeft {{
+        from {{
+            opacity: 0;
+            transform: translateX(-50px);
+        }}
+        to {{
+            opacity: 1;
+            transform: translateX(0);
+        }}
+    }}
+    
+    @keyframes fadeIn {{
+        from {{ opacity: 0; }}
+        to {{ opacity: 1; }}
+    }}
+    
+    @keyframes shimmer {{
+        0% {{ transform: translateX(-100%); }}
+        100% {{ transform: translateX(100%); }}
+    }}
+    
+    @keyframes pulse {{
+        0%, 100% {{ transform: scale(1); }}
+        50% {{ transform: scale(1.02); }}
+    }}
+    
+    @keyframes expandWidth {{
+        from {{ width: 0; }}
+        to {{ width: 50px; }}
+    }}
+    
+    /* Streamlit Element Overrides */
+    .stMetric {{
+        background: {COLORS['surface']};
+        padding: 1rem;
+        border-radius: 10px;
+        border: 1px solid {COLORS['card_bg']};
+    }}
+    
+    .stAlert {{
+        background: {COLORS['surface']};
+        border: 1px solid {COLORS['card_bg']};
+        border-radius: 10px;
+    }}
+    
+    /* Login Page Specific Styles */
+    .login-container {{
+        background: linear-gradient(135deg, {COLORS['surface']} 0%, {COLORS['card_bg']} 100%);
+        border-radius: 20px;
+        padding: 3rem;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        border: 1px solid {COLORS['medical_cyan']}33;
+        position: relative;
+        overflow: hidden;
+    }}
+    
+    .login-container::before {{
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, {COLORS['medical_cyan']}, {COLORS['wellness_green']});
+    }}
+    
+    .floating-input {{
+        background: {COLORS['dark_navy']};
+        border: 1px solid {COLORS['card_bg']};
+        border-radius: 10px;
+        padding: 1rem;
+        color: {COLORS['text_primary']};
+        transition: all 0.3s ease;
+        margin-bottom: 1rem;
+    }}
+    
+    .floating-input:focus {{
+        border-color: {COLORS['medical_cyan']};
+        box-shadow: 0 0 0 2px {COLORS['medical_cyan']}33;
+        transform: translateY(-2px);
+    }}
+    
+    /* Number Counting Animation */
+    @keyframes countUp {{
+        from {{ --num: 0; }}
+        to {{ --num: var(--target); }}
+    }}
+    
+    .counting-number {{
+        animation: countUp 2s ease-out;
+        counter-reset: num var(--num);
+        font-variant-numeric: tabular-nums;
+    }}
+    
+    .counting-number::after {{
+        content: counter(num);
     }}
 </style>
 """, unsafe_allow_html=True)
+
+
+# Check authentication - STOP HERE if not logged in
+if not auth.check_auth():
+    # Enhanced Login Page with Medical Theme
+    st.markdown("""
+    <div style='display: flex; justify-content: center; align-items: center; min-height: 100vh;'>
+        <div class='login-container' style='max-width: 450px; width: 100%;'>
+    """, unsafe_allow_html=True)
+    
+    col1, col2, col3 = st.columns([1, 2, 1])
+    with col2:
+        st.markdown(f"""
+        <div style='text-align: center; margin-bottom: 2rem;'>
+            <h1 style='color: {COLORS["text_primary"]}; font-size: 2.5rem; margin-bottom: 0.5rem;'>🏥</h1>
+            <h2 style='color: {COLORS["text_primary"]}; margin-bottom: 0.5rem;'>Health Matrices Pro</h2>
+            <p style='color: {COLORS["text_labels"]}; font-size: 1.1rem;'>Premium Health Intelligence</p>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        # Animated gradient border
+        st.markdown("""
+        <div style='
+            background: linear-gradient(135deg, #00e0ff, #00c9a7);
+            padding: 2px;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            animation: pulse 2s infinite;
+        '>
+            <div style='
+                background: #0a1128;
+                padding: 1.5rem;
+                border-radius: 10px;
+                text-align: center;
+            '>
+                <h3 style='color: #ffffff; margin-bottom: 0.5rem;'>Your Health Journey Starts Here</h3>
+                <p style='color: #94a3b8; margin: 0;'>Transform Your Wellness</p>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    auth.show_login_signup()
+    st.markdown("</div></div>", unsafe_allow_html=True)
+    st.stop()
+
+# ... (Keep all your existing functions exactly the same - load_user_profile, create_bmi_gauge, create_nutrient_chart, create_health_timeline)
 
 def load_user_profile():
     """Load user data from database with proper error handling - NO CACHING"""
@@ -239,16 +929,16 @@ def load_user_profile():
                 # Determine BMI category
                 if bmi < 18.5:
                     bmi_category = "Underweight"
-                    bmi_color = "#60a5fa"  # Blue
+                    bmi_color = COLORS['medical_cyan']
                 elif bmi < 25:
                     bmi_category = "Healthy"
-                    bmi_color = "#34d399"  # Green
+                    bmi_color = COLORS['wellness_green']
                 elif bmi < 30:
                     bmi_category = "Overweight"
-                    bmi_color = "#fbbf24"  # Yellow
+                    bmi_color = COLORS['health_amber']
                 else:
                     bmi_category = "Obese"
-                    bmi_color = "#f87171"  # Red
+                    bmi_color = COLORS['medical_red']
                 
                 # Calculate daily calorie needs (simplified Harris-Benedict)
                 if gender.lower() == "male":
@@ -302,7 +992,7 @@ def load_user_profile():
         'weight': 65,
         'bmi': 22.5,
         'bmi_category': 'Healthy',
-        'bmi_color': '#34d399',
+        'bmi_color': COLORS['wellness_green'],
         'gender': 'Not specified',
         'goal': 'Maintain',
         'lifestyle': 'Moderately Active',
@@ -313,27 +1003,28 @@ def load_user_profile():
     }
 
 def create_bmi_gauge(bmi_value):
-    """Create a BMI gauge chart"""
+    """Create a BMI gauge chart with premium medical styling - FIXED COLOR ISSUE"""
+    # Use solid colors without alpha transparency for Plotly
     fig = go.Figure(go.Indicator(
-        mode = "gauge+number+delta",
-        value = bmi_value,
-        domain = {'x': [0, 1], 'y': [0, 1]},
-        title = {'text': "BMI Score", 'font': {'size': 24, 'color': COLORS['dark_blue']}},
-        delta = {'reference': 22, 'increasing': {'color': COLORS['pink']}, 'decreasing': {'color': COLORS['light_green']}},
-        gauge = {
-            'axis': {'range': [None, 40], 'tickwidth': 2, 'tickcolor': COLORS['dark_blue']},
-            'bar': {'color': COLORS['medium_blue'], 'thickness': 0.75},
-            'bgcolor': "white",
+        mode="gauge+number+delta",
+        value=bmi_value,
+        domain={'x': [0, 1], 'y': [0, 1]},
+        title={'text': "BMI Score", 'font': {'size': 24, 'color': COLORS['text_primary'], 'family': "Arial"}},
+        delta={'reference': 22, 'increasing': {'color': COLORS['medical_red']}, 'decreasing': {'color': COLORS['wellness_green']}},
+        gauge={
+            'axis': {'range': [None, 40], 'tickwidth': 2, 'tickcolor': COLORS['text_primary']},
+            'bar': {'color': COLORS['medical_cyan'], 'thickness': 0.75},
+            'bgcolor': COLORS['surface'],
             'borderwidth': 2,
-            'bordercolor': COLORS['light_blue'],
+            'bordercolor': COLORS['medical_cyan'],
             'steps': [
-                {'range': [0, 18.5], 'color': '#dbeafe'},
-                {'range': [18.5, 25], 'color': '#dcfce7'},
-                {'range': [25, 30], 'color': '#fef3c7'},
-                {'range': [30, 40], 'color': '#fee2e2'}
+                {'range': [0, 18.5], 'color': '#4cc9f0'},      # Light blue for underweight
+                {'range': [18.5, 25], 'color': '#2a9d8f'},    # Teal for healthy
+                {'range': [25, 30], 'color': '#e9c46a'},      # Amber for overweight
+                {'range': [30, 40], 'color': '#e76f51'}       # Coral for obese
             ],
             'threshold': {
-                'line': {'color': COLORS['dark_blue'], 'width': 4},
+                'line': {'color': COLORS['text_primary'], 'width': 4},
                 'thickness': 0.75,
                 'value': bmi_value
             }
@@ -343,14 +1034,16 @@ def create_bmi_gauge(bmi_value):
     fig.update_layout(
         height=300,
         margin=dict(l=50, r=50, t=80, b=50),
-        font={'color': COLORS['dark_blue'], 'family': "Arial"},
-        paper_bgcolor=COLORS['light_bg']
+        font={'color': COLORS['text_primary'], 'family': "Arial"},
+        paper_bgcolor=COLORS['surface'],
+        plot_bgcolor=COLORS['surface']
     )
     
     return fig
 
+
 def create_nutrient_chart(user_data):
-    """Create nutrient distribution chart"""
+    """Create nutrient distribution chart with medical colors"""
     # Calculate macronutrient distribution based on user goals
     calories = user_data['daily_calories']
     
@@ -374,31 +1067,32 @@ def create_nutrient_chart(user_data):
         'Nutrient': ['Protein', 'Carbs', 'Fats'],
         'Grams': [protein_grams, carb_grams, fat_grams],
         'Percentage': [protein_ratio*100, carb_ratio*100, fat_ratio*100],
-        'Color': [COLORS['light_blue'], COLORS['light_green'], COLORS['yellow']]
+        'Color': [COLORS['medical_cyan'], COLORS['health_amber'], COLORS['medical_red']]
     }
     
     df = pd.DataFrame(data)
     
     fig = px.pie(df, values='Percentage', names='Nutrient', 
                  color='Nutrient', color_discrete_map={
-                     'Protein': COLORS['light_blue'],
-                     'Carbs': COLORS['light_green'],
-                     'Fats': COLORS['yellow']
+                     'Protein': COLORS['medical_cyan'],
+                     'Carbs': COLORS['health_amber'],
+                     'Fats': COLORS['medical_red']
                  })
     
     fig.update_traces(textposition='inside', textinfo='percent+label', 
-                      marker=dict(line=dict(color=COLORS['white'], width=2)))
+                      marker=dict(line=dict(color=COLORS['surface'], width=2)))
     fig.update_layout(
         height=300,
         showlegend=False,
         margin=dict(l=20, r=20, t=40, b=20),
-        paper_bgcolor=COLORS['light_bg']
+        paper_bgcolor=COLORS['surface'],
+        font=dict(color=COLORS['text_primary'], family="Arial")
     )
     
     return fig, data
 
 def create_health_timeline(user_data):
-    """Create a mock health progress timeline"""
+    """Create a mock health progress timeline with medical styling"""
     dates = pd.date_range(end=datetime.now(), periods=30, freq='D')
     weights = user_data['weight'] + np.random.normal(0, 0.5, 30).cumsum()
     
@@ -408,8 +1102,8 @@ def create_health_timeline(user_data):
         x=dates, y=weights,
         mode='lines+markers',
         name='Weight Trend',
-        line=dict(color=COLORS['light_blue'], width=4),
-        marker=dict(size=6, color=COLORS['medium_blue'])
+        line=dict(color=COLORS['medical_cyan'], width=4),
+        marker=dict(size=6, color=COLORS['wellness_green'])
     ))
     
     fig.update_layout(
@@ -417,9 +1111,10 @@ def create_health_timeline(user_data):
         xaxis_title='Date',
         yaxis_title='Weight (kg)',
         height=300,
-        plot_bgcolor=COLORS['light_bg'],
-        paper_bgcolor=COLORS['white'],
-        font=dict(color=COLORS['dark_blue'])
+        plot_bgcolor=COLORS['surface'],
+        paper_bgcolor=COLORS['surface'],
+        font=dict(color=COLORS['text_primary'], family="Arial"),
+        hoverlabel=dict(bgcolor=COLORS['card_bg'], font_size=12)
     )
     
     return fig
@@ -437,35 +1132,37 @@ def load_food_data():
 user = load_user_profile()
 foods = load_food_data()
 
-# Sidebar Navigation
+# Premium Medical Sidebar Navigation
 with st.sidebar:
     st.markdown(f"""
     <div class="sidebar-header">
-        <h2 style="color: {COLORS['off_white']}; margin: 0; font-size: 1.8rem;">🏥 Health Matrices Pro</h2>
-        <p style="opacity: 0.95; margin: 0.5rem 0 0 0; color: {COLORS['off_white']}; font-size: 1rem;">
-        Your Personal Health Companion</p>
+        <h2 style="color: {COLORS['text_primary']}; margin: 0; font-size: 1.6rem; font-weight: 700;">🏥 Health Matrices Pro</h2>
+        <p style="opacity: 0.9; margin: 0.5rem 0 0 0; color: {COLORS['text_labels']}; font-size: 0.9rem; font-weight: 500;">
+        Premium Health Intelligence</p>
     </div>
     """, unsafe_allow_html=True)
     
-    # User info section
+    # User info section with pulsing animation
     st.markdown(f"""
     <div class="user-welcome">
-        <h4 style="margin: 0 0 0.8rem 0; color: {COLORS['dark_blue']}; font-size: 1.2rem;">
+        <h4 style="margin: 0 0 0.8rem 0; color: {COLORS['text_primary']}; font-size: 1.1rem; font-weight: 600;">
         👋 Welcome, {user['name']}!</h4>
-        <p style="margin: 0.3rem 0; color: {COLORS['medium_blue']}; font-size: 0.95rem;">
+        <p style="margin: 0.3rem 0; color: {COLORS['text_secondary']}; font-size: 0.85rem; font-weight: 500;">
         <strong>BMI:</strong> {user['bmi']} ({user['bmi_category']})</p>
-        <p style="margin: 0.3rem 0; color: {COLORS['medium_blue']}; font-size: 0.95rem;">
+        <p style="margin: 0.3rem 0; color: {COLORS['text_secondary']}; font-size: 0.85rem; font-weight: 500;">
         <strong>Goal:</strong> {user['goal']} • <strong>Lifestyle:</strong> {user['lifestyle']}</p>
     </div>
     """, unsafe_allow_html=True)    
 
-# Refresh button
+    # Refresh button with animation
     if st.button("🔄 Refresh Profile Data", use_container_width=True):
+        st.balloons()
         st.cache_data.clear()
-        # Force reload by removing user data from session state
         if 'user_profile_data' in st.session_state:
             del st.session_state.user_profile_data
+        time.sleep(1)
         st.rerun()    
+    
     # Logout button
     if st.button("🚪 Logout", use_container_width=True):
         st.session_state.logged_in = False
@@ -475,16 +1172,17 @@ with st.sidebar:
     
     st.markdown("---")
     
-    # Navigation
+    # Premium Navigation
     st.markdown("### 🧭 Navigation")
     
     nav_options = {
         "🏠 Dashboard": "dashboard",
         "👤 Profile": "profile", 
-        "🍎 Food Search": "food_search",
-        "💡 Food Recommender": "food_recommender",
-        "🏋️ Exercise": "exercise",
-        "📅 Full-Day Planner": "planner",
+        "🍽 Nutrition Hub": "nutrition_hub",
+        "💪 Exercise & Fitness": "exercise_fitness",
+        "📅 Routine Optimizer": "routine_optimizer",
+        "🤖 Health Assistant": "health_assistant",
+        "⭐ Pro Features": "pro_features",
         "🔧 Admin": "admin"
     }
     
@@ -492,64 +1190,76 @@ with st.sidebar:
         if st.button(display_name, key=page_key, use_container_width=True):
             st.session_state.current_page = page_key
 
-# Dashboard Page
+# Dashboard Page with Enhanced Medical Theme
 if st.session_state.current_page == "dashboard":
-    # Header
+    # Header with medical theme
     st.markdown('<h1 class="main-header">Health Matrices Pro</h1>', unsafe_allow_html=True)
     
     # Welcome message
     if user['name'] == 'Guest User':
         st.warning("""
-        ⚠️ **Complete Your Profile** - You are viewing demo data. 
+        ⚠ *Complete Your Profile* - You are viewing demo data. 
         Please create or update your profile in the Profile section to unlock personalized health insights and recommendations!
         """)
     else:
         st.success(f"""
-        🎉 **Welcome back, {user['name']}!** Ready to continue your health journey?
+        🎉 *Welcome back, {user['name']}!* Ready to continue your health journey?
         Today's Focus: {user['goal']} weight • Lifestyle: {user['lifestyle']}
         """)
     
-    # Health Metrics Overview
+    # Health Metrics Overview - Enhanced Medical Cards
     st.markdown(f'<h2 class="section-header">📊 Your Health Overview</h2>', unsafe_allow_html=True)
     col1, col2, col3, col4 = st.columns(4)
     
     with col1:
         st.markdown(f"""
-        <div class="metric-card">
-            <h3>BMI</h3>
-            <h2>{user['bmi']}</h2>
+        <div class="metric-card metric-card-bmi">
+            <h3>🏥 BMI Score</h3>
+            <h2 style="color: {user['bmi_color']};">{user['bmi']}</h2>
             <p>{user['bmi_category']}</p>
+            <div style="margin-top: 0.8rem; padding: 0.4rem 0.8rem; background: rgba(255,255,255,0.1); border-radius: 8px; font-size: 0.8rem; color: {COLORS['text_labels']};">
+                📈 Health Indicator
+            </div>
         </div>
         """, unsafe_allow_html=True)
     
     with col2:
         st.markdown(f"""
-        <div class="metric-card-age">
-            <h3>Age</h3>
+        <div class="metric-card metric-card-age">
+            <h3>🎂 Age</h3>
             <h2>{user['age']}</h2>
             <p>Years</p>
+            <div style="margin-top: 0.8rem; padding: 0.4rem 0.8rem; background: rgba(255,255,255,0.1); border-radius: 8px; font-size: 0.8rem; color: {COLORS['text_labels']};">
+                👤 Demographic
+            </div>
         </div>
         """, unsafe_allow_html=True)
     
     with col3:
         st.markdown(f"""
-        <div class="metric-card-weight">
-            <h3>Weight</h3>
+        <div class="metric-card metric-card-weight">
+            <h3>⚖ Weight</h3>
             <h2>{user['weight']}</h2>
             <p>kg</p>
+            <div style="margin-top: 0.8rem; padding: 0.4rem 0.8rem; background: rgba(255,255,255,0.1); border-radius: 8px; font-size: 0.8rem; color: {COLORS['text_labels']};">
+                🎯 {user['goal'].title()} Goal
+            </div>
         </div>
         """, unsafe_allow_html=True)
     
     with col4:
         st.markdown(f"""
-        <div class="metric-card-height">
-            <h3>Height</h3>
+        <div class="metric-card metric-card-height">
+            <h3>📏 Height</h3>
             <h2>{user['height']}</h2>
             <p>cm</p>
+            <div style="margin-top: 0.8rem; padding: 0.4rem 0.8rem; background: rgba(255,255,255,0.1); border-radius: 8px; font-size: 0.8rem; color: {COLORS['text_labels']};">
+                📊 Anthropometry
+            </div>
         </div>
-        """, unsafe_allow_html=True)
+        """, unsafe_allow_html=True)    
     
-    # Health Insights Section with Visualizations
+    # Health Insights Section with Enhanced Visualizations
     st.markdown(f'<h2 class="section-header">💡 Advanced Health Analytics</h2>', unsafe_allow_html=True)
     
     col1, col2 = st.columns(2)
@@ -558,28 +1268,36 @@ if st.session_state.current_page == "dashboard":
         # BMI Gauge Chart
         st.markdown("""
         <div class="insight-card">
-            <h4 style="color: #131a2f; margin-bottom: 1.5rem; font-size: 1.3rem;">📈 BMI Analysis</h4>
+            <h4 style="color: #ffffff; margin-bottom: 1.5rem; font-size: 1.3rem;">📈 BMI Analysis</h4>
         """, unsafe_allow_html=True)
         
         bmi_gauge = create_bmi_gauge(user['bmi'])
         st.plotly_chart(bmi_gauge, use_container_width=True)
         
-        # BMI Status
-        if user['bmi_category'] == "Underweight":
-            st.error(f"🔵 {user['bmi_category']} - Consider nutritional consultation")
-        elif user['bmi_category'] == "Healthy":
-            st.success(f"🟢 {user['bmi_category']} - Excellent! Maintain your lifestyle")
-        elif user['bmi_category'] == "Overweight":
-            st.warning(f"🟡 {user['bmi_category']} - Consider lifestyle adjustments")
+        # BMI Status with color coding
+        bmi_status_config = {
+            "Underweight": ("🔵", "info", "Consider nutritional consultation"),
+            "Healthy": ("🟢", "success", "Excellent! Maintain your lifestyle"),
+            "Overweight": ("🟡", "warning", "Consider lifestyle adjustments"),
+            "Obese": ("🔴", "error", "Consult healthcare provider")
+        }
+        
+        icon, status_type, message = bmi_status_config.get(user['bmi_category'], ("⚪", "info", ""))
+        if status_type == "success":
+            st.success(f"{icon} {user['bmi_category']} - {message}")
+        elif status_type == "warning":
+            st.warning(f"{icon} {user['bmi_category']} - {message}")
+        elif status_type == "error":
+            st.error(f"{icon} {user['bmi_category']} - {message}")
         else:
-            st.error(f"🔴 {user['bmi_category']} - Consult healthcare provider")
+            st.info(f"{icon} {user['bmi_category']} - {message}")
         
         st.markdown("</div>", unsafe_allow_html=True)
         
         # Health Timeline
         st.markdown("""
         <div class="insight-card">
-            <h4 style="color: #131a2f; margin-bottom: 1.5rem; font-size: 1.3rem;">📅 Health Progress</h4>
+            <h4 style="color: #ffffff; margin-bottom: 1.5rem; font-size: 1.3rem;">📅 Health Progress</h4>
         """, unsafe_allow_html=True)
         
         timeline_chart = create_health_timeline(user)
@@ -590,42 +1308,42 @@ if st.session_state.current_page == "dashboard":
         # Nutrient Distribution
         st.markdown("""
         <div class="insight-card">
-            <h4 style="color: #131a2f; margin-bottom: 1.5rem; font-size: 1.3rem;">🍽️ Daily Nutrition Plan</h4>
+            <h4 style="color: #ffffff; margin-bottom: 1.5rem; font-size: 1.3rem;">🍽 Daily Nutrition Plan</h4>
         """, unsafe_allow_html=True)
         
         nutrient_chart, nutrient_data = create_nutrient_chart(user)
         st.plotly_chart(nutrient_chart, use_container_width=True)
         
-        # Display nutrient details
-        st.write("**Daily Targets:**")
+        # Display nutrient details with animated progress
+        st.write("*Daily Targets:*")
         for nutrient in nutrient_data['Nutrient']:
             idx = nutrient_data['Nutrient'].index(nutrient)
-            st.write(f"• **{nutrient}:** {nutrient_data['Grams'][idx]}g ({nutrient_data['Percentage'][idx]:.1f}%)")
+            st.write(f"• *{nutrient}:* {nutrient_data['Grams'][idx]}g ({nutrient_data['Percentage'][idx]:.1f}%)")
         
         st.markdown("</div>", unsafe_allow_html=True)
         
-        # Calorie Goals
+        # Calorie Goals with animated progress
         st.markdown("""
         <div class="insight-card">
-            <h4 style="color: #131a2f; margin-bottom: 1.5rem; font-size: 1.3rem;">🎯 Daily Calorie Target</h4>
+            <h4 style="color: #ffffff; margin-bottom: 1.5rem; font-size: 1.3rem;">🎯 Daily Calorie Target</h4>
         """, unsafe_allow_html=True)
         
         st.metric("Recommended Daily Intake", f"{user['daily_calories']} kcal", 
                  f"For {user['goal']} goal • {user['lifestyle']}")
         
-        # Progress bars for daily tracking
-        st.write("**Today's Progress:**")
+        # Animated progress bars for daily tracking
+        st.write("*Today's Progress:*")
         
         progress_data = [
-            ("Calories", 1450, user['daily_calories'], COLORS['light_blue']),
-            ("Protein", 55, nutrient_data['Grams'][0], COLORS['light_green']),
-            ("Water", 6, 8, COLORS['medium_blue']),
-            ("Exercise", 45, 60, COLORS['purple'])
+            ("Calories", 1450, user['daily_calories'], COLORS['medical_cyan']),
+            ("Protein", 55, nutrient_data['Grams'][0], COLORS['wellness_green']),
+            ("Water", 6, 8, COLORS['medical_cyan']),
+            ("Exercise", 45, 60, COLORS['health_amber'])
         ]
         
         for label, current, target, color in progress_data:
             progress = min(current / target, 1.0)
-            st.write(f"**{label}**")
+            st.write(f"{label}")
             progress_html = f"""
             <div class="progress-container">
                 <div class="progress-fill" style="width: {progress * 100}%; background: {color};">
@@ -637,7 +1355,7 @@ if st.session_state.current_page == "dashboard":
         
         st.markdown("</div>", unsafe_allow_html=True)
     
-    # Quick Access Features
+    # Quick Access Features with Enhanced Cards
     st.markdown(f'<h2 class="section-header">🚀 Quick Access</h2>', unsafe_allow_html=True)
     col1, col2 = st.columns(2)
     
@@ -645,167 +1363,322 @@ if st.session_state.current_page == "dashboard":
         st.markdown(f"""
         <div class="feature-card">
             <div>
-                <h4 style="color: {COLORS['dark_blue']}; margin-bottom: 1rem; font-size: 1.3rem;">🍎 Food Search</h4>
-                <p style="color: #64748b; margin: 0; line-height: 1.6;">Search through our extensive food database with detailed nutritional information and make informed dietary choices.</p>
+                <h4 style="color: {COLORS['text_primary']}; margin-bottom: 1rem; font-size: 1.3rem;">🍽 Nutrition Hub</h4>
+                <p style="color: {COLORS['text_secondary']}; margin: 0; line-height: 1.6;">All food-related features in one place: search foods, get recommendations, and plan full-day meals.</p>
             </div>
         </div>
         """, unsafe_allow_html=True)
         
-        if st.button("Explore Food Database →", key="goto_food", use_container_width=True):
-            st.session_state.current_page = "food_search"
+        if st.button("Explore Nutrition →", key="goto_nutrition", use_container_width=True):
+            st.session_state.current_page = "nutrition_hub"
+            st.rerun()
         
         st.markdown(f"""
         <div class="feature-card">
             <div>
-                <h4 style="color: {COLORS['dark_blue']}; margin-bottom: 1rem; font-size: 1.3rem;">💡 Food Recommender</h4>
-                <p style="color: #64748b; margin: 0; line-height: 1.6;">Get AI-powered food recommendations based on your health goals, preferences, and nutritional needs.</p>
-            </div>
-        </div>
-        """, unsafe_allow_html=True)
-        
-        if st.button("Get Smart Recommendations →", key="goto_recommender", use_container_width=True):
-            st.session_state.current_page = "food_recommender"
-    
-    with col2:
-        st.markdown(f"""
-        <div class="feature-card">
-            <div>
-                <h4 style="color: {COLORS['dark_blue']}; margin-bottom: 1rem; font-size: 1.3rem;">🏋️ Exercise Tracking</h4>
-                <p style="color: #64748b; margin: 0; line-height: 1.6;">Browse exercises, create workout routines, and track your fitness progress with detailed analytics.</p>
+                <h4 style="color: {COLORS['text_primary']}; margin-bottom: 1rem; font-size: 1.3rem;">💪 Exercise & Fitness</h4>
+                <p style="color: {COLORS['text_secondary']}; margin: 0; line-height: 1.6;">Smart exercise recommendations based on your performance, mood, and health data.</p>
             </div>
         </div>
         """, unsafe_allow_html=True)
         
         if st.button("Start Your Workout →", key="goto_exercise", use_container_width=True):
-            st.session_state.current_page = "exercise"
-        
+            st.session_state.current_page = "exercise_fitness"
+            st.rerun()
+    
+    with col2:
         st.markdown(f"""
         <div class="feature-card">
             <div>
-                <h4 style="color: {COLORS['dark_blue']}; margin-bottom: 1rem; font-size: 1.3rem;">📅 Full-Day Planner</h4>
-                <p style="color: #64748b; margin: 0; line-height: 1.6;">Plan your complete day of meals and activities for optimal health and wellness management.</p>
+                <h4 style="color: {COLORS['text_primary']}; margin-bottom: 1rem; font-size: 1.3rem;">📅 Routine Optimizer</h4>
+                <p style="color: {COLORS['text_secondary']}; margin: 0; line-height: 1.6;">Optimize your free time with AI-powered scheduling for meals, exercise, and rest.</p>
             </div>
         </div>
         """, unsafe_allow_html=True)
         
-        if st.button("Create Daily Plan →", key="goto_planner", use_container_width=True):
-            st.session_state.current_page = "planner"
+        if st.button("Optimize Your Day →", key="goto_routine", use_container_width=True):
+            st.session_state.current_page = "routine_optimizer"
+            st.rerun()
+        
+        st.markdown(f"""
+        <div class="feature-card">
+            <div>
+                <h4 style="color: {COLORS['text_primary']}; margin-bottom: 1rem; font-size: 1.3rem;">🤖 Health Assistant</h4>
+                <p style="color: {COLORS['text_secondary']}; margin: 0; line-height: 1.6;">Chat with our AI health assistant for personalized support and guidance.</p>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        if st.button("Chat with Assistant →", key="goto_assistant", use_container_width=True):
+            st.session_state.current_page = "health_assistant"
+            st.rerun()
 
-# Other Pages (Your existing functionality)
+# Profile Page
 elif st.session_state.current_page == "profile":
     st.markdown('<h1 class="main-header">👤 Profile Management</h1>', unsafe_allow_html=True)
     create_or_edit_profile()
 
-elif st.session_state.current_page == "food_search":
-    st.markdown('<h1 class="main-header">🍎 Food Search</h1>', unsafe_allow_html=True)
-    search_food_ui()
+# Nutrition Hub - Combined Food Features
+elif st.session_state.current_page == "nutrition_hub":
+    st.markdown('<h1 class="main-header">🍽 Nutrition Hub</h1>', unsafe_allow_html=True)
+    
+    tab1, tab2, tab3 = st.tabs(["🔍 Food Search", "💡 Food Recommender", "📅 Full-Day Planner"])
+    
+    with tab1:
+        search_food_ui()
+    
+    with tab2:
+        food_recommender_ui(st, foods)
+    
+    with tab3:
+        if user['name'] == 'Guest User':
+            st.warning("⚠ Please create or load your profile first to use the meal planner.")
+            if st.button("Go to Profile →", use_container_width=True):
+                st.session_state.current_page = "profile"
+                st.rerun()
+        else:
+            compatible_user = {
+                'Weight': user['weight'],
+                'Height': user['height'], 
+                'Age': user['age'],
+                'Goal': user['goal'],
+                'Lifestyle': user['lifestyle'],
+                'Gender': user['gender'],
+                'Diet Preference': user['diet_preference'],
+                'Allergies': user['allergies']
+            }
+            full_day_meal_planner_ui(compatible_user, foods)
 
-elif st.session_state.current_page == "food_recommender":
-    st.markdown('<h1 class="main-header">💡 Food Recommender</h1>', unsafe_allow_html=True)
-    food_recommender_ui(st, foods)
+# Exercise & Fitness Page
+elif st.session_state.current_page == "exercise_fitness":
+    st.markdown('<h1 class="main-header">💪 Exercise & Fitness</h1>', unsafe_allow_html=True)
+    
+    tab1, tab2 = st.tabs(["🎯 Quick Workout Generator", "🔍 Exercise Database"])
+    
+    with tab1:
+        workout_generator_ui()
+    
+    with tab2:
+        col1, col2 = st.columns([2, 1])
+        
+        with col1:
+            st.subheader("🏋 Exercise Database")
+            search_exercise_ui()
+        
+        with col2:
+            st.subheader("🎯 Smart Recommendations")
+            st.info("AI-powered exercise suggestions based on your profile!")
+            
+            # Load user data for recommendations
+            user = load_user_profile()
+            st.write("*Based on your profile:*")
+            st.write(f"• Goal: {user['goal']}")
+            st.write(f"• Lifestyle: {user['lifestyle']}")
+            st.write(f"• BMI: {user['bmi']} ({user['bmi_category']})")
+            
+            if user['goal'].lower() == 'lose':
+                st.success("💡 Recommended: Cardio exercises + Strength training")
+                st.write("• 30-45 min cardio sessions")
+                st.write("• Full body strength workouts")
+            elif user['goal'].lower() == 'gain':
+                st.success("💡 Recommended: Strength training + High-protein diet")
+                st.write("• Heavy compound exercises")
+                st.write("• Progressive overload")
+            else:
+                st.success("💡 Recommended: Balanced workout routine")
+                st.write("• Mix of cardio and strength")
+                st.write("• Flexibility training")
 
-elif st.session_state.current_page == "exercise":
-    st.markdown('<h1 class="main-header">🏋️ Exercise Tracking</h1>', unsafe_allow_html=True)
-    search_exercise_ui()
+# Routine Optimizer Page
 
-elif st.session_state.current_page == "planner":
-    st.markdown('<h1 class="main-header">📅 Full-Day Meal Planner</h1>', unsafe_allow_html=True)
-    if user['name'] == 'Guest User':
-        st.warning("⚠️ Please create or load your profile first to use the meal planner.")
-        if st.button("Go to Profile →", use_container_width=True):
-            st.session_state.current_page = "profile"
-    else:
-        compatible_user = {
-            'Weight': user['weight'],
-            'Height': user['height'], 
-            'Age': user['age'],
-            'Goal': user['goal'],
-            'Lifestyle': user['lifestyle'],
-            'Gender': user['gender'],
-            'Diet Preference': user['diet_preference'],
-            'Allergies': user['allergies']
-        }
-        full_day_meal_planner_ui(compatible_user, foods)
+elif st.session_state.current_page == "routine_optimizer":
+    st.markdown('<h1 class="main-header">📅 Routine Optimizer</h1>', unsafe_allow_html=True)
+    routine_optimizer_ui(user)
 
+
+# Health Assistant Page  
+elif st.session_state.current_page == "health_assistant":
+    st.markdown('<h1 class="main-header">🤖 Health Assistant</h1>', unsafe_allow_html=True)
+    
+    st.info("💬 *Coming Soon*: Chat with our AI health assistant for personalized support and guidance!")
+    
+    # Placeholder chat interface
+    col1, col2 = st.columns([3, 1])
+    
+    with col1:
+        st.subheader("Chat with Health Assistant")
+        st.text_area("Type your health question here...", 
+                    placeholder="e.g., I'm feeling tired today, what exercises should I do?\nOr: How can I improve my meal plan?",
+                    height=100,
+                    key="chat_input")
+        
+        if st.button("Send Message", use_container_width=True):
+            st.success("Message sent! (Feature in development)")
+    
+    with col2:
+        st.subheader("Quick Questions")
+        quick_questions = [
+            "What should I eat for breakfast?",
+            "I'm stressed, any suggestions?",
+            "Best exercises for weight loss?",
+            "How to improve sleep quality?"
+        ]
+        
+        for question in quick_questions:
+            if st.button(question, use_container_width=True):
+                st.info(f"Assistant would respond to: '{question}'")
+
+# Pro Features Page
+elif st.session_state.current_page == "pro_features":
+    st.markdown('<h1 class="main-header">⭐ Pro Features</h1>', unsafe_allow_html=True)
+    
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        st.subheader("🚀 Premium Benefits")
+        
+        features = [
+            ("🎯 Personalized Coaching", "AI-powered daily coaching sessions"),
+            ("📊 Advanced Analytics", "Deep health insights and trends"),
+            ("🍽 Custom Meal Plans", "Weekly customized nutrition plans"),
+            ("💪 Workout Programs", "Personalized exercise regimens"),
+            ("📱 Priority Support", "24/7 dedicated assistance"),
+            ("📈 Progress Tracking", "Detailed performance analytics")
+        ]
+        
+        for feature, description in features:
+            with st.expander(feature):
+                st.write(description)
+    
+    with col2:
+        st.subheader("Upgrade to Pro")
+        
+        st.info("Unlock the full potential of your health journey!")
+        
+        st.write("*Pro Membership Includes:*")
+        st.write("• AI Health Coach")
+        st.write("• Advanced Workout Plans") 
+        st.write("• Custom Nutrition Strategies")
+        st.write("• Priority Feature Access")
+        
+        st.warning("Pro features coming soon!")
+        
+        # Placeholder for upgrade button
+        if st.button("🚀 Upgrade to Pro", use_container_width=True, disabled=True):
+            st.success("Welcome to Health Matrices Pro!")
+
+# Admin Page
 elif st.session_state.current_page == "admin":
     st.markdown('<h1 class="main-header">🔧 Admin Panel</h1>', unsafe_allow_html=True)
     
-    # ONLY SPECIFIC USERNAMES CAN ACCESS
-    ADMIN_USERS = ["Palak"]  # Add your usernames here
+    import sqlite3
     
+    # SIMPLE ADMIN CHECK - Only specific usernames can access
+    ADMIN_USERS = ["admin", "Palak"]  
     if st.session_state.username in ADMIN_USERS:
-        import database as db
-        import sqlite3
+        st.success(f"✅ Welcome, {st.session_state.username}!")
         
-        st.success(f"✅ Welcome, Admin {st.session_state.username}!")
+        # Show user statistics
+        stats = db.get_user_stats()
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            st.metric("Total Users", stats.get('total_users', 0))
+        with col2:
+            st.metric("Total Profiles", stats.get('total_profiles', 0))
+        with col3:
+            st.metric("Latest User", stats.get('latest_user', 'None'))
         
-        tab1, tab2, tab3 = st.tabs(["👥 Users", "📊 Profiles", "⚙️ Database"])
+        tab1, tab2 = st.tabs(["👥 All Users", "📊 User Profiles"])
         
         with tab1:
-            st.subheader("Registered Users")
-            conn = sqlite3.connect('health_app.db')
-            users_df = pd.read_sql_query("SELECT id, username, email, created_at FROM users", conn)
-            conn.close()
-            
-            st.dataframe(users_df, use_container_width=True)
-            st.metric("Total Users", len(users_df))
-            
-            # Download users data
-            csv = users_df.to_csv(index=False)
-            st.download_button("📥 Download Users CSV", csv, "users.csv")
+            st.subheader("All Registered Users")
+            try:
+                users = db.get_all_users()
+                if users:
+                    users_data = []
+                    for user in users:
+                        users_data.append({
+                            'ID': user[0],
+                            'Username': user[1],
+                            'Email': user[2] or 'Not provided',
+                            'Signup Date': user[3],
+                            'Has Profile': '✅' if user[4] else '❌'
+                        })
+                    
+                    users_df = pd.DataFrame(users_data)
+                    st.dataframe(users_df, use_container_width=True)
+                    
+                    st.info(f"*Total registered users: {len(users)}*")
+                    
+                    csv = users_df.to_csv(index=False)
+                    st.download_button(
+                        "📥 Download Users List", 
+                        csv, 
+                        "registered_users.csv",
+                        use_container_width=True
+                    )
+                else:
+                    st.info("No users found in the system.")
+                    
+            except Exception as e:
+                st.error(f"Error loading users: {str(e)}")
         
         with tab2:
-            st.subheader("User Profiles")
-            conn = sqlite3.connect('health_app.db')
-            profiles_df = pd.read_sql_query("""
-                SELECT up.id, u.username, up.name, up.age, up.height, up.weight, 
-                       up.gender, up.goal, up.lifestyle, up.diet_preference,
-                       up.allergies, up.injuries, up.created_at 
-                FROM user_profiles up 
-                JOIN users u ON up.user_id = u.id
-            """, conn)
-            conn.close()
-            
-            st.dataframe(profiles_df, use_container_width=True)
-            st.metric("Total Profiles", len(profiles_df))
-            
-            # Download profiles data
-            csv = profiles_df.to_csv(index=False)
-            st.download_button("📥 Download Profiles CSV", csv, "profiles.csv")
-        
-        with tab3:
-            st.subheader("Database Management")
-            st.info("Database file: health_app.db")
-            
-            # Show file size
-            import os
-            if os.path.exists('health_app.db'):
-                file_size = os.path.getsize('health_app.db')
-                st.write(f"File size: {file_size / 1024:.2f} KB")
-            
-            # Clear database button (dangerous!)
-            if st.button("🗑️ Clear All Data", type="secondary"):
-                st.warning("This will delete ALL user data! Proceed with caution.")
-                confirm = st.text_input("Type 'DELETE ALL' to confirm:")
-                if confirm == "DELETE ALL":
-                    conn = sqlite3.connect('health_app.db')
-                    conn.execute("DELETE FROM user_profiles")
-                    conn.execute("DELETE FROM users")
-                    conn.commit()
-                    conn.close()
-                    st.error("All data has been deleted!")
-                    st.rerun()
+            st.subheader("All User Profiles")
+            try:
+                conn = sqlite3.connect('health_app.db')
+                profiles_df = pd.read_sql_query('''
+                    SELECT u.username, up.name, up.age, up.gender, up.goal, 
+                           up.lifestyle, up.diet_preference, up.created_at
+                    FROM user_profiles up 
+                    JOIN users u ON up.user_id = u.id
+                    ORDER BY up.created_at DESC
+                ''', conn)
+                conn.close()
+                
+                if not profiles_df.empty:
+                    st.dataframe(profiles_df, use_container_width=True)
+                    
+                    col1, col2 = st.columns(2)
+                    with col1:
+                        st.metric("Total Profiles", len(profiles_df))
+                    with col2:
+                        if 'age' in profiles_df.columns:
+                            avg_age = profiles_df['age'].mean()
+                            st.metric("Average Age", f"{avg_age:.1f} years")
+                    
+                    csv = profiles_df.to_csv(index=False)
+                    st.download_button(
+                        "📥 Download Profiles", 
+                        csv, 
+                        "user_profiles.csv",
+                        use_container_width=True
+                    )
+                else:
+                    st.info("No user profiles found.")
+                    
+            except Exception as e:
+                st.error(f"Error loading profiles: {str(e)}")
     
     else:
-        st.error("🚫 Access Denied - Admin privileges required")
+        st.error("🚫 Access Denied - Admin Privileges Required")
         st.info("This section is only accessible to administrators.")
+        
+        if st.session_state.logged_in:
+            st.write(f"Current user: {st.session_state.username}")
+        else:
+            st.write("Please log in with an admin account.")
+        
+        if st.button("🔙 Go Back to Dashboard", use_container_width=True):
+            st.session_state.current_page = "dashboard"
+            st.rerun()
 
-# Footer
+# Enhanced Footer
 st.markdown("---")
 st.markdown(
-    f"<div style='text-align: center; color: {COLORS['medium_blue']}; padding: 3rem; background: {COLORS['light_bg']}; border-radius: 15px; margin-top: 3rem;'>"
-    "<p style='margin: 0; font-size: 1rem; font-weight: 600;'>🏥 Health Matrices Pro •  Your Health Journey Starts Here • Transform Your Wellness</p>"
+    f"<div style='text-align: center; color: {COLORS['text_primary']}; padding: 3rem; background: {COLORS['surface']}; border-radius: 15px; margin-top: 3rem; border: 1px solid {COLORS['card_bg']};'>"
+    "<p style='margin: 0; font-size: 1rem; font-weight: 600;'>🏥 Health Matrices Pro • Your Health Journey Starts Here • Transform Your Wellness</p>"
+    "<p style='margin: 0.5rem 0 0 0; font-size: 0.9rem; color: #94a3b8;'>Premium Health Intelligence Platform</p>"
     "</div>",
     unsafe_allow_html=True
 )
-
