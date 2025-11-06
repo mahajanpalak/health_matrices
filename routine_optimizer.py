@@ -1,6 +1,3 @@
-# routine_optimizer.py
-# Complete runnable routine optimizer implementing the detailed logic requested.
-# Keep function names and signatures: generate_schedule, auto_mode, routine_optimizer_ui
 
 import os
 import random
