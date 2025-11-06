@@ -473,34 +473,24 @@ def generate_schedule(free_hours: List[str], prefs: List[str], user: Dict[str, A
                 return h
         return place_order_hours[0] if place_order_hours else free_hours[0]
 
-    # Assign compressed prefs to hours
-    # We will assign in input order to attempt to respect user order
-    for pref in compressed:
-        # allow merged prefs to occupy the same hour (we intentionally will allow this)
-        chosen_hour = find_hour_for_pref(pref)
-        if chosen_hour is None:
-            chosen_hour = place_order_hours[0]
-        # If this chosen_hour already has a sleep assigned and pref is heavy, consider moving pref if sleep should be preserved
-        if chosen_hour in schedule and schedule[chosen_hour]:
-            # If schedule has Sleep and pref is heavy and not forced to go into night, try to find alternate hour
-            if any(s.get("activity", "").lower() == "sleep" for s in schedule[chosen_hour]):
-                # try other hours first
-                alt = None
-                for h in place_order_hours:
-                    if h == chosen_hour:
-                        continue
-                    # prefer hours outside night for heavy prefs
-                    if pref and "Nap/Sleep" not in pref:
-                        if 0 <= _hour_to_int(h) < 6 and not force_place_prefs_in_night:
-                            continue
-                    if h not in used_hour_set:
-                        alt = h
-                        break
-                if alt:
-                    chosen_hour = alt
-        # Reserve the chosen hour (but multiple prefs can share same hour if merged)
-        used_hour_set.add(chosen_hour)
-        pref_to_hours.setdefault(chosen_hour, []).append(pref)
+    # Assign compressed prefs to hours - NUCLEAR OPTION: Force every hour to have content
+    pref_to_hours = {}
+
+    # SIMPLE ROUND-ROBIN: Distribute preferences evenly, ensuring every hour gets something
+    for i, hour in enumerate(free_hours):
+        if compressed:  # If we have user preferences
+            pref_index = i % len(compressed)
+            pref_to_hours[hour] = [compressed[pref_index]]
+        else:  # If no preferences, mark for auto-fill
+            pref_to_hours[hour] = []
+
+    # If we have more preferences than hours, add them to existing hours
+    if len(compressed) > len(free_hours):
+        extra_prefs = compressed[len(free_hours):]
+        for i, pref in enumerate(extra_prefs):
+            hour = free_hours[i % len(free_hours)]
+            pref_to_hours[hour].append(pref)
+    # For any remaining free hours that didn't get preferences, they'll be filled by the auto-fill logic later
 
     # Now for each hour we have one or more pref labels assigned (merged or single).
     # Create concrete activities for each pref label using dataset pickers & heuristics.
@@ -600,7 +590,7 @@ def generate_schedule(free_hours: List[str], prefs: List[str], user: Dict[str, A
                     alt_choices = [
                         "Read a book or an article",
                         "Write a short journal entry",
-                        "Plan your next day or set tomorrow’s goals",
+                        "Plan your next day or set tomorrow's goals",
                         "Do a 5-minute breathing exercise",
                         "Light stretching or posture correction"
                     ]
@@ -608,7 +598,7 @@ def generate_schedule(free_hours: List[str], prefs: List[str], user: Dict[str, A
                     subparts.append({
                         "pref": "Mindful/Light Activity",
                         "activity": alt_pick,
-                        "duration": "15–30 min",
+                        "duration": "15-30 min",
                         "reason": "You're not hungry — instead, use this time for self-growth or relaxation."
                     })
 
@@ -767,9 +757,10 @@ def generate_schedule(free_hours: List[str], prefs: List[str], user: Dict[str, A
                 })
 
     # Final cleanup:
-    # - Ensure no duplicate main heavy types: prioritize first occurrence and convert duplicates to supportive activity
+    # - Ensure no duplicate main types but NEVER skip hours
     seen_main = set()
     final_schedule = {}
+
     def main_type_of_activity(a):
         la = a.lower()
         if any(x in la for x in ["sleep", "nap", "rest"]):
@@ -789,34 +780,89 @@ def generate_schedule(free_hours: List[str], prefs: List[str], user: Dict[str, A
     for h in sorted(schedule.keys(), key=lambda x: _hour_to_int(x)):
         blocks = schedule[h]
         filtered = []
+        
         for b in blocks:
             m = main_type_of_activity(b["activity"])
+            
             if m in seen_main and m not in ["other", "mindfulness"]:
-                # convert to supportive activity to avoid repeating heavy thing
+                # Convert duplicate to supportive activity BUT NEVER SKIP THE HOUR
                 if m == "meal":
                     newb = b.copy()
                     newb["activity"] = "Healthy Snack"
                     newb["duration"] = "10-15 min"
-                    newb["reason"] = "Converted to a light snack to avoid repeating full meals."
+                    newb["reason"] = "Light snack (avoiding duplicate full meal)"
                     filtered.append(newb)
                 elif m == "exercise":
-                    # convert duplicate exercise to light stretching / walk
                     newb = b.copy()
                     newb["activity"] = "Light walk or stretching"
                     newb["duration"] = "10-15 min"
-                    newb["reason"] = "Short movement break instead of repeating a full workout."
+                    newb["reason"] = "Gentle movement (avoiding duplicate workout)"
+                    filtered.append(newb)
+                elif m == "work":
+                    newb = b.copy()
+                    newb["activity"] = "Quick task organization"
+                    newb["duration"] = "15-25 min"
+                    newb["reason"] = "Light productivity (avoiding duplicate work session)"
+                    filtered.append(newb)
+                elif m == "sleep":
+                    newb = b.copy()
+                    newb["activity"] = "Quick rest break"
+                    newb["duration"] = "10-15 min"
+                    newb["reason"] = "Short rest (avoiding duplicate sleep)"
+                    filtered.append(newb)
+                elif m == "outdoor":
+                    newb = b.copy()
+                    newb["activity"] = "Brief fresh air break"
+                    newb["duration"] = "10-15 min"
+                    newb["reason"] = "Quick outdoor moment (avoiding duplicate social)"
                     filtered.append(newb)
                 else:
-                    # skip duplicates of same main type
-                    continue
+                    # For any other duplicate type, modify but keep the hour
+                    newb = b.copy()
+                    newb["activity"] = f"Alternative: {b['activity']}"
+                    newb["reason"] = f"Variation of {m} activity"
+                    filtered.append(newb)
             else:
                 filtered.append(b)
                 if m not in ["other", "mindfulness"]:
                     seen_main.add(m)
-        if filtered:
-            final_schedule[h] = filtered
+        
+        # CRITICAL: If filtering removed ALL activities for this hour, add a default activity
+        if not filtered:
+            hour_int = _hour_to_int(h)
+            if 0 <= hour_int < 6:
+                filtered.append({
+                    "pref": "Auto-filled",
+                    "activity": "Rest period",
+                    "duration": "30-60 min",
+                    "reason": "Scheduled rest time"
+                })
+            elif 6 <= hour_int < 12:
+                filtered.append({
+                    "pref": "Auto-filled", 
+                    "activity": "Mindfulness break",
+                    "duration": "15-20 min",
+                    "reason": "Scheduled mindfulness time"
+                })
+            elif 12 <= hour_int < 18:
+                filtered.append({
+                    "pref": "Auto-filled",
+                    "activity": "Productivity time", 
+                    "duration": "30-45 min",
+                    "reason": "Scheduled productive time"
+                })
+            else:
+                filtered.append({
+                    "pref": "Auto-filled",
+                    "activity": "Wind-down activity",
+                    "duration": "20-30 min", 
+                    "reason": "Scheduled relaxation time"
+                })
+        
+        # Always add the hour to final schedule
+        final_schedule[h] = filtered
 
-    # Ensure chronological order (by hour int)
+    # Ensure chronological order (by hour int) - MOVED OUTSIDE THE LOOP
     ordered = dict(sorted(final_schedule.items(), key=lambda x: _hour_to_int(x[0])))
     return ordered
 
