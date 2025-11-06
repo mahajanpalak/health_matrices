@@ -22,7 +22,7 @@ def create_or_edit_profile():
 
     # --- Basic info ---
     name = st.text_input("Name", profile.get("Name", ""))
-    age = st.number_input("Age", min_value=0, max_value=120, value=int(profile.get("Age", 25)))
+    age = st.number_input("Age", min_value=10, max_value=120, value=int(profile.get("Age", 25)))
     height = st.number_input("Height (cm)", min_value=50, max_value=250, value=int(profile.get("Height", 170)))
     weight = st.number_input("Weight (kg)", min_value=20, max_value=300, value=int(profile.get("Weight", 65)))
     gender = st.selectbox("Gender", ["Male", "Female", "Other"], index=["Male", "Female", "Other"].index(profile.get("Gender", "Male")))
