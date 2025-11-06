@@ -1,3 +1,4 @@
+# workout_generator.py
 import pandas as pd
 import random
 import streamlit as st
@@ -7,13 +8,20 @@ class WorkoutGenerator:
     def __init__(self, csv_file='data/exercises.csv'):
         try:
             self.df = pd.read_csv(csv_file)
-            # Clean the data
+            # Debug: Show available columns
+            # st.write("📊 Available columns:", list(self.df.columns))
+            
+            # Clean the data - use exact column names from your CSV
             self.df['Equipment'] = self.df['Equipment'].fillna('None')
             self.df['Body Focus'] = self.df['Body Focus'].fillna('')
             self.df['Goal'] = self.df['Goal'].fillna('')
         except FileNotFoundError:
             st.error(f"Exercise database not found at {csv_file}")
             self.df = pd.DataFrame(columns=['Exercise Name', 'Category', 'Intensity', 'Equipment', 'Body Focus', 'Goal', 'Workload Match'])
+        except Exception as e:
+            st.error(f"Error loading data: {str(e)}")
+            # Create a fallback dataframe with correct columns
+            self.df = pd.DataFrame(columns=['Exercise Name', 'Category', 'Intensity', 'Equipment', 'Body Focus', 'Goal', 'Workload Match', 'Calories/10min', 'Skill Level'])
         
         # Enhanced mapping with all possible combinations
         self.body_focus_map = {
@@ -21,9 +29,11 @@ class WorkoutGenerator:
             '💪 Upper Body': ['Arms', 'Shoulders', 'Chest', 'Back', 'Upper body', 'Upper Body'],
             '🦵 Lower Body': ['Legs', 'Glutes', 'Lower body', 'Lower Body', 'Thighs', 'Calves', 'Hamstrings'],
             '🎯 Core': ['Core', 'Abs', 'Obliques', 'Abdominals'],
-            '🧘 Flexibility': ['Spine', 'Hamstrings', 'Hips', 'Flexibility', 'Back', 'Shoulders']
+            '🧘 Flexibility': ['Spine', 'Hamstrings', 'Hips', 'Flexibility', 'Back', 'Shoulders', 'Balance'],
+            '🌬️ Respiratory System': ['Lungs', 'Throat'],
+            '🧠 Mind & Wellness': ['Mind', 'Digestion']
         }
-        
+    
         self.emotion_intensity_map = {
             '😴 Tired': 'Low',
             '😌 Calm': 'Low',
@@ -32,24 +42,34 @@ class WorkoutGenerator:
         }
         
         self.need_goal_map = {
-            '⚡ Quick Energy': ['Energy Boost', 'Fat loss', 'Endurance'],
+            '⚡ Energy Boost': ['Energy Boost', 'Fat loss', 'Endurance'],
             '😌 Stress Relief': ['Stress Relief', 'Relaxation', 'Calmness', 'Mindfulness'],
             '💪 Full Workout': ['Strength', 'Fat loss', 'Endurance', 'Core Strength'],
-            '🪑 Desk Relief': ['Flexibility', 'Mobility', 'Posture', 'Balance']
+            '🪑 Desk Relief': ['Flexibility', 'Mobility', 'Posture', 'Balance'],
+            '📈 Posture Improvement': ['Improve posture', 'Posture'],
+            '💪 Strength': ['Core Strength', 'Strength'],
+            '😊 Calmness': ['Calmness', 'Relaxation'],
+            '🎯 Core Stability': ['Core Stability', 'Core Strength']
         }
         
         self.equipment_map = {
             '👤 Nothing': ['None'],
-            '🧘 Yoga Mat': ['None', 'Mat'],
-            '🏋️ Dumbbells': ['None', 'Dumbbell', 'Dumbbells'],
-            '💪 Bands': ['None', 'Resistance Band']
+            '🧘 Yoga Mat': ['Mat', 'Yoga Mat'],
+            '🏋️ Dumbbells': ['Dumbbell', 'Dumbbells'],
+            '💪 Bands': ['Resistance Band', 'Bands'],
+            '🏃 Skipping Rope': ['Rope', 'Skipping rope', 'Skipping Rope'],
+            '⚽ Football': ['Football', 'FootBall'],
+            '🏐 Volleyball': ['VolleyBall', 'Volleyball'],
+            '🎾 Badminton Racket': ['Badminton Racket', 'Racket', 'Badminton racket'],
+            '🏸 Shuttle': ['Shuttle', 'shuttle'],
+            '🪑 Chair': ['Chair', 'chair']
         }
         
         self.time_structure = {
-            '15min ⚡': {'rounds': 2, 'exercises': 4, 'total_time': 15},
-            '30min 🕒': {'rounds': 3, 'exercises': 6, 'total_time': 30},
-            '45min ⏱️': {'rounds': 3, 'exercises': 6, 'total_time': 45},
-            '60min 🕛': {'rounds': 4, 'exercises': 8, 'total_time': 60}
+            '⚡ 15min': {'rounds': 2, 'exercises': 4, 'total_time': 15},
+            '🕒 30min': {'rounds': 3, 'exercises': 6, 'total_time': 30},
+            '⏱️ 45min': {'rounds': 3, 'exercises': 6, 'total_time': 45},
+            '🕛 60min': {'rounds': 4, 'exercises': 8, 'total_time': 60}
         }
 
     def get_exercise_sets_reps(self, exercise_name, category):
@@ -64,53 +84,75 @@ class WorkoutGenerator:
         }
         return sets_reps_map.get(category, "12-15 reps")
 
+    def _get_equipment_exercises(self, exercises, equipment_preference):
+        """Get exercises that specifically use the selected equipment"""
+        if equipment_preference == '👤 Nothing':
+            return pd.DataFrame()
+        
+        target_equipment = self.equipment_map.get(equipment_preference, [])
+        
+        def matches_equipment(equipment_str):
+            if pd.isna(equipment_str):
+                return False
+            equipment_str_lower = str(equipment_str).lower()
+            return any(eq.lower() in equipment_str_lower for eq in target_equipment)
+        
+        # Check if 'Equipment' column exists
+        if 'Equipment' not in exercises.columns:
+            st.error("❌ 'Equipment' column not found in exercises data")
+            return pd.DataFrame()
+            
+        equipment_exercises = exercises[exercises['Equipment'].apply(matches_equipment)]
+        return equipment_exercises
+
     def _filter_exercises_by_equipment(self, exercises, equipment_preference):
-        """Filter exercises by equipment preference with priority"""
-        target_equipment = self.equipment_map.get(equipment_preference, ['None'])
+        """Filter exercises with MAXIMUM priority given to selected equipment"""
+        # Check if dataframe is empty or missing Equipment column
+        if exercises.empty or 'Equipment' not in exercises.columns:
+            return exercises
+            
+        # If no equipment selected, return exercises that require no equipment
+        if equipment_preference == '👤 Nothing':
+            no_equipment_exercises = exercises[exercises['Equipment'].str.lower().isin(['none', ''])]
+            return no_equipment_exercises if len(no_equipment_exercises) > 0 else exercises
         
-        # First try exact equipment match
-        exact_match = exercises[exercises['Equipment'].isin(target_equipment)]
+        # Get exercises that specifically use the selected equipment
+        equipment_exercises = self._get_equipment_exercises(exercises, equipment_preference)
         
-        if len(exact_match) >= 4:
-            return exact_match
+        # If we have equipment-specific exercises, prioritize them
+        if len(equipment_exercises) > 0:
+            return equipment_exercises
         
-        # If not enough, include exercises that require less equipment
-        all_equipment = ['None', 'Mat', 'Dumbbell', 'Resistance Band', 'Chair', 'Wall']
-        equipment_priority = {
-            '👤 Nothing': ['None'],
-            '🧘 Yoga Mat': ['None', 'Mat'],
-            '🏋️ Dumbbells': ['None', 'Mat', 'Dumbbell'],
-            '💪 Bands': ['None', 'Mat', 'Resistance Band']
-        }
-        
-        fallback_equipment = equipment_priority.get(equipment_preference, ['None'])
-        fallback_match = exercises[exercises['Equipment'].isin(fallback_equipment)]
-        
-        return fallback_match if len(fallback_match) >= 4 else exercises
+        # If no equipment-specific exercises found, return original exercises
+        return exercises
 
     def _filter_exercises_by_body_focus(self, exercises, body_focus):
         """Filter exercises by body focus with intelligent matching"""
+        if exercises.empty or 'Body Focus' not in exercises.columns:
+            return exercises
+            
         target_focus_areas = self.body_focus_map.get(body_focus, [])
         
         if not target_focus_areas:
             return exercises
         
-        # Find exercises that match any of the target focus areas
         def matches_focus(body_focus_str):
             if pd.isna(body_focus_str):
                 return False
-            return any(focus_area.lower() in body_focus_str.lower() for focus_area in target_focus_areas)
+            return any(focus_area.lower() in str(body_focus_str).lower() for focus_area in target_focus_areas)
         
         focused_exercises = exercises[exercises['Body Focus'].apply(matches_focus)]
         
         if len(focused_exercises) >= 4:
             return focused_exercises
         
-        # If not enough, return original exercises but prioritize matching ones
         return exercises
 
     def _filter_exercises_by_goal(self, exercises, need):
         """Filter exercises by user's goal/need"""
+        if exercises.empty or 'Goal' not in exercises.columns:
+            return exercises
+            
         target_goals = self.need_goal_map.get(need, [])
         
         if not target_goals:
@@ -119,7 +161,7 @@ class WorkoutGenerator:
         def matches_goal(goal_str):
             if pd.isna(goal_str):
                 return False
-            return any(goal.lower() in goal_str.lower() for goal in target_goals)
+            return any(goal.lower() in str(goal_str).lower() for goal in target_goals)
         
         goal_matched = exercises[exercises['Goal'].apply(matches_goal)]
         
@@ -130,6 +172,9 @@ class WorkoutGenerator:
 
     def _filter_exercises_by_intensity(self, exercises, emotion):
         """Filter exercises by intensity based on emotion"""
+        if exercises.empty or 'Intensity' not in exercises.columns:
+            return exercises
+            
         target_intensity = self.emotion_intensity_map.get(emotion, 'Moderate')
         
         intensity_matched = exercises[exercises['Intensity'] == target_intensity]
@@ -141,11 +186,9 @@ class WorkoutGenerator:
         intensity_order = ['Low', 'Moderate', 'High']
         try:
             target_idx = intensity_order.index(target_intensity)
-            # Include one level above and below
-            allowed_intensities = []
+            allowed_intensities = [target_intensity]
             if target_idx > 0:
                 allowed_intensities.append(intensity_order[target_idx - 1])
-            allowed_intensities.append(target_intensity)
             if target_idx < len(intensity_order) - 1:
                 allowed_intensities.append(intensity_order[target_idx + 1])
             
@@ -154,10 +197,37 @@ class WorkoutGenerator:
         except ValueError:
             return exercises
 
-    def _select_varied_exercises(self, exercises_df, num_exercises):
-        """Select exercises ensuring variety in categories"""
+    def _select_varied_exercises(self, exercises_df, num_exercises, equipment_preference):
+        """Select exercises ensuring MAXIMUM equipment usage and variety"""
+        if len(exercises_df) == 0:
+            return exercises_df
+        
+        # If equipment is selected, prioritize equipment-specific exercises
+        if equipment_preference != '👤 Nothing':
+            equipment_exercises = self._get_equipment_exercises(exercises_df, equipment_preference)
+            
+            # If we have equipment exercises, use them as primary
+            if len(equipment_exercises) > 0:
+                # Use ALL equipment exercises if possible
+                if len(equipment_exercises) >= num_exercises:
+                    return equipment_exercises.sample(n=num_exercises)
+                else:
+                    # Use all equipment exercises and fill the rest with others
+                    selected = equipment_exercises.copy()
+                    remaining_needed = num_exercises - len(equipment_exercises)
+                    
+                    # Get non-equipment exercises that match other criteria
+                    other_exercises = exercises_df[~exercises_df.index.isin(equipment_exercises.index)]
+                    if len(other_exercises) >= remaining_needed:
+                        selected = pd.concat([selected, other_exercises.sample(n=remaining_needed)])
+                    else:
+                        selected = pd.concat([selected, other_exercises])
+                    
+                    return selected.sample(frac=1)  # Shuffle
+        
+        # If no equipment or no equipment exercises, select with variety
         if len(exercises_df) <= num_exercises:
-            return exercises_df.sample(frac=1)  # Shuffle all exercises
+            return exercises_df.sample(frac=1)
         
         # Group by category and select evenly
         categories = exercises_df['Category'].unique()
@@ -184,36 +254,46 @@ class WorkoutGenerator:
                     remaining_exercises.sample(n=min(remaining, len(remaining_exercises)))
                 ])
         
-        return selected_exercises.sample(frac=1)  # Final shuffle
+        return selected_exercises.sample(frac=1)
 
     def generate_workout(self, emotion, time_available, equipment, need, body_focus):
         try:
             # Start with all exercises
             filtered_exercises = self.df.copy()
             
-            # Apply filters in order of importance
-            st.write("🔍 Filtering exercises...")
+            # Check if dataframe is loaded properly
+            if filtered_exercises.empty:
+                st.error("❌ No exercise data loaded. Please check your CSV file.")
+                return None
             
-            # 1. Filter by equipment (most important - user has limited equipment)
+            # Apply filters in order of importance - EQUIPMENT FIRST AND FOREMOST
+            # st.write("🔍 Filtering exercises...")
+            
+            # 1. FILTER BY EQUIPMENT - HIGHEST PRIORITY
             filtered_exercises = self._filter_exercises_by_equipment(filtered_exercises, equipment)
-            st.write(f"   ✅ After equipment filter: {len(filtered_exercises)} exercises")
+            # st.write(f"   ✅ After equipment filter: {len(filtered_exercises)} exercises")
+            
+            # Show equipment-specific count
+            if equipment != '👤 Nothing':
+                equipment_exercises = self._get_equipment_exercises(filtered_exercises, equipment)
+                # st.write(f"   🎯 Equipment-specific exercises: {len(equipment_exercises)}")
             
             # 2. Filter by body focus
             filtered_exercises = self._filter_exercises_by_body_focus(filtered_exercises, body_focus)
-            st.write(f"   ✅ After body focus filter: {len(filtered_exercises)} exercises")
+            # st.write(f"   ✅ After body focus filter: {len(filtered_exercises)} exercises")
             
             # 3. Filter by goal/need
             filtered_exercises = self._filter_exercises_by_goal(filtered_exercises, need)
-            st.write(f"   ✅ After goal filter: {len(filtered_exercises)} exercises")
+            # st.write(f"   ✅ After goal filter: {len(filtered_exercises)} exercises")
             
             # 4. Filter by intensity
             filtered_exercises = self._filter_exercises_by_intensity(filtered_exercises, emotion)
-            st.write(f"   ✅ After intensity filter: {len(filtered_exercises)} exercises")
+            # st.write(f"   ✅ After intensity filter: {len(filtered_exercises)} exercises")
             
-            # If we have very few exercises, show what we're working with
+            # If we have very few exercises, expand search but maintain equipment priority
             if len(filtered_exercises) < 4:
-                st.warning(f"Only found {len(filtered_exercises)} matching exercises. Expanding search criteria...")
-                # Start over with just equipment requirement
+                # st.warning(f"Only found {len(filtered_exercises)} matching exercises. Expanding search criteria...")
+                # Start over with just equipment requirement as non-negotiable
                 filtered_exercises = self._filter_exercises_by_equipment(self.df.copy(), equipment)
             
             # Select exercises based on time structure
@@ -224,8 +304,8 @@ class WorkoutGenerator:
                 st.error("❌ No exercises found with current criteria. Please adjust your selections.")
                 return None
             
-            # Ensure variety in selection
-            selected_exercises = self._select_varied_exercises(filtered_exercises, num_exercises)
+            # Ensure variety in selection with equipment priority
+            selected_exercises = self._select_varied_exercises(filtered_exercises, num_exercises, equipment)
             
             # Generate workout plan
             workout_plan = {
@@ -249,8 +329,8 @@ class WorkoutGenerator:
                     'equipment': exercise['Equipment'],
                     'body_focus': exercise['Body Focus'],
                     'goal': exercise['Goal'],
-                    'calories': exercise['Calories/10min'],
-                    'skill_level': exercise['Skill Level']
+                    'calories': exercise.get('Calories/10min', 'N/A'),
+                    'skill_level': exercise.get('Skill Level', 'Beginner')
                 })
             
             return workout_plan
@@ -267,6 +347,10 @@ def workout_generator_ui():
     # Initialize workout generator
     workout_gen = WorkoutGenerator()
     
+    # Initialize session state for real-time updates
+    if 'last_params' not in st.session_state:
+        st.session_state.last_params = {}
+    
     # Create form for user input
     with st.form("workout_form"):
         col1, col2 = st.columns(2)
@@ -280,50 +364,61 @@ def workout_generator_ui():
             
             time_available = st.selectbox(
                 "How much time do you have?",
-                options=['15min ⚡', '30min 🕒', '45min ⏱️', '60min 🕛'],
+                options=['⚡ 15min', '🕒 30min', '⏱️ 45min', '🕛 60min'],
                 index=1
             )
             
         with col2:
             equipment = st.selectbox(
                 "What's available around you?",
-                options=['👤 Nothing', '🧘 Yoga Mat', '🏋️ Dumbbells', '💪 Bands'],
+                options=['👤 Nothing', '🧘 Yoga Mat', '🏋️ Dumbbells', '💪 Bands', '🎾 Badminton Racket', '🏃 Skipping Rope', '🏐 Volleyball', '⚽ Football'],
                 index=0
             )
             
             need = st.selectbox(
                 "What do you need most?",
-                options=['⚡ Quick Energy', '😌 Stress Relief', '💪 Full Workout', '🪑 Desk Relief'],
+                options=['⚡ Energy Boost', '😌 Stress Relief', '💪 Full Workout', '🪑 Desk Relief', '😊 Calmness', '💪 Strength', '📈 Posture Improvement', '🎯 Core Stability'],
                 index=2
             )
         
         body_focus = st.selectbox(
             "Focus area?",
-            options=['🔄 Full Body', '💪 Upper Body', '🦵 Lower Body', '🎯 Core', '🧘 Flexibility'],
+            options=['🔄 Full Body', '💪 Upper Body', '🦵 Lower Body', '🎯 Core', '🧘 Flexibility', '🧠 Mind & Wellness'],
             index=0
         )
         
         generate_clicked = st.form_submit_button("💪 Generate My Workout", use_container_width=True)
     
-    # Generate and display workout
-    if generate_clicked:
+    # Check if any parameter changed for real-time updates
+    current_params = {
+        'emotion': emotion,
+        'time_available': time_available,
+        'equipment': equipment,
+        'need': need,
+        'body_focus': body_focus
+    }
+    
+    # Auto-generate workout when parameters change (real-time feel)
+    params_changed = current_params != st.session_state.last_params
+    should_generate = generate_clicked or ('current_workout' in st.session_state and params_changed)
+    
+    if should_generate:
         with st.spinner("Creating your personalized workout..."):
             workout = workout_gen.generate_workout(emotion, time_available, equipment, need, body_focus)
             
             if workout:
                 # Store workout in session state for regeneration
                 st.session_state.current_workout = workout
-                st.session_state.workout_params = {
-                    'emotion': emotion,
-                    'time_available': time_available,
-                    'equipment': equipment,
-                    'need': need,
-                    'body_focus': body_focus
-                }
+                st.session_state.workout_params = current_params
+                st.session_state.last_params = current_params
                 
                 display_workout(workout, workout_gen)
             else:
                 st.error("Could not generate a workout with the current criteria. Try adjusting your selections.")
+
+    # Display current workout if exists
+    elif 'current_workout' in st.session_state:
+        display_workout(st.session_state.current_workout, workout_gen)
 
     # Check if we have a workout in session state to allow regeneration
     if 'current_workout' in st.session_state and 'workout_params' in st.session_state:
@@ -370,6 +465,35 @@ def display_workout(workout, workout_gen):
         categories = set(ex['category'] for ex in workout['exercises'])
         st.metric("Exercise Types", len(categories))
     
+    # Equipment usage highlight
+    selected_equipment = workout['filters_applied']['equipment']
+    
+    # Safe equipment exercise counting
+    equipment_exercises = []
+    for ex in workout['exercises']:
+        try:
+            # Create a single-row DataFrame for the exercise
+            ex_df = pd.DataFrame([{
+                'Exercise Name': ex['name'],
+                'Category': ex['category'],
+                'Intensity': ex['intensity'],
+                'Equipment': ex['equipment'],
+                'Body Focus': ex['body_focus'],
+                'Goal': ex['goal']
+            }])
+            
+            # Check if this exercise uses the selected equipment
+            if workout_gen._get_equipment_exercises(ex_df, selected_equipment).shape[0] > 0:
+                equipment_exercises.append(ex)
+        except Exception as e:
+            continue
+    
+    if selected_equipment != '👤 Nothing':
+        if equipment_exercises:
+            st.success(f"🎯 **Equipment Focus**: {len(equipment_exercises)} out of {len(workout['exercises'])} exercises use your {selected_equipment}")
+        else:
+            st.warning(f"⚠️ No exercises found using {selected_equipment}. Try different equipment or criteria.")
+    
     # Exercise list with enhanced information
     st.markdown("#### 🏋️ Your Workout Plan")
     st.markdown(f"**Complete {workout['rounds']} rounds** • Rest 30-60 seconds between exercises")
@@ -378,8 +502,27 @@ def display_workout(workout, workout_gen):
         with st.container():
             col1, col2, col3 = st.columns([3, 1, 1])
             with col1:
-                st.write(f"**{i}. {exercise['name']}**")
+                # Highlight if exercise uses selected equipment
+                equipment_highlight = ""
+                if selected_equipment != '👤 Nothing':
+                    try:
+                        ex_df = pd.DataFrame([{
+                            'Exercise Name': exercise['name'],
+                            'Category': exercise['category'],
+                            'Intensity': exercise['intensity'],
+                            'Equipment': exercise['equipment'],
+                            'Body Focus': exercise['body_focus'],
+                            'Goal': exercise['goal']
+                        }])
+                        is_equipment_exercise = workout_gen._get_equipment_exercises(ex_df, selected_equipment).shape[0] > 0
+                        if is_equipment_exercise:
+                            equipment_highlight = " 🎯"
+                    except:
+                        pass
+                
+                st.write(f"**{i}. {exercise['name']}{equipment_highlight}**")
                 st.caption(f"🏷️ {exercise['category']} • ⚡ {exercise['intensity']} Intensity")
+                st.caption(f"🔧 Equipment: {exercise['equipment']}")
                 st.caption(f"🎯 Focus: {exercise['body_focus']}")
                 st.caption(f"📊 Goal: {exercise['goal']} • 🎓 Level: {exercise['skill_level']}")
             with col2:
@@ -390,7 +533,7 @@ def display_workout(workout, workout_gen):
     
     # Workout statistics
     with st.expander("📊 Workout Statistics"):
-        col1, col2 = st.columns(2)
+        col1, col2, col3 = st.columns(3)
         
         with col1:
             st.write("**Exercise Distribution:**")
@@ -411,6 +554,12 @@ def display_workout(workout, workout_gen):
             
             for intensity, count in intensity_count.items():
                 st.write(f"• {intensity}: {count} exercises")
+        
+        with col3:
+            if selected_equipment != '👤 Nothing':
+                st.write("**Equipment Usage:**")
+                st.write(f"• Using {selected_equipment}: {len(equipment_exercises)} exercises")
+                st.write(f"• No equipment: {len(workout['exercises']) - len(equipment_exercises)} exercises")
     
     # Download option
     workout_text = f"{workout['filters_applied']['body_focus']} {workout['total_time']}min Workout\n\n"

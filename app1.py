@@ -23,7 +23,7 @@ from database import load_user_profile as load_user_profile_db
 
 # Page configuration
 st.set_page_config(
-    page_title="Health Matrices Pro",
+    page_title="Health Matrices",
     page_icon="🏥",
     layout="wide",
     initial_sidebar_state="expanded"
@@ -874,7 +874,7 @@ if not auth.check_auth():
         st.markdown(f"""
         <div style='text-align: center; margin-bottom: 2rem;'>
             <h1 style='color: {COLORS["text_primary"]}; font-size: 2.5rem; margin-bottom: 0.5rem;'>🏥</h1>
-            <h2 style='color: {COLORS["text_primary"]}; margin-bottom: 0.5rem;'>Health Matrices Pro</h2>
+            <h2 style='color: {COLORS["text_primary"]}; margin-bottom: 0.5rem;'>Health Matrices </h2>
             <p style='color: {COLORS["text_labels"]}; font-size: 1.1rem;'>Premium Health Intelligence</p>
         </div>
         """, unsafe_allow_html=True)
@@ -1043,30 +1043,27 @@ def create_bmi_gauge(bmi_value):
 
 
 def create_nutrient_chart(user_data):
-    """Create nutrient distribution chart with medical colors"""
-    # Calculate macronutrient distribution based on user goals
-    calories = user_data['daily_calories']
+    """Create nutrient distribution chart using meal planner logic"""
+    # Calculate ranges using the same logic as meal planner
+    ranges = calculate_daily_ranges(user_data)
     
-    if user_data['goal'].lower() == 'lose':
-        protein_ratio, carb_ratio, fat_ratio = 0.35, 0.40, 0.25
-    elif user_data['goal'].lower() == 'gain':
-        protein_ratio, carb_ratio, fat_ratio = 0.30, 0.50, 0.20
-    else:  # maintain
-        protein_ratio, carb_ratio, fat_ratio = 0.25, 0.45, 0.30
+    # Use the midpoint of each range for display
+    calories_mid = sum(ranges['Calories']) / 2
+    protein_mid = sum(ranges['Protein']) / 2
+    carbs_mid = sum(ranges['Carbs']) / 2
+    fats_mid = sum(ranges['Fats']) / 2
     
-    protein_cals = calories * protein_ratio
-    carb_cals = calories * carb_ratio
-    fat_cals = calories * fat_ratio
+    # Calculate percentages
+    total_nutrient_cals = (protein_mid * 4) + (carbs_mid * 4) + (fats_mid * 9)
     
-    # Convert to grams
-    protein_grams = round(protein_cals / 4)
-    carb_grams = round(carb_cals / 4)
-    fat_grams = round(fat_cals / 9)
+    protein_ratio = (protein_mid * 4) / total_nutrient_cals * 100
+    carb_ratio = (carbs_mid * 4) / total_nutrient_cals * 100
+    fat_ratio = (fats_mid * 9) / total_nutrient_cals * 100
     
     data = {
         'Nutrient': ['Protein', 'Carbs', 'Fats'],
-        'Grams': [protein_grams, carb_grams, fat_grams],
-        'Percentage': [protein_ratio*100, carb_ratio*100, fat_ratio*100],
+        'Grams': [round(protein_mid), round(carbs_mid), round(fats_mid)],
+        'Percentage': [round(protein_ratio, 1), round(carb_ratio, 1), round(fat_ratio, 1)],
         'Color': [COLORS['medical_cyan'], COLORS['health_amber'], COLORS['medical_red']]
     }
     
@@ -1119,9 +1116,238 @@ def create_health_timeline(user_data):
     
     return fig
 
+
+def calculate_daily_ranges(user_data):
+    """Calculate daily nutrient ranges - SAME LOGIC AS MEAL PLANNER"""
+    weight, height, age = user_data['weight'], user_data['height'], user_data['age']
+    goal, lifestyle = user_data['goal'], user_data['lifestyle']
+    gender = user_data['gender']
+    
+    # Calculate BMR (same as meal planner)
+    if gender.lower() == "male":
+        bmr = 10 * weight + 6.25 * height - 5 * age + 5
+    else:
+        bmr = 10 * weight + 6.25 * height - 5 * age - 161
+    
+    # Activity multipliers (same as meal planner)
+    multipliers = {
+        "Sedentary": 1.2,
+        "Lightly Active": 1.375, 
+        "Moderately Active": 1.55,
+        "Very Active": 1.725
+    }
+    
+    tdee = bmr * multipliers.get(lifestyle, 1.55)
+    
+    # Goal adjustment (same as meal planner)
+    if goal.lower() == "lose":
+        tdee_range = (tdee - 500, tdee - 300)
+    elif goal.lower() == "gain":
+        tdee_range = (tdee + 300, tdee + 500)
+    else:  # maintain
+        tdee_range = (tdee - 200, tdee + 200)
+    
+    # Calculate nutrient ranges (same as meal planner)
+    protein_range = (0.8 * weight, 1.8 * weight)
+    carbs_range = (0.4 * tdee / 4, 0.6 * tdee / 4)
+    fats_range = (0.2 * tdee / 9, 0.35 * tdee / 9)
+    
+    return {
+        "Calories": tdee_range,
+        "Protein": protein_range,
+        "Carbs": carbs_range,
+        "Fats": fats_range
+    }
+
+def get_daily_progress_targets(user_data):
+    """Get daily progress targets that match meal planner ranges"""
+    ranges = calculate_daily_ranges(user_data)
+    
+    # Use upper bound for targets to be more permissive
+    calorie_target = ranges['Calories'][1]  # Use upper bound
+    protein_target = ranges['Protein'][1]   # Use upper bound  
+    carbs_target = ranges['Carbs'][1]       # Use upper bound
+    fats_target = ranges['Fats'][1]         # Use upper bound
+    
+    return {
+        "Calories": round(calorie_target),
+        "Protein": round(protein_target),
+        "Carbs": round(carbs_target),
+        "Fats": round(fats_target),
+        "Water": max(round(user_data['weight'] * 0.035), 2),  # Minimum 2L
+        "Exercise": 60  # 60 minutes exercise target
+    }
+
+def get_todays_progress(user_id):
+    """Get today's actual progress from database or session state"""
+    # Try to get from session state first
+    if 'daily_progress' in st.session_state:
+        return st.session_state.daily_progress
+    
+    # Default progress (you can replace this with database calls)
+    return {
+        "Calories": 0,
+        "Protein": 0,
+        "Carbs": 0,
+        "Fats": 0,
+        "Water": 0,
+        "Exercise": 0
+    }
+
+def update_progress(nutrient, amount):
+    """Update progress for a specific nutrient with validation"""
+    if 'daily_progress' not in st.session_state:
+        st.session_state.daily_progress = get_todays_progress(st.session_state.user_id)
+    
+    # Get current targets
+    user_data = load_user_profile()
+    targets = get_daily_progress_targets(user_data)
+    
+    current_value = st.session_state.daily_progress.get(nutrient, 0)
+    target_value = targets.get(nutrient, 0)
+    
+    # Calculate new value
+    new_value = current_value + amount
+    
+    # Validate limits
+    if new_value > target_value * 1.2:  # Allow 20% over target with warning
+        st.warning(f"⚠️ {nutrient} intake ({new_value:.0f}) exceeds your target ({target_value:.0f}) by more than 20%!")
+        # Cap at 120% of target
+        st.session_state.daily_progress[nutrient] = target_value * 1.2
+    elif new_value > target_value:
+        st.info(f"ℹ️ {nutrient} intake ({new_value:.0f}) exceeds your target ({target_value:.0f})")
+        st.session_state.daily_progress[nutrient] = new_value
+    else:
+        st.session_state.daily_progress[nutrient] = new_value
+
+def get_progress_status(nutrient, current, target):
+    """Get status and color for progress display"""
+    if target == 0:
+        return "No target", COLORS['text_labels']
+    
+    percentage = (current / target) * 100
+    
+    if percentage <= 80:
+        return "Below Target", COLORS['medical_cyan']
+    elif percentage <= 100:
+        return "On Target", COLORS['wellness_green']
+    elif percentage <= 120:
+        return "Slightly Over", COLORS['health_amber']
+    else:
+        return "Significantly Over", COLORS['medical_red']
+
+def create_progress_display(user_data):
+    """Create progress display with proper validation"""
+    # Get targets and current progress
+    targets = get_daily_progress_targets(user_data)
+    current = get_todays_progress(st.session_state.user_id)
+    
+    progress_data = [
+        ("Calories", current["Calories"], targets["Calories"], "kcal"),
+        ("Protein", current["Protein"], targets["Protein"], "g"),
+        ("Carbs", current["Carbs"], targets["Carbs"], "g"), 
+        ("Fats", current["Fats"], targets["Fats"], "g"),
+        ("Water", current["Water"], targets["Water"], "L"),
+        ("Exercise", current["Exercise"], targets["Exercise"], "min")
+    ]
+    
+    for label, current_val, target_val, unit in progress_data:
+        # Get status and color
+        status, color = get_progress_status(label, current_val, target_val)
+        
+        # Calculate progress percentage (capped at 120% for display)
+        progress_pct = min(current_val / target_val, 1.2) if target_val > 0 else 0
+        display_pct = min(progress_pct, 1.0)  # Cap at 100% for bar display
+        
+        st.write(f"**{label}** - *{status}*")
+        
+        # Progress bar (shows up to 100%, but text shows actual)
+        progress_html = f"""
+        <div class="progress-container">
+            <div class="progress-fill" style="width: {display_pct * 100}%; background: {color};">
+                {current_val:.0f}/{target_val:.0f} {unit} ({min(progress_pct * 100, 120):.0f}%)
+            </div>
+        </div>
+        """
+        st.markdown(progress_html, unsafe_allow_html=True)
+        
+        # Show warning if significantly over target
+        if progress_pct > 1.0:
+            overage_pct = (progress_pct - 1.0) * 100
+            if overage_pct > 20:
+                st.error(f"🚨 {label} is {overage_pct:.0f}% over target!")
+            elif overage_pct > 0:
+                st.warning(f"⚠️ {label} is {overage_pct:.0f}% over target")
+
+def reset_daily_progress():
+    """Reset daily progress with confirmation"""
+    if st.button("🔄 Start New Day", use_container_width=True):
+        st.session_state.daily_progress = {
+            "Calories": 0,
+            "Protein": 0,
+            "Carbs": 0, 
+            "Fats": 0,
+            "Water": 0,
+            "Exercise": 0
+        }
+        st.success("✅ Daily progress reset! Ready for a new day.")
+        st.rerun()
+
+def sync_meal_planner_progress(selected_meals):
+    """Sync progress from meal planner selections with validation"""
+    if 'daily_progress' not in st.session_state:
+        st.session_state.daily_progress = get_todays_progress(st.session_state.user_id)
+    
+    total_calories = 0
+    total_protein = 0
+    total_carbs = 0
+    total_fats = 0
+    
+    # Calculate totals from selected meals
+    for meal, items in selected_meals.items():
+        for item in items:
+            qty = item.get('Quantity', 100)
+            total_calories += item['Calories'] * qty / 100
+            total_protein += item['Protein'] * qty / 100
+            total_carbs += item['Carbs'] * qty / 100
+            total_fats += item['Fats'] * qty / 100
+    
+    # Get current targets for validation
+    user_data = load_user_profile()
+    targets = get_daily_progress_targets(user_data)
+    
+    # Validate and update progress
+    nutrients_to_update = {
+        "Calories": total_calories,
+        "Protein": total_protein, 
+        "Carbs": total_carbs,
+        "Fats": total_fats
+    }
+    
+    over_target_nutrients = []
+    
+    for nutrient, value in nutrients_to_update.items():
+        target = targets.get(nutrient, 0)
+        if value > target * 1.2:
+            # Cap at 120% of target
+            st.session_state.daily_progress[nutrient] = target * 1.2
+            over_target_nutrients.append(f"{nutrient} ({value:.0f} vs target {target:.0f})")
+        elif value > target:
+            st.session_state.daily_progress[nutrient] = value
+            over_target_nutrients.append(f"{nutrient} ({value:.0f} vs target {target:.0f})")
+        else:
+            st.session_state.daily_progress[nutrient] = value
+    
+    # Show summary warnings
+    if over_target_nutrients:
+        st.warning(f"⚠️ The following nutrients exceed targets: {', '.join(over_target_nutrients)}")
 # Initialize session state for navigation
 if 'current_page' not in st.session_state:
     st.session_state.current_page = "Dashboard"
+
+# Initialize daily progress tracking
+if 'daily_progress' not in st.session_state:
+    st.session_state.daily_progress = get_todays_progress(st.session_state.user_id if 'user_id' in st.session_state else None)
 
 # Load data
 @st.cache_data
@@ -1136,7 +1362,7 @@ foods = load_food_data()
 with st.sidebar:
     st.markdown(f"""
     <div class="sidebar-header">
-        <h2 style="color: {COLORS['text_primary']}; margin: 0; font-size: 1.6rem; font-weight: 700;">🏥 Health Matrices Pro</h2>
+        <h2 style="color: {COLORS['text_primary']}; margin: 0; font-size: 1.6rem; font-weight: 700;">🏥 Health Matrices</h2>
         <p style="opacity: 0.9; margin: 0.5rem 0 0 0; color: {COLORS['text_labels']}; font-size: 0.9rem; font-weight: 500;">
         Premium Health Intelligence</p>
     </div>
@@ -1154,15 +1380,6 @@ with st.sidebar:
     </div>
     """, unsafe_allow_html=True)    
 
-    # Refresh button with animation
-    if st.button("🔄 Refresh Profile Data", use_container_width=True):
-        st.balloons()
-        st.cache_data.clear()
-        if 'user_profile_data' in st.session_state:
-            del st.session_state.user_profile_data
-        time.sleep(1)
-        st.rerun()    
-    
     # Logout button
     if st.button("🚪 Logout", use_container_width=True):
         st.session_state.logged_in = False
@@ -1174,26 +1391,26 @@ with st.sidebar:
     
     # Premium Navigation
     st.markdown("### 🧭 Navigation")
-    
+
     nav_options = {
         "🏠 Dashboard": "dashboard",
         "👤 Profile": "profile", 
         "🍽 Nutrition Hub": "nutrition_hub",
         "💪 Exercise & Fitness": "exercise_fitness",
         "📅 Routine Optimizer": "routine_optimizer",
-        "🤖 Health Assistant": "health_assistant",
+        "🤖 Health Assistant": "health_assistant_page",  # Changed from "health_assistant"
         "⭐ Pro Features": "pro_features",
         "🔧 Admin": "admin"
     }
-    
+
     for display_name, page_key in nav_options.items():
-        if st.button(display_name, key=page_key, use_container_width=True):
+        if st.button(display_name, key=f"nav_btn_{page_key}", use_container_width=True):
             st.session_state.current_page = page_key
 
 # Dashboard Page with Enhanced Medical Theme
 if st.session_state.current_page == "dashboard":
     # Header with medical theme
-    st.markdown('<h1 class="main-header">Health Matrices Pro</h1>', unsafe_allow_html=True)
+    st.markdown('<h1 class="main-header">Health Matrices</h1>', unsafe_allow_html=True)
     
     # Welcome message
     if user['name'] == 'Guest User':
@@ -1328,32 +1545,48 @@ if st.session_state.current_page == "dashboard":
             <h4 style="color: #ffffff; margin-bottom: 1.5rem; font-size: 1.3rem;">🎯 Daily Calorie Target</h4>
         """, unsafe_allow_html=True)
         
-        st.metric("Recommended Daily Intake", f"{user['daily_calories']} kcal", 
+        # Get consistent targets that match meal planner FIRST
+        progress_targets = get_daily_progress_targets(user)
+        
+        # Get today's actual progress
+        todays_progress = get_todays_progress(st.session_state.user_id)
+        
+        st.metric("Recommended Daily Intake", f"{progress_targets['Calories']} kcal", 
                  f"For {user['goal']} goal • {user['lifestyle']}")
         
-        # Animated progress bars for daily tracking
+        # Today's Progress with proper validation
         st.write("*Today's Progress:*")
+
+        # Use the new progress display function
+        create_progress_display(user)
         
-        progress_data = [
-            ("Calories", 1450, user['daily_calories'], COLORS['medical_cyan']),
-            ("Protein", 55, nutrient_data['Grams'][0], COLORS['wellness_green']),
-            ("Water", 6, 8, COLORS['medical_cyan']),
-            ("Exercise", 45, 60, COLORS['health_amber'])
-        ]
+        # Add quick update buttons for manual tracking
+        st.write("**Quick Update:**")
+        col1, col2, col3 = st.columns(3)
         
-        for label, current, target, color in progress_data:
-            progress = min(current / target, 1.0)
-            st.write(f"{label}")
-            progress_html = f"""
-            <div class="progress-container">
-                <div class="progress-fill" style="width: {progress * 100}%; background: {color};">
-                    {current}/{target}
-                </div>
-            </div>
-            """
-            st.markdown(progress_html, unsafe_allow_html=True)
+        with col1:
+            if st.button("🍽 Add Meal", use_container_width=True):
+                # This would ideally come from your meal planner
+                # For now, using sample values
+                update_progress("Calories", 500)
+                update_progress("Protein", 25)
+                update_progress("Carbs", 60)
+                update_progress("Fats", 15)
+                st.rerun()
         
-        st.markdown("</div>", unsafe_allow_html=True)
+        with col2:
+            if st.button("💧 Add Water", use_container_width=True):
+                update_progress("Water", 1)  # 1 liter
+                st.rerun()
+        
+        with col3:
+            if st.button("🏃 Add Exercise", use_container_width=True):
+                update_progress("Exercise", 30)  # 30 minutes
+                st.rerun()
+        
+        # Reset button for new day
+        # Reset progress with the new function
+        reset_daily_progress()
     
     # Quick Access Features with Enhanced Cards
     st.markdown(f'<h2 class="section-header">🚀 Quick Access</h2>', unsafe_allow_html=True)
@@ -1447,7 +1680,12 @@ elif st.session_state.current_page == "nutrition_hub":
                 'Diet Preference': user['diet_preference'],
                 'Allergies': user['allergies']
             }
+            # Call meal planner and sync progress
             full_day_meal_planner_ui(compatible_user, foods)
+            
+            # Sync progress when meal plan is created
+            if 'selected_meals' in st.session_state and st.session_state['selected_meals']:
+                sync_meal_planner_progress(st.session_state['selected_meals'])
 
 # Exercise & Fitness Page
 elif st.session_state.current_page == "exercise_fitness":
@@ -1497,36 +1735,30 @@ elif st.session_state.current_page == "routine_optimizer":
 
 
 # Health Assistant Page  
-elif st.session_state.current_page == "health_assistant":
+elif st.session_state.current_page == "health_assistant_page":
     st.markdown('<h1 class="main-header">🤖 Health Assistant</h1>', unsafe_allow_html=True)
     
-    st.info("💬 *Coming Soon*: Chat with our AI health assistant for personalized support and guidance!")
+    # Clear any corrupted session state
+    if 'health_assistant' in st.session_state:
+        # Check if it's a widget conflict and clear it
+        if not hasattr(st.session_state.health_assistant, 'process_message'):
+            del st.session_state.health_assistant
     
-    # Placeholder chat interface
-    col1, col2 = st.columns([3, 1])
-    
-    with col1:
-        st.subheader("Chat with Health Assistant")
-        st.text_area("Type your health question here...", 
-                    placeholder="e.g., I'm feeling tired today, what exercises should I do?\nOr: How can I improve my meal plan?",
-                    height=100,
-                    key="chat_input")
+    # Import and render the health assistant
+    try:
+        from health_assistant import show_health_assistant
+        show_health_assistant()
+    except Exception as e:
+        st.error(f"Error loading health assistant: {str(e)}")
+        st.info("Please try refreshing the page or use the reset button below.")
         
-        if st.button("Send Message", use_container_width=True):
-            st.success("Message sent! (Feature in development)")
-    
-    with col2:
-        st.subheader("Quick Questions")
-        quick_questions = [
-            "What should I eat for breakfast?",
-            "I'm stressed, any suggestions?",
-            "Best exercises for weight loss?",
-            "How to improve sleep quality?"
-        ]
-        
-        for question in quick_questions:
-            if st.button(question, use_container_width=True):
-                st.info(f"Assistant would respond to: '{question}'")
+        if st.button("Reset Health Assistant", key="reset_assistant_btn"):
+            keys_to_clear = ['health_assistant', 'health_chat_history', 'show_health_initial_greeting']
+            for key in keys_to_clear:
+                if key in st.session_state:
+                    del st.session_state[key]
+            st.rerun()
+            
 
 # Pro Features Page
 elif st.session_state.current_page == "pro_features":
@@ -1677,7 +1909,7 @@ elif st.session_state.current_page == "admin":
 st.markdown("---")
 st.markdown(
     f"<div style='text-align: center; color: {COLORS['text_primary']}; padding: 3rem; background: {COLORS['surface']}; border-radius: 15px; margin-top: 3rem; border: 1px solid {COLORS['card_bg']};'>"
-    "<p style='margin: 0; font-size: 1rem; font-weight: 600;'>🏥 Health Matrices Pro • Your Health Journey Starts Here • Transform Your Wellness</p>"
+    "<p style='margin: 0; font-size: 1rem; font-weight: 600;'>🏥 Health Matrices • Your Health Journey Starts Here • Transform Your Wellness</p>"
     "<p style='margin: 0.5rem 0 0 0; font-size: 0.9rem; color: #94a3b8;'>Premium Health Intelligence Platform</p>"
     "</div>",
     unsafe_allow_html=True

@@ -5,7 +5,14 @@ import streamlit as st
 from datetime import datetime
 import hashlib
 import os
-import shutil
+import json
+
+def get_db_path():
+    """
+    Get database path that works in both local and deployed environments
+    Uses a fixed database file name that gets committed to Git
+    """
+    return 'health_app_persistent.db'
 
 def hash_password(password):
     """Hash a password for storing."""
@@ -16,12 +23,13 @@ def verify_password(plain_password, hashed_password):
     return hash_password(plain_password) == hashed_password
 
 def init_db():
-    """Initialize the database and create tables - SIMPLE VERSION"""
+    """Initialize the database and create tables"""
+    db_path = get_db_path()
     
-    conn = sqlite3.connect('health_app.db')
+    conn = sqlite3.connect(db_path)
     c = conn.cursor()
     
-    # Users table - SIMPLE VERSION
+    # Users table
     c.execute('''
         CREATE TABLE IF NOT EXISTS users (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -59,7 +67,8 @@ def init_db():
 
 def create_user(username, password, email=""):
     """Create a new user with hashed password"""
-    conn = sqlite3.connect('health_app.db')
+    db_path = get_db_path()
+    conn = sqlite3.connect(db_path)
     c = conn.cursor()
     try:
         # Hash the password before storing
@@ -78,7 +87,8 @@ def create_user(username, password, email=""):
 
 def verify_user(username, password):
     """Verify user credentials with hashed password"""
-    conn = sqlite3.connect('health_app.db')
+    db_path = get_db_path()
+    conn = sqlite3.connect(db_path)
     c = conn.cursor()
     
     try:
@@ -104,7 +114,8 @@ def verify_user(username, password):
 
 def save_user_profile(user_id, profile_data):
     """Save or update user profile"""
-    conn = sqlite3.connect('health_app.db')
+    db_path = get_db_path()
+    conn = sqlite3.connect(db_path)
     c = conn.cursor()
     
     try:
@@ -123,8 +134,10 @@ def save_user_profile(user_id, profile_data):
             ''', (
                 profile_data['Name'], profile_data['Age'], profile_data['Height'],
                 profile_data['Weight'], profile_data['Gender'], profile_data['Goal'],
-                profile_data['Diet Preference'], str(profile_data['Allergies']),
-                str(profile_data['Injuries']), profile_data['Lifestyle'],
+                profile_data['Diet Preference'], 
+                json.dumps(profile_data['Allergies']),
+                json.dumps(profile_data['Injuries']),
+                profile_data['Lifestyle'],
                 datetime.now(), user_id
             ))
         else:
@@ -136,8 +149,10 @@ def save_user_profile(user_id, profile_data):
             ''', (
                 user_id, profile_data['Name'], profile_data['Age'], profile_data['Height'],
                 profile_data['Weight'], profile_data['Gender'], profile_data['Goal'],
-                profile_data['Diet Preference'], str(profile_data['Allergies']),
-                str(profile_data['Injuries']), profile_data['Lifestyle']
+                profile_data['Diet Preference'], 
+                json.dumps(profile_data['Allergies']),
+                json.dumps(profile_data['Injuries']),
+                profile_data['Lifestyle']
             ))
         
         conn.commit()
@@ -150,7 +165,8 @@ def save_user_profile(user_id, profile_data):
 
 def load_user_profile(user_id):
     """Load user profile data"""
-    conn = sqlite3.connect('health_app.db')
+    db_path = get_db_path()
+    conn = sqlite3.connect(db_path)
     c = conn.cursor()
     
     try:
@@ -158,7 +174,7 @@ def load_user_profile(user_id):
         profile = c.fetchone()
         
         if profile:
-            # Convert back to dictionary format
+            # Convert back to dictionary format using json
             return {
                 'Name': profile[2],
                 'Age': profile[3],
@@ -167,8 +183,8 @@ def load_user_profile(user_id):
                 'Gender': profile[6],
                 'Goal': profile[7],
                 'Diet Preference': profile[8],
-                'Allergies': eval(profile[9]) if profile[9] else [],
-                'Injuries': eval(profile[10]) if profile[10] else [],
+                'Allergies': json.loads(profile[9]) if profile[9] else [],
+                'Injuries': json.loads(profile[10]) if profile[10] else [],
                 'Lifestyle': profile[11]
             }
         return None
@@ -180,7 +196,8 @@ def load_user_profile(user_id):
 
 def get_all_users():
     """Get all users for admin panel"""
-    conn = sqlite3.connect('health_app.db')
+    db_path = get_db_path()
+    conn = sqlite3.connect(db_path)
     c = conn.cursor()
     
     try:
@@ -201,7 +218,8 @@ def get_all_users():
 
 def get_user_stats():
     """Get user statistics"""
-    conn = sqlite3.connect('health_app.db')
+    db_path = get_db_path()
+    conn = sqlite3.connect(db_path)
     c = conn.cursor()
     
     try:

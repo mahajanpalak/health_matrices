@@ -4,33 +4,33 @@ Banana(118g),105,1.3,27,3,0.3,Veg,Fruits,"Breakfast,Snack",None,Healthy,Weight L
 Mango(165g),99,1.4,25,2.6,0.6,Veg,Fruits,"Lunch,Snack",None,Healthy,Weight Loss
 Guava(165g),112,4.2,23.6,8.9,1.6,Veg,Fruits,"Breakfast,Snack",None,Healthy,Weight Loss
 Papaya(145g),62,0.7,16,2.5,0.4,Veg,Fruits,"Breakfast,Snack",None,Healthy,Weight Loss
-Orange(140g),66,1.3,14.8,2.8,0.2,Veg,Fruits,"Breakfast,Snack",None,Healthy,Weight Loss
+Orange(140g),73,1.3,16.5,2.8,0.2,Veg,Fruits,"Breakfast,Snack",None,Healthy,Weight Loss
 Pineapple(165g),82,0.9,22,2.3,0.2,Veg,Fruits,"Breakfast,Snack",None,Healthy,Weight Loss
-Watermelon(152g),46,0.9,12,0.6,0,Veg,Fruits,"Breakfast,Snack",None,Healthy,Weight Loss
+Watermelon(152g),46,0.9,12,0.6,0.2,Veg,Fruits,"Breakfast,Snack",None,Healthy,Weight Loss
 Lychee(100g),66,0.8,16.5,1.3,0.4,Veg,Fruits,"Breakfast,Snack",None,Healthy,Weight Loss
-Pomegranate(169g),144,2.9,25.6,7,2,Veg,Fruits,"Breakfast,Snack",None,Healthy,Weight Loss
+Pomegranate(169g),141,2.9,31.6,7,2,Veg,Fruits,"Breakfast,Snack",None,Healthy,Weight Loss
 Pear(178g),101,0.6,27,5.5,0.3,Veg,Fruits,"Breakfast,Snack",None,Healthy,Weight Loss
 Peach(168g),66,1.5,16,2.5,0.4,Veg,Fruits,Snack,None,Healthy,Weight Loss
-Grapes(200g),110,1.15,29,1.4,0.26,Veg,Fruits,"Breakfast,Snack",None,Healthy,Weight Loss
+Grapes(200g),138,1,36,2,0.3,Veg,Fruits,"Breakfast,Snack",None,Healthy,Weight Loss
 Plum(100g),46,0.7,11,1.4,0.28,Veg,Fruits,"Breakfast,Snack",None,Healthy,Weight Loss
 Kiwi(75g),42,0.8,10.1,2.1,0.4,Veg,Fruits,"Breakfast,Snack",None,Healthy,Weight Loss
 Jamun(135g),60,1.4,14,1.4,0.3,Veg,Fruits,"Breakfast,Snack",None,Healthy,Weight Loss
-Custard Apple(100g),101,1.7,25.2,2.4,0.6,Veg,Fruits,"Breakfast,Snack",None,Healthy,Weight Loss
+Custard Apple(100g),101,2,24,5,0.6,Veg,Fruits,"Breakfast,Snack",None,Healthy,Weight Loss
 Sapota(100g),83,0.44,19.9,5.3,1.1,Veg,Fruits,"Breakfast,Snack",None,Healthy,Weight Loss
 Fig(100g),74,0.75,19.18,2.9,0.3,Veg,Fruits,"Breakfast,Snack",None,Healthy,Weight Loss
-Dried Fig(100g),249,3.3,63.9,9.8,0.92,Veg,Fruits,"Breakfast,Snack",None,Healthy,Weight Loss
+Dried Fig(100g),249,3.3,63.9,9.8,0.9,Veg,Fruits,"Breakfast,Snack",None,Healthy,Weight Loss
 Strawberry(150g),50,1,12,3,0.5,Veg,Fruits,"Breakfast,Snack",None,Healthy,Weight Loss
 Blueberry(148g),84,1,21,3.5,0.5,Veg,Fruits,"Breakfast,Snack",None,Healthy,Weight Loss
-Mulberry(140g),60,2,15,2,0.8,Veg,Fruits,"Breakfast,Snack",None,Healthy,WeightLoss
+Mulberry(140g),60,2,13.7,2,0.5,Veg,Fruits,"Breakfast,Snack",None,Healthy,WeightLoss
 Dragon Fruit(180g),103,0.6,27.4,5.6,0.2,Veg,Fruits,Snack,None,Healthy,Weight Loss
-Avocado(136g),227,2.67,11.8,9.2,21,Veg,Fruits,Snack/Lunch,None,Healthy,Weight Gain
-Raisins(40g),42,0.5,11,0.6,0.1,Veg,Fruits,Snack,None,Healthy,Weight Gain
+Avocado(136g),227,3,11.8,9.2,21,Veg,Fruits,Snack/Lunch,None,Healthy,Weight Gain
+Raisins(40g),120,1.2,32,1.6,0.2,Veg,Fruits,Snack,None,Healthy,Weight Gain
 Prunes(30-50g),100,1.1,30.5,3.4,0.2,Veg,Fruits,Snack,None,Healthy,Weight Loss
-Dried Appricot(30g),69,1.3,13.3,2.5,0.1,Veg,Fruits,Snack,None,Healthy,Maintain
-"Dates(40g, 3 pieces)",69,1,18,2,0.9,Veg,Fruits,Snack,None,Healthy,Weight Gain
-Mixed Nuts(30g),185,4.95,6.47,2.5,16.89,Veg,Nuts&Seeds,Snack,Tree Nuts,Healthy,Weight Gain
-Walnuts(30g),190,4,4,2,18.5,Veg,Nuts&Seeds,Snack,Tree Nuts,Healthy,Weight  Gain
-Almond(30g),170,6,6,4,15,Veg,Nuts&Seeds,Snack,Tree Nuts,Healthy,Weight Gain
+Dried Appricot(30g),72,1,19,2,0.2,Veg,Fruits,Snack,None,Healthy,Maintain
+"Dates(40g, 3 pieces)",110,1,27,3,0.2,Veg,Fruits,Snack,None,Healthy,Weight Gain
+Mixed Nuts(30g),180,5,7,2.5,15,Veg,Nuts&Seeds,Snack,Tree Nuts,Healthy,Weight Gain
+Walnuts(30g),185,4,4,2,18.5,Veg,Nuts&Seeds,Snack,Tree Nuts,Healthy,Weight  Gain
+Almond(30g),174,6,6,4,15,Veg,Nuts&Seeds,Snack,Tree Nuts,Healthy,Weight Gain
 Cashews(30g),166,5,9,1,13,Veg,Nuts&Seeds,Snack,Tree Nuts,Healthy,Weight Gain
 Pistachios(30g),169,6,9,3,13,Veg,Nuts&Seeds,Snack,Tree Nuts,Healthy,Weight Gain
 Peanuts Roasted(30g),175,8,6,3,15,Veg,Nuts&Seeds,Snack,Peanuts,Healthy,Weight Gain
@@ -74,17 +74,17 @@ Mixed Veg Curry(200g),250,7,25,6,10,Veg,Cooked Meals,"Lunch,Dinner",None,Healthy
 Kadhi Chawal(300g),500,15,50,7,30,Veg,Cooked Meals,"Lunch,Dinner",Dairy,Healthy,Weight Gain
 Palak Paneer(200g),338,14,16,4.3,28,Veg,Cooked Meals,"Breakfast,Lunch,Dinner",Dairy,Healthy,Weight Gain
 Chole Bhature(180g),321,8.9,40.2,12,13.8,Veg,Cooked Meals,"Breakfast,Lunch,Dinner",Gluten,Healthy,Weight Gain
-Rajma Chawal(250g),315,50,11,7,9,Veg,Cooked Meals,"Breakfast,Lunch,Dinner",Lectin,Healthy,Weight Loss
-Shahi Paneer(100g),143,4.8,6.7,2,10.8,Veg,Cooked Meals,"Breakfast,Lunch,Dinner",Dairy,Healthy,Weight Gain
-Paneer Butter Masala(200g),650,20,25,4,50,Veg,Cooked Meals,"Breakfast,Lunch,Dinner",Dairy,Healthy,Weight Gain
+Rajma Chawal(250g),315,11,50,7,6,Veg,Cooked Meals,"Breakfast,Lunch,Dinner",Lectin,Healthy,Weight Loss
+Shahi Paneer(100g),300,15,7,2,22,Veg,Cooked Meals,"Breakfast,Lunch,Dinner",Dairy,Healthy,Weight Gain
+Paneer Butter Masala(200g),650,20,55,4,38,Veg,Cooked Meals,"Breakfast,Lunch,Dinner",Dairy,Healthy,Weight Gain
 Baingan Bharta(100g),97,1.7,12.6,3.1,5.3,Veg,Cooked Meals,"Breakfast,Lunch,Dinner",Eggplant,Healthy,Weight Loss
-Dal Makhani(250g),450,16,39,13,24,Veg,Cooked Meals,"Breakfast,Lunch,Dinner",Dairy,Healthy,Weight Gain
-Sarson Da Saag(150g),125,4,9,5,10,Veg,Cooked Meals,"Breakfast,Lunch,Dinner",Mustard,Healthy,Weight Gain
-Makki Roti Saag(155g),187,5.7,18.8,6.4,9.4,Veg,Cooked Meals,"Breakfast,Lunch,Dinner",Dairy,Healthy,Weight Gain
-Bhindi Masala(100g),75,2.4,9.5,10,4,Veg,Cooked Meals,"Breakfast,Lunch,Dinner",None,Healthy,Weight Loss
+Dal Makhani(250g),450,18,112,6,14,Veg,Cooked Meals,"Breakfast,Lunch,Dinner",Dairy,Healthy,Weight Gain
+Sarson Da Saag(150g),125,4,9,3,9,Veg,Cooked Meals,"Breakfast,Lunch,Dinner",Mustard,Healthy,Weight Gain
+Makki Roti Saag(155g),300,9,35,10,9.4,Veg,Cooked Meals,"Breakfast,Lunch,Dinner",Dairy,Healthy,Weight Gain
+Bhindi Masala(100g),145,3,12,10,3,Veg,Cooked Meals,"Breakfast,Lunch,Dinner",None,Healthy,Weight Loss
 Vegetable Pulao(244g),281,5.4,54,1,4.4,Veg,Cooked Meals,"Breakfast,Lunch,Dinner",None,Healthy,Weight Gain
 Vegetable Biryani(169g),198,4.2,37,2,3.9,Veg,Cooked Meals,"Breakfast,Snack",None,Healthy,Weight Gain
-Khichdi(250g),210,7.5,38,4.5,3.5,Veg,Cooked Meals,Breakfast,None,Healthy,Maintain
+Khichdi(250g),420,12.4,58.1,5.96,8.8,Veg,Cooked Meals,Breakfast,None,Healthy,Maintain
 Curd Rice(250g),185,6.5,32,1.5,3.5,Veg,Cooked Meals,Lunch,Dairy,Healthy,Weight Gain
 Puri sabji(175g),500,8,60,8,17,Veg,Cooked Meals,Lunch,Gluten,Junk,Weight Gain
 Mutter Panner(100g),150,7,9,2,9,Veg,Cooked Meals,"Lunch,Dinner",Dairy,Healthy,Weight Gain
@@ -274,7 +274,7 @@ Soy Protein Powder(30g),103,27,3,1,1,Veg,Protein Supplements,"Pre-Workout, Post-
 Pea Protein Powder(30g),120,25,3,1,2,Veg,Protein Supplements,"Breakfast, Snack, Post-Workout",Dairy,Healthy,Weight Gain
 Casein Protein(35g),130,25,4,1,1,Veg,Protein Supplements,"Pre-Workout, Post-Workout",Dairy,Healthy,Weight Gain
 Mass Gainer(100g),388,23.5,66.4,0,3.5,Veg,Protein Supplements,"Pre-Workout, Post-Workout",Dairy,Healthy,Weight Gain
-Egg Protein Powder(30g),120,25,3,0,0.5,Veg,Protein Supplements,"Pre-Workout, Post-Workout",Dairy,Healthy,Weight Gain
+Egg Protein Powder(30g),120,25,3,0.5,0,Veg,Protein Supplements,"Pre-Workout, Post-Workout",Dairy,Healthy,Weight Gain
 Hemp Protein Powder(30g),120,15,13,11,3,Veg,Protein Supplements,"Snack, Pre-Bed",Dairy,Healthy,Weight Loss
 Brown Rice Protein(30g),130,27,4,2.5,2,Veg,Protein Supplements,"Pre-Workout, Post-Workout","Dairy,Soy,Gluten,Eggs",Healthy,Weight Loss
 Collagen Powder(14g),70,14,0,0,0,Veg,Protein Supplements,"Pre-Workout, Post-Workout,Snack",Animal,Healthy,Weight Loss

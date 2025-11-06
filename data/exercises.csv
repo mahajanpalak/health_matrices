@@ -1,111 +1,111 @@
 Exercise Name,Category,Intensity,Calories/10min,Equipment,Body Focus,Min Duration,Max Duration,Goal,Workload Match,Skill Level
-Surya Namaskar,Yoga,Moderate,60,Mat,Full body,10,30,"Flexibility, Strength",After long sitting,Beginner
-Kapalbhati,Breathing,Low,20,None,"Core, Lungs",5,15,Stress Relief,Exam stress reset,Beginner
-Anulom Vilom,Breathing,Low,15,None,"Lungs, Mind",5,20,"Calmness, Stress Relief",Exam stress reset,Beginner
-Bhastrika,Breathing,Low,25,None,Lungs,5,10,Energy Boost,Quick recovery,Intermediate
-Bhujangasana,Yoga,Low,30,Mat,"Spine, Core",5,15,Flexibility,After long sitting,Beginner
-Tadasana,Yoga,Low,20,None,Full body,5,15,"Posture, Balance",Quick recovery,Beginner
-Vrikshasana,Yoga,Low,25,None,"Legs, Balance",5,20,Balance,Quick recovery,Beginner
-Padmasana Meditation,Meditation,Low,5,None,Mind,5,60,Stress Relief,Exam stress reset,Beginner
-Shavasana,Yoga,Low,5,Mat,"Mind, Full body",5,20,Relaxation,Exam stress reset,Beginner
-Ustrasana,Yoga,Moderate,40,Mat,"Spine, Core",5,15,Flexibility,After long sitting,Intermediate
-Dhanurasana,Yoga,Moderate,45,Mat,"Core, Back",5,15,"Strength, Flexibility",Active workout,Intermediate
-Setu Bandhasana,Yoga,Moderate,35,Mat,"Back, Core",5,15,Strength,Quick recovery,Beginner
-Nadi Shodhana,Breathing,Low,15,None,"Lungs, Mind",5,15,Calmness,Exam stress reset,Beginner
-Trikonasana,Yoga,Moderate,35,Mat,"Legs, Spine",5,15,Flexibility,Quick recovery,Beginner
-Halasana,Yoga,Moderate,40,Mat,"Spine, Core",5,15,Flexibility,Active workout,Intermediate
-Pawanmuktasana,Yoga,Low,20,Mat,"Core, Digestion",5,15,"Digestion, Stress Relief",Quick recovery,Beginner
-Kumbhaka Pranayama,Breathing,Low,10,None,Lungs,2,10,Lung Strength,Exam stress reset,Intermediate
-Simhasana,Yoga,Low,15,Mat,"Throat, Lungs",5,10,Stress Relief,Quick recovery,Beginner
-Paschimottanasana,Yoga,Moderate,30,Mat,"Spine, Hamstrings",5,15,Flexibility,Quick recovery,Beginner
-Chakrasana,Yoga,High,60,Mat,Full body,5,10,"Strength, Flexibility",Active workout,Advanced
-Push-ups,Strength,High,70,None,Upper body,5,15,Strength,Active workout,Beginner
-Squats,Strength,Moderate,90,None,Lower body,5,20,"Strength, Fat loss",Active workout,Beginner
-Plank,Strength,High,70,None,Core,5,10,Core Strength,After long sitting,Intermediate
-Lunges,Strength,Moderate,80,None,Lower body,5,15,Strength,Active workout,Beginner
-Burpees,Strength,High,120,None,Full body,5,15,"Fat loss, Strength",Active workout,Intermediate
-Mountain Climbers,Strength,High,110,None,"Core, Legs",5,15,"Endurance, Strength",Active workout,Intermediate
-Side Plank,Strength,Moderate,60,None,"Core, Obliques",5,10,Core Strength,Quick recovery,Intermediate
-Glute Bridge,Strength,Moderate,50,Mat,"Glutes, Core",5,15,Strength,After long sitting,Beginner
-Bicep Curls,Strength,Moderate,60,Dumbbell,Arms,5,15,Strength,Active workout,Beginner
-Shoulder Press,Strength,Moderate,70,Dumbbell,Shoulders,5,15,Strength,Active workout,Beginner
-Deadlift,Strength,High,150,Barbell,"Back, Legs",10,20,Strength,Active workout,Advanced
-Pull-ups,Strength,High,100,Pull-up bar,"Back, Arms",5,15,Strength,Active workout,Intermediate
-Tricep Dips,Strength,Moderate,80,Chair,Arms,5,15,Strength,Quick recovery,Beginner
-Leg Raises,Strength,Moderate,70,Mat,Core,5,15,Core Strength,After long sitting,Beginner
-Russian Twist,Strength,Moderate,75,Mat,Core,5,15,Core Strength,Active workout,Beginner
-Superman Hold,Strength,Low,50,Mat,Back,5,10,Back Strength,Quick recovery,Beginner
-Chest Press,Strength,High,120,Barbell,Chest,10,20,Strength,Active workout,Advanced
-Bent-over Row,Strength,High,110,Barbell,Back,10,20,Strength,Active workout,Intermediate
-Calf Raises,Strength,Low,40,None,Lower legs,5,15,Strength,Quick recovery,Beginner
-Wall Sit,Strength,Moderate,60,None,Legs,5,10,Endurance,After long sitting,Beginner
-Crunches,Strength,Moderate,80,Mat,Core,5,15,Core Strength,Quick recovery,Beginner
-Leg Press,Strength,High,140,Machine,Legs,10,20,Strength,Active workout,Advanced
-Hammer Curl,Strength,Moderate,70,Dumbbell,Arms,5,15,Strength,Active workout,Beginner
-Arnold Press,Strength,High,100,Dumbbell,Shoulders,10,15,Strength,Active workout,Intermediate
-Front Raise,Strength,Moderate,60,Dumbbell,Shoulders,5,15,Strength,Active workout,Beginner
-Lateral Raise,Strength,Moderate,60,Dumbbell,Shoulders,5,15,Strength,Active workout,Beginner
-Farmer's Walk,Strength,High,120,Dumbbell,Full body,5,15,"Strength, Endurance",Active workout,Intermediate
-Overhead Squat,Strength,High,130,Barbell,Full body,10,20,"Strength, Mobility",Active workout,Advanced
-Incline Push-ups,Strength,Low,50,None,"Chest, Arms",5,15,Strength,Quick recovery,Beginner
-Reverse Crunch,Strength,Moderate,70,Mat,Core,5,15,Core Strength,Quick recovery,Beginner
-Running,Cardio,High,130,None,Full body,10,40,"Endurance, Fat loss",Active workout,Beginner
-Brisk Walking,Cardio,Moderate,50,None,Full body,10,30,"Endurance, Fat loss",Quick recovery,Beginner
-Cycling,Cardio,Moderate,80,Bicycle,Legs,15,60,Endurance,Active workout,Beginner
-Swimming,Cardio,High,150,Pool,Full body,15,60,"Endurance, Fat loss",Active workout,Intermediate
-Rowing Machine,Cardio,High,140,Machine,Full body,10,30,Endurance,Active workout,Intermediate
-Jumping Jacks,Cardio,Moderate,100,None,Full body,5,15,"Fat loss, Warm-up",Quick recovery,Beginner
-Dance Fitness,Cardio,Moderate,90,None,Full body,15,45,"Fat loss, Energy boost",Active workout,Beginner
-Stair Climbing,Cardio,High,110,Stairs,Legs,10,20,"Strength, Fat loss",Active workout,Beginner
-HIIT Sprints,Cardio,High,200,None,Full body,10,20,Fat loss,Active workout,Advanced
-Elliptical Trainer,Cardio,Moderate,85,Machine,Full body,15,40,Endurance,Active workout,Beginner
-Shadow Boxing,Cardio,High,120,None,"Arms, Core",10,20,Fat loss,Quick recovery,Intermediate
-Kickboxing,Cardio,High,150,None,Full body,15,40,"Strength, Fat loss",Active workout,Intermediate
-Zumba,Cardio,Moderate,100,None,Full body,20,40,"Fat loss, Energy boost",Active workout,Beginner
-Skipping,Cardio,High,120,Rope,Full body,5,20,"Fat loss, Endurance",Active workout,Beginner
-Sports Drills,Cardio,High,130,None,Full body,15,30,Endurance,Active workout,Intermediate
-Agility Ladder,Cardio,Moderate,110,Ladder,Legs,5,15,"Agility, Speed",Quick recovery,Intermediate
-Hiking,Cardio,Moderate,90,Shoes,Legs,30,120,Endurance,Active workout,Beginner
-Football Drills,Cardio,High,140,Ball,"Legs, Core",15,30,"Agility, Fat loss",Active workout,Intermediate
-Basketball Drills,Cardio,High,130,Ball,"Legs, Arms",15,30,"Agility, Endurance",Active workout,Intermediate
-Badminton Rallies,Cardio,High,120,Racket,Full body,20,40,"Agility, Endurance",Active workout,Beginner
-Table Tennis,Cardio,Moderate,80,Racket,"Arms, Core",20,40,Agility,Quick recovery,Beginner
-Cricket Nets,Cardio,Moderate,100,"Bat, Ball",Full body,20,60,"Endurance, Agility",Active workout,Intermediate
-Frisbee,Cardio,Moderate,70,Frisbee,Full body,20,40,"Agility, Fun",Quick recovery,Beginner
-Volleyball,Cardio,High,110,Ball,Full body,30,60,Endurance,Active workout,Intermediate
-Tennis Rallies,Cardio,High,130,Racket,Full body,20,40,Agility,Active workout,Intermediate
-Climbing Wall,Cardio,High,160,Climbing gear,Full body,20,60,"Strength, Endurance",Active workout,Advanced
-Roller Skating,Cardio,Moderate,100,Skates,Legs,20,40,"Balance, Endurance",Active workout,Beginner
-Rowing Outdoor,Cardio,High,150,Boat,Full body,20,60,"Strength, Endurance",Active workout,Intermediate
-Martial Arts Practice,Cardio,High,160,None,Full body,20,60,"Agility, Strength",Active workout,Advanced
-Jump Squats,Cardio,High,120,None,Legs,5,15,"Fat loss, Strength",Active workout,Intermediate
-Cat-Cow Stretch,Flexibility,Low,15,Mat,"Spine, Core",5,15,"Mobility, Relaxation",Quick recovery,Beginner
-Hamstring Stretch,Flexibility,Low,10,None,Legs,5,10,Flexibility,Quick recovery,Beginner
-Quadriceps Stretch,Flexibility,Low,10,None,Legs,5,10,Flexibility,Quick recovery,Beginner
-Shoulder Stretch,Flexibility,Low,10,None,Shoulders,5,10,Flexibility,Quick recovery,Beginner
-Neck Rolls,Flexibility,Low,5,None,Neck,5,10,Relaxation,Quick recovery,Beginner
-Hip Opener Stretch,Flexibility,Low,15,Mat,Hips,5,15,Flexibility,Quick recovery,Beginner
-Seated Forward Bend,Flexibility,Low,20,Mat,"Spine, Legs",5,15,Flexibility,Quick recovery,Beginner
-Side Stretch,Flexibility,Low,15,None,Obliques,5,10,Flexibility,Quick recovery,Beginner
-Bridge Stretch,Flexibility,Low,20,Mat,Back,5,15,Mobility,Quick recovery,Beginner
-Butterfly Stretch,Flexibility,Low,15,Mat,"Hips, Thighs",5,15,Flexibility,Quick recovery,Beginner
-Calf Stretch,Flexibility,Low,10,Wall,Calves,5,10,Flexibility,Quick recovery,Beginner
-Wrist Stretch,Flexibility,Low,5,None,Arms,5,10,Mobility,Quick recovery,Beginner
-Child's Pose,Flexibility,Low,10,Mat,"Back, Hips",5,15,Relaxation,Quick recovery,Beginner
-Spinal Twist,Flexibility,Low,15,Mat,Spine,5,15,Mobility,Quick recovery,Beginner
-Cobra Stretch,Flexibility,Low,20,Mat,Spine,5,15,Flexibility,Quick recovery,Beginner
-Chest Opener,Flexibility,Low,15,Wall,Chest,5,15,Flexibility,Quick recovery,Beginner
-Seated Side Bend,Flexibility,Low,15,Mat,Obliques,5,15,Flexibility,Quick recovery,Beginner
-Hip Flexor Stretch,Flexibility,Low,15,None,Hips,5,15,Flexibility,Quick recovery,Beginner
-Pigeon Pose,Flexibility,Moderate,25,Mat,Hips,5,15,Flexibility,Quick recovery,Intermediate
-Standing Forward Bend,Flexibility,Low,20,None,"Hamstrings, Spine",5,15,Flexibility,Quick recovery,Beginner
-Mindful Breathing,Meditation,Low,5,None,Mind,5,20,Stress Relief,Exam stress reset,Beginner
-Body Scan Meditation,Meditation,Low,5,None,Mind,10,30,Stress Relief,Exam stress reset,Beginner
-Guided Relaxation,Meditation,Low,5,Audio,Mind,10,30,Stress Relief,Exam stress reset,Beginner
-Progressive Muscle Relaxation,Meditation,Low,5,None,Full body,10,20,Relaxation,Exam stress reset,Beginner
-Visualization Meditation,Meditation,Low,5,None,Mind,10,20,Stress Relief,Exam stress reset,Beginner
-Loving-Kindness Meditation,Meditation,Low,5,None,Mind,10,20,Calmness,Exam stress reset,Beginner
-Walking Meditation,Meditation,Low,20,None,"Mind, Body",10,30,Mindfulness,Quick recovery,Beginner
-Counting Breath Meditation,Meditation,Low,5,None,Mind,5,20,Calmness,Exam stress reset,Beginner
-Chanting Meditation,Meditation,Low,10,None,Mind,10,30,Calmness,Exam stress reset,Beginner
-Yoga Nidra,Meditation,Low,5,None,"Mind, Full body",20,60,Deep Relaxation,Exam stress reset,Beginner
+Surya Namaskar,Yoga,Moderate,60,Yoga Mat,Full body,10,30,"Flexibility, Stress Relief",Focused,Beginner
+Kapalbhati,Breathing,Low,20,Nothing,"Core, Lungs",5,15,"Calmness, Stress Relief",Tired,Beginner
+Anulom Vilom,Breathing,Low,15,Nothing,"Lungs, Mind",5,20,"Calmness, Stress Relief",Calm,Beginner
+Bhastrika,Breathing,Low,25,Nothing,Lungs,5,10,"Calmness, Stress Relief",Energetic,Intermediate
+Bhujangasana,Yoga,Low,30,Yoga Mat,"Spine, Core",5,15,"Flexibility, Stress Relief",Focused,Beginner
+Tadasana,Yoga,Low,20,Nothing,Full body,5,15,"Flexibility, Stress Relief",Calm,Beginner
+Vrikshasana,Yoga,Low,25,Nothing,"Legs, Balance",5,20,"Flexibility, Strength ",Calm,Beginner
+Padmasana Meditation,Meditation,Low,5,Nothing,Mind,5,60,"Calmness, Stress Relief",Tired,Beginner
+Shavasana,Yoga,Low,5,Yoga Mat,"Mind, Full body",5,20,"Stress Relief , Calmness ",Tired,Beginner
+Ustrasana,Yoga,Moderate,40,Yoga Mat,"Spine, Core",5,15,"Desk Relief, Flexibility ",Focused,Intermediate
+Dhanurasana,Yoga,Moderate,45,Yoga Mat,"Core, Back",5,15,"Flexibility, Strength ",Energetic,Intermediate
+Setu Bandhasana,Yoga,Moderate,35,Yoga Mat,"Back, Core",5,15,"Flexibility, Stress Relief",Focused,Beginner
+Nadi Shodhana,Breathing,Low,15,Nothing,"Lungs, Mind",5,15,"Stress Relief, Calmness ",Calm,Beginner
+Trikonasana,Yoga,Moderate,35,Yoga Mat,"Legs, Spine",5,15,Flexibility,Focused,Beginner
+Halasana,Yoga,Moderate,40,Yoga Mat,"Spine, Core",5,15,"Flexibility, Calmness ",Energetic,Intermediate
+Pawanmuktasana,Yoga,Low,20,Yoga Mat,"Core, Digestion",5,15,"Stress Relief, Flexibility",Tired,Beginner
+Kumbhaka Pranayama,Breathing,Low,10,Nothing,Lungs,2,10,"Stress Relief, Calmness ",Calm,Intermediate
+Simhasana,Yoga,Low,15,Yoga Mat,"Throat, Lungs",5,10,"Stress Relief, Calmness",Tired,Beginner
+Paschimottanasana,Yoga,Moderate,30,Yoga Mat,"Spine, Hamstrings",5,15,"Desk Relief, Flexibility ",Calm,Beginner
+Chakrasana,Yoga,High,60,Yoga Mat,Full body,5,10,"Flexibility, Strength ",Energetic,Advanced
+Push-ups,Strength,High,70,Nothing,Upper body,5,15,"Strength , Core stability ",Energetic,Beginner
+Squats,Strength,Moderate,90,Nothing,Lower body,5,20,"Flexibility , Strength ",Energetic,Beginner
+Plank,Strength,High,70,Yoga Mat,Core,5,10,"Strength , Core stability ",Focused,Intermediate
+Lunges,Strength,Moderate,80,Nothing,Lower body,5,15,"Strength , Flexibility",Energetic,Beginner
+Burpees,Strength,High,120,Nothing,Full body,5,15,Full Workout,Energetic,Intermediate
+Mountain Climbers,Strength,High,110,Nothing,"Core, Legs",5,15,"Strength, Stress Relief ",Energetic,Intermediate
+Side Plank,Strength,Moderate,60,Yoga Mat,"Core, Obliques",5,10,"Strength, Core Stability",Focused,Intermediate
+Glute Bridge,Strength,Moderate,50,Yoga Mat,"Glutes, Core",5,15,"Strength , Flexibility",Focused,Beginner
+Bicep Curls,Strength,Moderate,60,Dumbbells,Arms,5,15,Strength ,Focused,Beginner
+Shoulder Press,Strength,Moderate,70,Dumbbells,Shoulders,5,15,"Strength, Stress Relief ",Energetic,Beginner
+Deadlift,Strength,High,150,Bands,"Back, Legs",10,20,"Mobility, Flexibility, Strength ",Energetic,Advanced
+Pull-ups,Strength,High,100,Bands,"Back, Arms",5,15,"Strength, Posture improvement ",Energetic,Intermediate
+Tricep Dips,Strength,Moderate,80,Nothing,Arms,5,15,Strength,Focused,Beginner
+Leg Raises,Strength,Moderate,70,Yoga Mat,Core,5,15,"Strength, Desk Relief , Posture improvement ",Focused,Beginner
+Russian Twist,Strength,Moderate,75,Yoga Mat,Core,5,15,"Flexibility, Core Stability ",Energetic,Beginner
+Superman Hold,Strength,Low,50,Yoga Mat,Back,5,10,"Desk Relief, Posture improvement, Strength ",Calm,Beginner
+Chest Press,Strength,High,120,Bands,Chest,10,20,Strength,Energetic,Advanced
+Bent-over Row,Strength,High,110,Bands,Back,10,20,"Strength, Posture improvement ",Energetic,Intermediate
+Calf Raises,Strength,Low,40,Nothing,Lower legs,5,15,Strength,Calm,Beginner
+Wall Sit,Strength,Moderate,60,Nothing,Legs,5,10,Strength,Focused,Beginner
+Crunches,Strength,Moderate,80,Yoga Mat,Core,5,15,"Strength, Stress Relief ",Focused,Beginner
+Leg Press,Strength,High,140,Bands,Legs,10,20,Strength,Energetic,Advanced
+Hammer Curl,Strength,Moderate,70,Dumbbells,Arms,5,15,Strength ,Focused,Beginner
+Arnold Press,Strength,High,100,Dumbbells,Shoulders,10,15,Strength ,Energetic,Intermediate
+Front Raise,Strength,Moderate,60,Dumbbells,Shoulders,5,15,"Strength, Posture improvement ",Focused,Beginner
+Lateral Raise,Strength,Moderate,60,Dumbbells,Shoulders,5,15,"Strength, Posture improvement ",Focused,Beginner
+Farmer's Walk,Strength,High,120,Dumbbells,Full body,5,15,"Strength, Core Stability",Energetic,Intermediate
+Overhead Squat,Strength,High,130,Bands,Full body,10,20,"Strength, Flexibility",Energetic,Advanced
+Incline Push-ups,Strength,Low,50,Nothing,"Chest, Arms",5,15,"Strength, Core Stability",Calm,Beginner
+Reverse Crunch,Strength,Moderate,70,Yoga Mat,Core,5,15,"Strength, Flexibility",Focused,Beginner
+Running,Cardio,High,130,Nothing,Full body,10,40,"Stress Relief, Calmness ",Energetic,Beginner
+Brisk Walking,Cardio,Moderate,50,Nothing,Full body,10,30,"Stress Relief, Calmness",Calm,Beginner
+Cycling,Cardio,Moderate,80,Nothing,Legs,15,60,"Strength, Stress Relief ",Focused,Beginner
+Swimming,Cardio,High,150,Nothing,Full body,15,60,"Strength, Flexibility ",Energetic,Intermediate
+Rowing Machine,Cardio,High,140,Nothing,Full body,10,30,"Strength, Stress Relief ",Energetic,Intermediate
+Jumping Jacks,Cardio,Moderate,100,Nothing,Full body,5,15,"Strength, Flexibility, Stress Relief",Energetic,Beginner
+Dance Fitness,Cardio,Moderate,90,Nothing,Full body,15,45,"Stress Relief, Calmness, Strength",Energetic,Beginner
+Stair Climbing,Cardio,High,110,Nothing,Legs,10,20," Strength, Stress Relief ",Energetic,Beginner
+HIIT Sprints,Cardio,High,200,Nothing,Full body,10,20,Full Workout,Energetic,Advanced
+Elliptical Trainer,Cardio,Moderate,85,Nothing,Full body,15,40,"Strength, Stress Relief ",Focused,Beginner
+Shadow Boxing,Cardio,High,120,Nothing,"Arms, Core",10,20,"Strength,  Stress Relief ",Energetic,Intermediate
+Kickboxing,Cardio,High,150,Nothing,Full body,15,40,"Strength, Calmness , Flexibility ",Energetic,Intermediate
+Zumba,Cardio,Moderate,100,Nothing,Full body,20,40,"Strength, Flexibility , Calmness ",Energetic,Beginner
+Skipping,Cardio,High,120,Skipping Rope ,Full body,5,20,"Strength, Stress Relief ",Energetic,Beginner
+Sports Drills,Cardio,High,130,Nothing,Full body,15,30,Full Workout,Energetic,Intermediate
+Agility Ladder,Cardio,Moderate,110,Nothing,Legs,5,15,Strength,Energetic,Intermediate
+Hiking,Cardio,Moderate,90,Nothing,Legs,30,120,"Stress Relief, Calmness , Strength ",Calm,Beginner
+Football Drills,Cardio,High,140,Football ,"Legs, Core",15,30,Full Workout,Energetic,Intermediate
+Basketball Drills,Cardio,High,130,Basketball ,"Legs, Arms",15,30,Full Workout,Energetic,Intermediate
+Badminton Rallies,Cardio,High,120,"Badminton Racket, Shuttle ",Full body,20,40,Full Workout,Energetic,Beginner
+Table Tennis,Cardio,Moderate,80,Nothing,"Arms, Core",20,40,Full Workout,Focused,Beginner
+Cricket Nets,Cardio,Moderate,100,Nothing,Full body,20,60,Full Workout,Focused,Intermediate
+Frisbee,Cardio,Moderate,70,Nothing,Full body,20,40,"Strength, Flexibility ",Calm,Beginner
+Volleyball,Cardio,High,110,Volleyball ,Full body,30,60,"Strength, Flexibility ",Energetic,Intermediate
+Tennis Rallies,Cardio,High,130,Nothing,Full body,20,40,"Strength, Flexibility ",Energetic,Intermediate
+Climbing Wall,Cardio,High,160,Nothing,Full body,20,60,Full Workout,Energetic,Advanced
+Roller Skating,Cardio,Moderate,100,Nothing,Legs,20,40,"Strength, Flexibility ",Focused,Beginner
+Rowing Outdoor,Cardio,High,150,Nothing,Full body,20,60,Full Workout,Energetic,Intermediate
+Martial Arts Practice,Cardio,High,160,Nothing,Full body,20,60,Full Workout,Energetic,Advanced
+Jump Squats,Cardio,High,120,Nothing,Legs,5,15,"Strength, Flexibility ",Energetic,Intermediate
+Cat-Cow Stretch,Flexibility,Low,15,Yoga Mat,"Spine, Core",5,15,"Flexibility , Strength ",Calm,Beginner
+Hamstring Stretch,Flexibility,Low,10,Nothing,Legs,5,10,"Desk Relief , Flexibility ",Calm,Beginner
+Quadriceps Stretch,Flexibility,Low,10,Nothing,Legs,5,10,"Desk Relief, Flexibility ",Calm,Beginner
+Shoulder Stretch,Flexibility,Low,10,Nothing,Shoulders,5,10,"Desk Relief, Flexibility ",Calm,Beginner
+Neck Rolls,Flexibility,Low,5,Nothing,Neck,5,10,Desk Relief,Tired,Beginner
+Hip Opener Stretch,Flexibility,Low,15,Yoga Mat,Hips,5,15,"Desk Relief, Flexibility ",Calm,Beginner
+Seated Forward Bend,Flexibility,Low,20,Yoga Mat,"Spine, Legs",5,15,"Strength, Posture improvement ",Calm,Beginner
+Side Stretch,Flexibility,Low,15,Nothing,Obliques,5,10,"Desk Relief, Flexibility ",Calm,Beginner
+Bridge Stretch,Flexibility,Low,20,Yoga Mat,Back,5,15,"Desk Relief, Flexibility ",Calm,Beginner
+Butterfly Stretch,Flexibility,Low,15,Yoga Mat,"Hips, Thighs",5,15,"Stress Relief, Flexibility ",Calm,Beginner
+Calf Stretch,Flexibility,Low,10,Nothing,Calves,5,10,"Desk Relief , Flexibility ",Calm,Beginner
+Wrist Stretch,Flexibility,Low,5,Nothing,Arms,5,10,"Desk Relief, Flexibility ",Tired,Beginner
+Child's Pose,Flexibility,Low,10,Yoga Mat,"Back, Hips",5,15,"Stress Relief, Flexibility ",Tired,Beginner
+Spinal Twist,Flexibility,Low,15,Yoga Mat,Spine,5,15,"Desk Relief, Flexibility ",Calm,Beginner
+Cobra Stretch,Flexibility,Low,20,Yoga Mat,Spine,5,15,"Desk Relief, Flexibility ",Calm,Beginner
+Chest Opener,Flexibility,Low,15,Nothing,Chest,5,15,"Flexibility ,Stress Relief ",Calm,Beginner
+Seated Side Bend,Flexibility,Low,15,Yoga Mat,Obliques,5,15,"Desk Relief, Flexibility ",Calm,Beginner
+Hip Flexor Stretch,Flexibility,Low,15,Nothing,Hips,5,15,"Desk Relief, Flexibility ",Calm,Beginner
+Pigeon Pose,Flexibility,Moderate,25,Yoga Mat,Hips,5,15,"Desk Relief, Flexibility ",Focused,Intermediate
+Standing Forward Bend,Flexibility,Low,20,Nothing,"Hamstrings, Spine",5,15,"Desk Relief, Flexibility ",Calm,Beginner
+Mindful Breathing,Meditation,Low,5,Nothing,Mind,5,20,"Stress Relief, Calmness ",Tired,Beginner
+Body Scan Meditation,Meditation,Low,5,Nothing,Mind,10,30,"Stress Relief, Calmness ",Tired,Beginner
+Guided Relaxation,Meditation,Low,5,Nothing,Mind,10,30,"Stress Relief, Calmness ",Tired,Beginner
+Progressive Muscle Relaxation,Meditation,Low,5,Nothing,Full body,10,20,"Stress Relief, Calmness ",Tired,Beginner
+Visualization Meditation,Meditation,Low,5,Nothing,Mind,10,20,"Stress Relief , Calmness ",Calm,Beginner
+Loving-Kindness Meditation,Meditation,Low,5,Nothing,Mind,10,20,"Stress Relief, Calmness ",Calm,Beginner
+Walking Meditation,Meditation,Low,20,Nothing,"Mind, Body",10,30,"Stress Relief, Calmness ",Calm,Beginner
+Counting Breath Meditation,Meditation,Low,5,Nothing,Mind,5,20,"Stress Relief, Calmness ",Calm,Beginner
+Chanting Meditation,Meditation,Low,10,Nothing,Mind,10,30,"Stress Relief, Calmness ",Calm,Beginner
+Yoga Nidra,Meditation,Low,5,Nothing,"Mind, Full body",20,60,"Stress Relief, Calmness ",Tired,Beginner

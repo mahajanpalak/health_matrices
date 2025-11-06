@@ -130,10 +130,12 @@ def skip_item(meal, idx, user, foods_df):
 
 # --- Full-day meal planner UI ---
 def full_day_meal_planner_ui(user, foods_df):
+    # DON'T clear session state here - let the nutrient_balance handle it
     st.header("🍴 Full-Day Personalized Meal Planner")
     
     tdee = sum(calculate_daily_ranges(user)['Calories'])/2
     ranges = calculate_daily_ranges(user)
+    
     
     st.subheader("Daily Requirement Ranges")
     for key, val in ranges.items():

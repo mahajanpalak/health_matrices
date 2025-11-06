@@ -58,12 +58,12 @@ def suggest_balance(totals, ranges, meals, foods_df, tolerance=0.15):
                 replacement_df = foods_df[(foods_df["Meal"].str.contains(meal_name, case=False)) &
                                           (foods_df[nutrient] < culprit["Value"]) &
                                           (~foods_df["Food Item"].isin(used_foods))]
-                suggestion_text = f"⚠️ {nutrient} is HIGH.\n👉 Culprit: **{culprit_food}** in {meal_name}.\n💡 Suggest replacing with a lighter option."
+                suggestion_text = f"⚠️ {nutrient} is HIGH.\n👉 Culprit: **{culprit_food}** in {meal_name}.\n💡 Consider replacing with a lighter option."
             else:
                 replacement_df = foods_df[(foods_df["Meal"].str.contains(meal_name, case=False)) &
                                           (foods_df[nutrient] > culprit["Value"]) &
                                           (~foods_df["Food Item"].isin(used_foods))]
-                suggestion_text = f"⚠️ {nutrient} is LOW.\n👉 {culprit_food} is not enough.\n💡 Suggest replacing with a richer option."
+                suggestion_text = f"⚠️ {nutrient} is LOW.\n👉 {culprit_food} is not enough.\n💡 Consider replacing with a richer option."
 
             replacement = replacement_df.sample(1).iloc[0].to_dict() if not replacement_df.empty else None
 
@@ -104,62 +104,30 @@ def suggest_balance(totals, ranges, meals, foods_df, tolerance=0.15):
     return suggestions
 
 # ------------------------------
-# Show balance and handle user actions
+# Show balance - SIMPLIFIED VERSION WITHOUT BUTTONS
 # ------------------------------
 def show_balance_and_actions(totals, ranges, meals, foods_df):
-    if "suggestion_actions" not in st.session_state:
-        st.session_state["suggestion_actions"] = {}
-
-    suggestions = suggest_balance(totals, ranges, meals, foods_df)
-    all_handled = True
-
     st.subheader("⚖️ Nutrient Balance Check")
+    
+    suggestions = suggest_balance(totals, ranges, meals, foods_df)
 
+    has_suggestions = False
+    
     for i, sug in enumerate(suggestions):
         st.markdown(sug["text"])
+        
+        # Show automatic recommendations without buttons
         if sug["replacement"] or sug["culprit"]:
-            all_handled = all_handled and (i in st.session_state["suggestion_actions"])
-            col1, col2, col3 = st.columns(3)
+            has_suggestions = True
+            if sug["replacement"]:
+                st.info(f"💡 **Recommendation:** Try adding **{sug['replacement']['Food Item']}** to balance your {sug['nutrient']} intake.")
+        
+        # Add some space between suggestions
+        st.write("")
 
-            with col1:
-                if st.button(f"Accept", key=f"accept_{i}"):
-                    st.session_state["suggestion_actions"][i] = ("accept", sug["replacement"])
-
-            with col2:
-                if st.button(f"No, I'm good", key=f"reject_{i}"):
-                    st.session_state["suggestion_actions"][i] = ("reject", None)
-
-            with col3:
-                if st.button(f"New alternative", key=f"alt_{i}"):
-                    # Suggest a new food alternative safely
-                    nutrient = sug["nutrient"]
-                    if nutrient and nutrient in foods_df.columns:
-                        alt_df = foods_df[(foods_df[nutrient].notnull()) & (foods_df[nutrient] > 0) &
-                                          (~foods_df["Food Item"].isin(
-                                              [item["Food Item"] for meal_items in meals.values() for item in meal_items]
-                                          ))]
-                        if not alt_df.empty:
-                            new_food = alt_df.sample(1).iloc[0].to_dict()
-                            st.session_state["suggestion_actions"][i] = ("alternative", new_food)
-
-    # Apply accepted/alternative suggestions after all handled
-    if all_handled and suggestions:
-        applied = False
-        for i, (action, food) in st.session_state["suggestion_actions"].items():
-            sug = suggestions[i]
-            if action in ["accept", "alternative"] and food and sug["culprit"]:
-                # Replace culprit food in the meal plan
-                meal_name = sug["meal"]
-                if meal_name in meals:
-                    for idx, item in enumerate(meals[meal_name]):
-                        if item["Food Item"] == sug["culprit"]:
-                            meals[meal_name][idx].update(food)
-                            applied = True
-            elif action in ["accept", "alternative"] and food and not sug["culprit"]:
-                # If no culprit, append the suggested food to first meal
-                first_meal = list(meals.keys())[0]
-                meals[first_meal].append(food)
-                applied = True
-
-        if applied:
-            st.success("✅ All accepted/alternative suggestions applied. Totals updated.")
+    # Show completion message with happy meal message only once at the end
+    if has_suggestions:
+        st.success("🍽️ Have a happy meal! 😊")
+        st.success("✅ Nutrient analysis completed! Enjoy your meal planning! 🎉")
+    else:
+        st.success("✅ Your meal plan is perfectly balanced! 🍽️ Have a happy meal! 😊")
