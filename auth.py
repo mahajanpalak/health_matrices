@@ -176,7 +176,7 @@ def show_login_signup():
         # Password requirements info
         st.markdown("""
         <div class="password-requirements">
-            <h4>🔒 Password Requirements:</h4>
+            <h4>🔒 Password Requirements:</h4>    
             <ul style="margin: 0; padding-left: 1.5rem;">
                 <li>At least 8 characters long</li>
                 <li>Contains at least one uppercase letter (A-Z)</li>
@@ -236,3 +236,4 @@ def logout():
     st.session_state.logged_in = False
     st.session_state.user_id = None
     st.session_state.username = None
+
