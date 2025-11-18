@@ -1858,7 +1858,7 @@ elif st.session_state.current_page == "admin":
         with tab2:
             st.subheader("All User Profiles")
             try:
-                conn = sqlite3.connect('health_app.db')
+                conn = sqlite3.connect('health_app_persistent.db')
                 profiles_df = pd.read_sql_query('''
                     SELECT u.username, up.name, up.age, up.gender, up.goal, 
                            up.lifestyle, up.diet_preference, up.created_at
@@ -1900,7 +1900,7 @@ elif st.session_state.current_page == "admin":
             st.write(f"Current user: {st.session_state.username}")
         else:
             st.write("Please log in with an admin account.")
-        
+
         if st.button("🔙 Go Back to Dashboard", use_container_width=True):
             st.session_state.current_page = "dashboard"
             st.rerun()

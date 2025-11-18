@@ -48,9 +48,13 @@ def create_or_edit_profile():
     # --- Save button ---
 # user_profile.py - Update the save button section
 # --- Save button ---
+# --- Save button ---
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
-        if st.button("💾 Save Profile", use_container_width=True):
+        save_clicked = st.button("💾 Save Profile", use_container_width=True)
+        dashboard_clicked = st.button("🏠 Go to Dashboard to See Updates", key="go_to_dashboard_btn", use_container_width=True)
+        
+        if save_clicked:
             if not name:
                 st.error("❌ Please enter your name")
             else:
@@ -69,11 +73,10 @@ def create_or_edit_profile():
                 save_user_profile(st.session_state.user_id, updated_profile)
                 st.success("✅ Profile saved successfully!")
                 st.balloons()
-                
-                # Clear cache and force refresh
                 st.cache_data.clear()
-                
-                # Add a button to go back to dashboard to see updated data
-                if st.button("🏠 Go to Dashboard to See Updates", use_container_width=True):
-                    st.session_state.current_page = "dashboard"
-                    st.rerun()
+                st.info("💡 Click the 'Go to Dashboard' button above to see your updated data!")
+        
+        if dashboard_clicked:
+            st.session_state.force_refresh = True
+            st.session_state.current_page = "dashboard"
+            st.rerun()
